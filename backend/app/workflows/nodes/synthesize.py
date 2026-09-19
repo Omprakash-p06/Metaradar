@@ -7,6 +7,7 @@ from app.core.domain_config import get_domain_config
 from app.providers.base import DataClassification, ProviderCapability
 from app.providers.factory import provider_factory
 from app.services.deduplication import chunk_text_for_embedding
+from app.services.pii import PIIPHIScrubber
 from app.workflows.state import MetaRadarState
 
 logger = logging.getLogger(__name__)
@@ -119,11 +120,18 @@ async def node_synthesize(state: MetaRadarState) -> Dict[str, Any]:
 
             # Invoke ProviderFactory Reasoning Layer
             try:
+                # Classify payload to enforce privacy gate (CR-02)
+                evidence_text = "\n".join(evidence_list)
+                classification = PIIPHIScrubber.classify_payload(
+                    text=evidence_text,
+                    source_type=sig.get("source_type") or sig.get("source") or "unknown"
+                )
+
                 intelligence = await provider_factory.execute_task(
                     required_capability=ProviderCapability.REASON,
                     evidence=evidence_list,
                     task=task_prompt,
-                    classification=DataClassification.PUBLIC
+                    classification=classification
                 )
 
                 meta = intelligence.get("model_metadata", {})

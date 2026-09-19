@@ -314,6 +314,18 @@ def main():
     # Load environment variables from root .env
     load_env_file(BASE_DIR / ".env")
 
+    # Enforce production security check early (CR-01)
+    app_env = (os.environ.get("APP_ENV") or "development").lower()
+    if app_env in ("production", "prod"):
+        secret_key = os.environ.get("SECRET_KEY", "dev-secret-change-in-production")
+        demo_mode = (os.environ.get("DEMO_MODE") or "true").lower() in ("true", "1", "yes")
+        if secret_key in ("dev-secret-change-in-production", ""):
+            print("[FATAL SECURITY ERROR] Cannot run in production with default SECRET_KEY.", file=sys.stderr)
+            sys.exit(1)
+        if demo_mode:
+            print("[FATAL SECURITY ERROR] DEMO_MODE must be False in production.", file=sys.stderr)
+            sys.exit(1)
+
     # Register signal handlers
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)

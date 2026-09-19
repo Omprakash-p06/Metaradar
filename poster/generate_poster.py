@@ -8,8 +8,14 @@ using Chrome headless.
 
 import base64
 import os
+from pathlib import Path
+import shutil
 import subprocess
 import sys
+from typing import Optional
+
+SCRIPT_DIR = Path(__file__).resolve().parent
+ROOT_DIR = SCRIPT_DIR.parent
 
 def get_base64_img(path: str) -> str:
     if not os.path.exists(path):
@@ -22,17 +28,61 @@ def get_base64_img(path: str) -> str:
         data = base64.b64encode(f.read()).decode("utf-8")
     return f"data:image/{ext};base64,{data}"
 
+def find_chrome_binary() -> Optional[str]:
+    """Finds a Chromium-based browser across Windows, Linux, and macOS."""
+    env_bin = os.environ.get("CHROME_BIN") or os.environ.get("BROWSER_BIN")
+    if env_bin and os.path.exists(env_bin):
+        return env_bin
+
+    for name in ["google-chrome", "google-chrome-stable", "chromium", "chromium-browser", "chrome", "msedge"]:
+        path = shutil.which(name)
+        if path:
+            return path
+
+    candidates = [
+        r"C:\Program Files\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
+        r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
+        r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
+        "/usr/bin/google-chrome",
+        "/usr/bin/google-chrome-stable",
+        "/usr/bin/chromium",
+        "/usr/bin/chromium-browser",
+        "/snap/bin/chromium",
+        "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
+        "/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge",
+    ]
+    return next((c for c in candidates if os.path.exists(c)), None)
+
 def generate_svg() -> str:
     width = 3402
     height = 4536
 
-    # Load and encode images
-    proclin_logo_b64 = get_base64_img("poster/extracted_assets/REACH_2026_Conc_p1_1.png")
-    reach_logo_b64 = get_base64_img("poster/extracted_assets/REACH_2026_Conc_p1_0.png")
-    icon_b64 = get_base64_img("pitch/pngs/icon.png")
-    arch_b64 = get_base64_img("pitch/pngs/architecture.png")
-    dataflow_b64 = get_base64_img("pitch/pngs/dataflow.png")
-    resp_b64 = get_base64_img("pitch/pngs/responsibility_flow.png")
+    # Load and encode images relative to script directory (WR-05)
+    proclin_logo_path = SCRIPT_DIR / "extracted_assets" / "REACH_2026_Conc_p1_1.png"
+    reach_logo_path = SCRIPT_DIR / "extracted_assets" / "REACH_2026_Conc_p1_0.png"
+    icon_path = ROOT_DIR / "pitch" / "pngs" / "icon.png"
+    arch_path = ROOT_DIR / "pitch" / "pngs" / "architecture.png"
+    dataflow_path = ROOT_DIR / "pitch" / "pngs" / "dataflow.png"
+    resp_path = ROOT_DIR / "pitch" / "pngs" / "responsibility_flow.png"
+
+    # Enforce required diagram assets presence
+    required_assets = {
+        "Architecture Diagram": arch_path,
+        "Dataflow Pipeline": dataflow_path,
+        "Responsibility Flow": resp_path,
+    }
+    missing = [name for name, p in required_assets.items() if not p.exists()]
+    if missing:
+        print(f"Error: Missing required diagram assets: {', '.join(missing)}", file=sys.stderr)
+        sys.exit(2)
+
+    proclin_logo_b64 = get_base64_img(str(proclin_logo_path))
+    reach_logo_b64 = get_base64_img(str(reach_logo_path))
+    icon_b64 = get_base64_img(str(icon_path))
+    arch_b64 = get_base64_img(str(arch_path))
+    dataflow_b64 = get_base64_img(str(dataflow_path))
+    resp_b64 = get_base64_img(str(resp_path))
 
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}">
   <defs>
@@ -476,9 +526,9 @@ def generate_svg() -> str:
     return svg
 
 def main():
-    os.makedirs("poster", exist_ok=True)
-    svg_path = "poster/poster.svg"
-    png_path = "poster/poster.png"
+    SCRIPT_DIR.mkdir(parents=True, exist_ok=True)
+    svg_path = SCRIPT_DIR / "poster.svg"
+    png_path = SCRIPT_DIR / "poster.png"
 
     print("Step 1: Generating master SVG poster...")
     svg_content = generate_svg()
@@ -489,15 +539,10 @@ def main():
     print(f"Created {svg_path} ({file_size_mb:.2f} MB)")
 
     print("Step 2: Converting SVG to high-resolution PNG using Chrome headless...")
-    chrome_candidates = [
-        r"C:\Program Files\Google\Chrome\Application\chrome.exe",
-        r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
-        r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
-        r"C:\Program Files\Microsoft\Edge\Application\msedge.exe"
-    ]
-    chrome_bin = next((c for c in chrome_candidates if os.path.exists(c)), None)
+    chrome_bin = find_chrome_binary()
     if not chrome_bin:
-        print("Error: Could not find Chrome or Edge executable!", file=sys.stderr)
+        print("Error: Could not find Chrome, Chromium, or Edge executable in PATH or standard install locations.", file=sys.stderr)
+        print("Please install Chrome/Chromium or set the CHROME_BIN environment variable.", file=sys.stderr)
         sys.exit(1)
 
     abs_svg = os.path.abspath(svg_path)

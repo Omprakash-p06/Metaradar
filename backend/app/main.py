@@ -4,7 +4,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 import structlog
 
-from app.core.config import settings
+from app.core.config import settings, validate_production_settings
 from app.core.domain_config import get_domain_config
 from app.core.logging import configure_structlog
 from app.core.middleware import CorrelationIdMiddleware, SecurityHeadersMiddleware
@@ -31,6 +31,7 @@ logger = structlog.get_logger("metaradar.main")
 async def lifespan(app: FastAPI):
     # Startup
     logger.info("service_startup", message="Initializing MetaRadar Backend Service...")
+    validate_production_settings()
     try:
         domain_cfg = get_domain_config()
         logger.info(

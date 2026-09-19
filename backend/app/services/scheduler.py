@@ -74,6 +74,11 @@ class SourceScheduler:
             "et_pharma": settings.SCHEDULER_ET_PHARMA_INTERVAL_MINUTES,
         }
         for conn in ALL_CONNECTORS:
+            if conn.source_id not in intervals:
+                logger.warning(
+                    "Unregistered scheduler source_id '%s' falling back to 30 min default",
+                    conn.source_id,
+                )
             interval = intervals.get(conn.source_id, 30)
             self._jobs[conn.source_id] = ScheduledJobState(conn.source_id, interval)
 

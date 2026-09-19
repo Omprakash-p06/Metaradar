@@ -72,8 +72,8 @@ class NewsAPIConnector(SourceConnector):
             )
 
         # --- quota gate: read state BEFORE any network call (D-20) ---
-        quota_remaining, quota_window_date = await self._read_quota(session, profile_id)
         today = datetime.now(timezone.utc).date().isoformat()
+        quota_remaining, quota_window_date = await self._read_quota(session, profile_id, today=today)
 
 
         if quota_remaining is not None and quota_remaining <= 0 and quota_window_date == today:
@@ -153,9 +153,12 @@ class NewsAPIConnector(SourceConnector):
 
     # ------------------------------------------------------------------ #
 
-    async def _read_quota(self, session: Any, profile_id: str) -> Tuple[Optional[int], str]:
+    async def _read_quota(
+        self, session: Any, profile_id: str, today: Optional[str] = None
+    ) -> Tuple[Optional[int], str]:
         default_quota = (self.config.quota_per_day if self.config else 100) or 100
-        today = date.today().isoformat()
+        if today is None:
+            today = datetime.now(timezone.utc).date().isoformat()
         state = await self._read_connector_state(session, profile_id)
         if state is None or not state.cursor:
             return default_quota, today
@@ -196,44 +199,53 @@ class NewsAPIConnector(SourceConnector):
         if not title:
             return None
 
+        # Scrub both title and body fields (WR-04)
+        scrubbed_title, _, _ = PIIPHIScrubber.scrub(title)
         scrubbed, _, _ = PIIPHIScrubber.scrub(f"{description} {content_raw}".strip())
-        content = scrubbed or title
+        content = scrubbed or scrubbed_title
         published_at = self._parse_date(pub_date_raw, retrieved_at)
 
         fingerprint = generate_fingerprint(
-            title=title,
+            title=scrubbed_title,
             published_at=published_at,
             publisher=publisher,
         )
         external_id = url or hashlib.sha256(fingerprint.encode("utf-8")).hexdigest()
         content_hash = hashlib.sha256(f"{external_id}:{content}".encode("utf-8")).hexdigest()
-        entities = self._detect_entities(f"{title} {description}")
+        entities = self._detect_entities(f"{scrubbed_title} {scrubbed}")
+
+        # Sanitize article dict to prevent unscrubbed PII leaks to bronze (WR-04)
+        sanitized_article = dict(article)
+        for key in ("title", "description", "content"):
+            if isinstance(sanitized_article.get(key), str):
+                scrubbed_val, _, _ = PIIPHIScrubber.scrub(sanitized_article[key])
+                sanitized_article[key] = scrubbed_val
 
         raw_payload = {
             "external_id": external_id,
             "fingerprint": fingerprint,
-            "title": title,
+            "title": scrubbed_title,
             "description": scrubbed,
             "source_name": publisher or "NewsAPI",
             "source_tier": 3,
             "signal_type": "NEWS",
             "event_type": "INDUSTRY_NEWS",
             "url": url or None,
-            "evidence_text": scrubbed or description or title,
+            "evidence_text": scrubbed or scrubbed_title,
             "provenance_status": "available" if url else "missing_url",
             "entity_terms": entities,
             "pii_scrubbed": True,
             "published_at": published_at.isoformat(),
             "retrieved_at": retrieved_at.isoformat(),
             "connector_version": self.connector_version,
-            "article": article,  # verbatim NewsAPI article object (D-23)
+            "article": sanitized_article,  # scrubbed NewsAPI article object (WR-04)
         }
 
         return RawSignalPayload(
             source_id=self.source_id,
             source_type=self.source_type,
             external_id=external_id,
-            title=title,
+            title=scrubbed_title,
             content=content,
             url=url or None,
             published_at=published_at,

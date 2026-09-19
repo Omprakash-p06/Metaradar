@@ -16,7 +16,7 @@ findings:
   warning: 8
   info: 4
   total: 14
-status: issues-found
+status: resolved
 ---
 
 # Phase 13: Code Review Report
@@ -24,7 +24,7 @@ status: issues-found
 **Reviewed:** 2026-09-19T00:00:00Z
 **Depth:** standard
 **Files Reviewed:** 7
-**Status:** issues-found
+**Status:** resolved (all 14 findings remediated and verified)
 
 ## Summary
 
@@ -172,3 +172,24 @@ At minimum assert `inspect.getsource(NewsAPIConnector._read_quota)` contains `ti
 _Reviewed: 2026-09-19T00:00:00Z_
 _Reviewer: the agent (gsd-code-reviewer)_
 _Depth: standard_
+
+## Remediation & Verification (2026-09-19)
+
+All 14 review findings have been resolved and verified across the codebase:
+
+| Finding | Severity | File(s) | Remediation Applied | Verification |
+|:---|:---|:---|:---|:---|
+| **CR-01** | Critical | `main.py`, `start.py` | Wired `validate_production_settings()` into `lifespan()` startup and `start.py` main. | `test_lifespan_wires_production_boot_guard` PASSED |
+| **CR-02** | Critical | `synthesize.py`, `signals.py` | Classified evidence dynamically with `PIIPHIScrubber.classify_payload()`; converged on `DataClassification.CONFIDENTIAL`. | `test_synthesis_evidence_pii_classification` PASSED |
+| **WR-01** | Warning | `newsapi.py` | Standardized `_read_quota` on UTC `datetime.now(timezone.utc).date().isoformat()` with optional `today` parameter. | `test_newsapi_read_quota_uses_utc` PASSED |
+| **WR-02** | Warning | `pii.py` | Fixed MRN regex requiring marker (`#` or `:`), preventing false positive on "Chart review". | `test_pii_scrubber_clinical_identifiers` PASSED |
+| **WR-03** | Warning | `pii.py` | Scoped `patient_name` pattern with case sensitivity and exact `Patient Name:` prefix. | `test_pii_scrubber_clinical_identifiers` PASSED |
+| **WR-04** | Warning | `newsapi.py` | Scrubbed `title` prior to fingerprinting/payload; sanitized nested `article` dict fields. | `test_newsapi_parse_article_scrubs_title_and_raw_article` PASSED |
+| **WR-05** | Warning | `generate_poster.py` | Resolved paths relative to script; enforced required assets; added cross-platform browser lookup. | Executed and generated `poster.png` (2.13 MB, 3402x4536) |
+| **WR-06** | Warning | `generate_pitch_deck.py` | Added graceful `python-pptx` import guard; created output dir; warned on missing diagrams. | Executed and saved `MetaRadar_Pitch_Deck.pptx` |
+| **WR-07** | Warning | `test_codebase_concerns.py` | Replaced tautological date test with behavioral `NewsAPIConnector._read_quota` UTC test. | `test_newsapi_read_quota_uses_utc` PASSED |
+| **WR-08** | Warning | `test_codebase_concerns.py` | Added test verifying `lifespan` startup fails fast with `RuntimeError` on misconfigured prod. | `test_lifespan_wires_production_boot_guard` PASSED |
+| **IN-01** | Info | `pii.py`, `scheduler.py` | Removed phantom `"congress"` source; added warning log on unconfigured scheduler intervals. | `test_source_classification_all_connectors` PASSED |
+| **IN-02** | Info | `pii.py` | Added `None` guard returning `("", False, {})`; precompiled regexes into `COMPILED_PATTERNS`. | `test_pii_scrubber_clinical_identifiers` PASSED |
+| **IN-03** | Info | `test_codebase_concerns.py` | Asserted exact per-source intervals against `scheduler._jobs` without re-calling `_init_job_states()`. | `test_scheduler_intervals_configured` PASSED |
+| **IN-04** | Info | `config.py` | Removed unreachable `None` comparison in `validate_production_settings()`. | `test_production_boot_guard` PASSED |

@@ -6,11 +6,19 @@ Style: Swiss Professional High-Contrast Dark Theme with Pure Absolute Positionin
 """
 
 import os
-import pptx
-from pptx.util import Inches, Pt
-from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
-from pptx.dml.color import RGBColor
-from pptx.enum.shapes import MSO_SHAPE
+from pathlib import Path
+import sys
+
+try:
+    import pptx
+    from pptx.util import Inches, Pt
+    from pptx.enum.text import PP_ALIGN, MSO_ANCHOR
+    from pptx.dml.color import RGBColor
+    from pptx.enum.shapes import MSO_SHAPE
+except ImportError:
+    print("Error: python-pptx is required to generate the pitch deck.", file=sys.stderr)
+    print("Please install python-pptx using: pip install python-pptx", file=sys.stderr)
+    sys.exit(1)
 
 # --- Color Constants ---
 BG_COLOR = RGBColor(11, 15, 25)          # #0B0F19 - Deep Navy
@@ -29,16 +37,29 @@ HIGHLIGHT_CYAN = RGBColor(6, 182, 212)   # #06B6D4 - Tech Cyan
 FONT_HEADING = "Segoe UI"
 FONT_BODY = "Segoe UI"
 
+ROOT_DIR = Path(__file__).resolve().parent.parent
+PITCH_DIR = ROOT_DIR / "pitch"
+PNGS_DIR = PITCH_DIR / "pngs"
+
 def create_presentation():
     prs = pptx.Presentation()
     prs.slide_width = Inches(13.333)
     prs.slide_height = Inches(7.5)
     blank_layout = prs.slide_layouts[6]
 
-    icon_path = os.path.abspath("pitch/pngs/icon.png")
-    arch_path = os.path.abspath("pitch/pngs/architecture.png")
-    dataflow_path = os.path.abspath("pitch/pngs/dataflow.png")
-    resp_path = os.path.abspath("pitch/pngs/responsibility_flow.png")
+    icon_path = str(PNGS_DIR / "icon.png")
+    arch_path = str(PNGS_DIR / "architecture.png")
+    dataflow_path = str(PNGS_DIR / "dataflow.png")
+    resp_path = str(PNGS_DIR / "responsibility_flow.png")
+
+    for name, p in [
+        ("Icon", icon_path),
+        ("Architecture", arch_path),
+        ("Dataflow", dataflow_path),
+        ("Responsibility Flow", resp_path),
+    ]:
+        if not os.path.exists(p):
+            print(f"Warning: Diagram asset '{name}' not found at {p}. Slide cards will omit image.", file=sys.stderr)
 
     def add_slide_base(slide_num, eyebrow_text, title_text, badge_text="Problem Statement #3 · Rare Disease"):
         slide = prs.slides.add_slide(blank_layout)
@@ -524,8 +545,9 @@ def create_presentation():
     add_entry(tf11, "3. Complete Decision Governance", "Intelligence without action is useless. MetaRadar delivers Four-Question Decision Briefs with role-scoped ownership and an immutable WORM executive sign-off queue.", HIGHLIGHT_CYAN, TEXT_WHITE, 9.8, 4)
 
     # Save output
-    output_path = os.path.abspath("pitch/MetaRadar_Pitch_Deck.pptx")
-    prs.save(output_path)
+    PITCH_DIR.mkdir(parents=True, exist_ok=True)
+    output_path = PITCH_DIR / "MetaRadar_Pitch_Deck.pptx"
+    prs.save(str(output_path))
     print(f"Presentation saved successfully to {output_path}")
 
 if __name__ == "__main__":

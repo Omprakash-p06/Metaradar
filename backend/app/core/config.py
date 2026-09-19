@@ -143,7 +143,7 @@ def validate_production_settings() -> None:
     Raises RuntimeError if production is misconfigured.
     """
     if settings.is_production:
-        if settings.SECRET_KEY in ("dev-secret-change-in-production", "", None):
+        if settings.SECRET_KEY in ("dev-secret-change-in-production", ""):
             raise RuntimeError("FATAL: Cannot run in production with default SECRET_KEY.")
         if settings.DEMO_MODE:
             raise RuntimeError("FATAL: DEMO_MODE must be False in production.")

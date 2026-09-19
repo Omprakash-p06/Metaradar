@@ -1539,7 +1539,7 @@ async def query_athena(payload: AthenaQueryRequest, db: AsyncSession = Depends(g
 
     # 1. PII / PHI scrubbing & content classification (CR-03)
     scrubbed_prompt, has_pii, _ = PIIPHIScrubber.scrub(trimmed)
-    classification = DataClassification.PATIENT_IDENTIFIABLE if has_pii else DataClassification.PUBLIC
+    classification = DataClassification.CONFIDENTIAL if has_pii else DataClassification.PUBLIC
 
     logger.info(f"[ATHENA] Query received: '{trimmed[:80]}' (classification={classification})")
 
