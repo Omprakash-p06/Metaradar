@@ -1,190 +1,124 @@
 # Coding Conventions
 
-**Analysis Date:** 2026-09-01
+**Analysis Date:** 2026-09-19
 
 ## Naming Patterns
 
-### Files & Folders
+**Files:**
+- Backend Python: `snake_case.py` — `backend/app/core/logging.py`, `backend/app/api/v1/endpoints/signals.py`, `backend/app/schemas/auth.py`, `backend/app/services/ingestion.py`
+- Backend packages: `snake_case` dirs — `backend/app/core/`, `backend/app/schemas/`, `backend/app/models/`, `backend/app/providers/`, `backend/app/services/`, `backend/app/api/v1/endpoints/`
+- Backend tests: `test_*.py` (enforced by `pytest.ini: python_files = test_*.py`) — `tests/test_auth.py`, `tests/test_signals_endpoints.py`, `tests/test_foundation.py`
+- Frontend components: `PascalCase.tsx` — `frontend/components/auth/ProfileCard.tsx`, `frontend/components/common/EvidenceDrawer.tsx`, `frontend/components/signals/SignalCard.tsx`
+- Frontend component folders: `kebab-case` — `frontend/components/common/`, `frontend/components/signals/`, `frontend/components/ui/`, `frontend/components/auth/`
+- Frontend utilities/types: `camelCase.ts` — `frontend/types/api.ts`; co-located CSS: `ProfileCard.css` next to `ProfileCard.tsx`
+- Scripts: `snake_case.py` for Python (`scripts/export_openapi.py`, `scripts/test_e2e_vertical_slice.py`), `kebab-case.mjs` for Node (`scripts/check-banned-classes.mjs`)
 
-| Layer | Pattern | Examples |
-|-------|---------|----------|
-| Python source files | `snake_case.py` | `auth.py`, `signals.py`, `logging.py`, `middleware.py`, `config.py`, `redact.py` |
-| Python package directories | `snake_case` | `app/core/`, `app/schemas/`, `app/api/v1/endpoints/`, `app/services/`, `app/models/`, `app/providers/` |
-| Test files | `test_*.py` | `test_auth.py`, `test_signals_endpoints.py`, `test_ingestion.py` |
-| TypeScript source files | `camelCase.ts` or `kebab-case.tsx` | `api.ts`, `mappers.ts`, `errors.ts`, `hooks.ts`, `utils.ts` |
-| React components | `PascalCase.tsx` | `PersonaSwitcher.tsx`, `SignalCard.tsx`, `SpecularButton.tsx`, `AnimatedCounter.tsx` |
-| Component subdirectories | `kebab-case` | `components/ui/`, `components/common/`, `components/signals/`, `components/theme/` |
-| Schema files | `snake_case.py` | `auth.py`, `intelligence.py`, `registry.py` |
-| Endpoint files | `snake_case.py` | `auth.py`, `signals.py`, `health.py`, `pipeline.py`, `feedback.py` |
-| Config files | `snake_case` or standard names | `pytest.ini`, `eslint.config.mjs`, `setup.py` |
+**Functions:**
+- Python: `snake_case` verbs — `configure_structlog()` in `backend/app/core/logging.py:22`, `export_contracts()` in `scripts/export_openapi.py:13`, `generate_fingerprint()` in `backend/app/services/deduplication.py`, `utc_now()` in `backend/app/models/__init__.py:16`
+- TypeScript/React: `camelCase` handlers — `handleFeedback` in `frontend/components/common/EvidenceDrawer.tsx:40`, `handleContactClick` in `frontend/components/auth/ProfileCard.tsx:334`; hooks `useState`, `useMemo`, `useCallback`, `useRef`, `useEffect`
+- Test functions: `test_<subject>` matching `pytest.ini: python_functions = test_*` — `test_contract_sync_drift` in `tests/test_contract_drift.py:11`, `test_domain_config_loader` in `tests/test_foundation.py:20`
 
-### Functions & Methods (Python Backend)
+**Variables:**
+- Python locals: `snake_case` — `openapi_schema`, `contracts_dir`, `json_path` in `scripts/export_openapi.py:24-30`
+- TypeScript locals/props: `camelCase` — `selectedFunction`, `feedbackSuccess`, `isOpen`, `onClose` in `frontend/components/common/EvidenceDrawer.tsx:23-36`
+- CSS custom properties: `--kebab-case` design tokens — `--surface`, `--surface-secondary`, `--foreground`, `--muted-foreground`, `--border`, `--primary`, `--success`, `--danger` in `frontend/app/globals.css:30-65`
+- Env vars: `UPPER_SNAKE_CASE` — `DATABASE_URL`, `REDIS_URL`, `LLM_PROVIDER`, `METARADAR_API_URL`, `METARADAR_ORIGIN` (see `.github/workflows/ci.yml:57-73`, `scripts/test_e2e_vertical_slice.py:36-37`)
 
-- **Standard functions:** `snake_case` — e.g., `validate_state_transition`, `_serialize_signal`, `configure_structlog`, `redact_text`
-- **Private/helper functions:** Leading underscore — e.g., `_scrub_secrets`, `_set_auth_cookies`, `_clear_auth_cookies`
-- **Async functions:** `async def` prefix — e.g., `async def login`, `async def get_signal_detail`
-- **Class methods:** `snake_case` — e.g., `filter`, `scrub`, `classify_payload`, `validate`
-- **Route handler functions:** `async def` matching the endpoint — e.g., `list_signals`, `submit_signal_review`, `get_overview`
-- **State machine/validation functions:** `snake_case` — e.g., `validate_state_transition`
-- **Database helpers:** `snake_case` — e.g., `_compile_params` in `FakeSession`
-
-### Variables & Constants (Python Backend)
-
-- **Module-level constants:** `UPPER_SNAKE_CASE` — e.g., `MAX_EVIDENCE_DISTANCE = 0.35`, `KNOWN_STATES`, `VALID_TRANSITIONS`, `ACTIONED_ALLOWED_ROLES`, `ATHENA_GREETINGS`
-- **Database model fields:** `snake_case` — e.g., `signal_id`, `source_name`, `review_status`
-- **Pydantic model fields:** `snake_case` — e.g., `novelty`, `clinical`, `regulatory`, `recency`, `total`
-- **Type variables:** `snake_case` with type hints — e.g., `text: str`, `items: List[SignalSchema]`
-- **Mutable default arguments:** `Field(default_factory=...)` — never mutable literals
-
-### Types & Interfaces (TypeScript Frontend)
-
-- **Interfaces:** `PascalCase` — e.g., `Signal`, `HealthResponse`, `ModelMetadata`, `ScoreBreakdown`, `AuditLogItem`, `SignalReviewPayload`
-- **Type aliases:** `PascalCase` — e.g., `DataMode`, `ConfidenceType`, `HealthStatus`
-- **Enum-like string unions:** `PascalCase` or uppercase values — e.g., `"CRITICAL" | "HIGH" | "MEDIUM" | "LOW"` for priority
-- **Exported types:** Always `export`ed from `frontend/types/api.ts`
-- **Function types:** Arrow functions with explicit return types — e.g., `export async function fetchOverview(signal?: AbortSignal): Promise<DashboardOverview>`
-- **API function names:** `camelCase` with `fetch`/`get`/`submit` prefix — e.g., `fetchOverview`, `getSignals`, `submitSignalFeedback`, `askAthena`, `streamAthena`
+**Types:**
+- Pydantic v2 schemas: `PascalCase` + `Schema`/`Request`/`Response` suffix — `SignalReviewRequest`, `SignalSchema`, `HealthResponse`, `ModelMetadataSchema`, `FactInterpretationSpeculationSchema` in `backend/app/schemas/__init__.py`; `LoginRequest`, `DemoLoginRequest`, `UserMe` in `backend/app/schemas/auth.py`; `ConfluenceAlertItem`, `ContradictionItem` in `backend/app/schemas/intelligence.py`
+- SQLAlchemy models: `PascalCase` singular — `PipelineRun`, `Source`, `SourceHealthLog`, `Company`, `Asset`, `ClinicalTrial`, `Signal`, `User`, `Session` in `backend/app/models/__init__.py`, `backend/app/models/auth.py`
+- TypeScript: `PascalCase` interfaces/types — `Signal`, `DataMode`, `ConfidenceType`, `ScoreBreakdown`, `SignalReviewPayload`, `EvidenceDrawerProps`, `ProfileCardProps` in `frontend/types/api.ts`, `frontend/components/common/EvidenceDrawer.tsx:9`, `frontend/components/auth/ProfileCard.tsx:7`
+- Test classes: `Test*` prefix per `pytest.ini: python_classes = Test*`
 
 ## Code Style
 
-### Backend (Python)
+**Formatting:**
+- No Prettier config in repo — formatting is enforced implicitly via `eslint .` + `tsc --noEmit` + `next build` gates (see `frontend/package.json:11-15`, `.github/workflows/ci.yml:95-102`)
+- Python: 4-space indent, double quotes, ~120-col soft limit (observed in `backend/app/core/logging.py`, `scripts/export_openapi.py`); type annotations on all public functions
+- TSX: single quotes, semicolons omitted inconsistently — match surrounding file; 2-space indent
 
-- **Imports:** `from __future__ import annotations` in all source files
-- **Import order:** stdlib → third-party → local app (grouped, alphabetically within groups)
-- **Type hints:** Required on all function signatures, including return types and parameter types
-- **String formatting:** f-strings throughout — e.g., `f"[ATHENA] Query received: '{trimmed[:80]}'"`
-- **Docstrings:** Triple-quoted `"""` docstrings on modules, classes, and public functions
-- **Error handling:** `try/except` blocks with specific exception types; bare `except Exception:` only where appropriate with logging
-- **Async patterns:** `async/await` throughout; `AsyncSession` from SQLAlchemy; `AsyncGenerator` for streaming SSE
-- **Pydantic v2:** `BaseModel` with `ConfigDict(from_attributes=True)` for models that accept ORM attributes; `field_validator` for custom validation; `Field(default_factory=...)` for mutable defaults
-- **Logging:** `logging.getLogger(__name__)` for module-level loggers; `structlog` for structured JSON logging in `core/logging.py`; `logger.info()`, `logger.warning()`, `logger.debug()`, `logger.error()` patterns
-- **HTTP exceptions:** `fastapi.HTTPException(status_code=status.HTTP_4xx_XXX, detail="...")` throughout endpoints
-- **UUID usage:** `from uuid import UUID` and `uuid.uuid4()` for primary keys
-- **Database queries:** SQLAlchemy 2.0 style `select(...)` with `await db.execute(query)`; `result.scalars().all()` for results
-- **Constants location:** Module-level constants at top of file, before class/function definitions
-- **No trailing semicolons**; one import per line (multi-import from same module on single line with parens)
+**Linting:**
+- Frontend: ESLint flat config in `frontend/eslint.config.mjs` — `@next/eslint-plugin-next` recommended + `core-web-vitals` rules only; ignores `.next/`, `node_modules/`, `out/`, `build/`, `src/`. Run: `pnpm lint` (=`eslint .`) from `frontend/`
+- Backend: no flake8/ruff config — linting is type + test discipline (Pydantic v2 validation, pytest suite). Do NOT add a new linter without a phase plan
+- Custom CSS gate: `scripts/check-banned-classes.mjs` bans `bg-slate-*`, `text-slate-*`, `border-slate-*`, `dark:*slate-*`, and arbitrary hex `bg-[#...]`/`text-[#...]`/`border-[#...]` in `frontend/components/**/*.tsx` (except `metaradar.tsx`); comment lines skipped. Run: `pnpm run check:banned-classes` from `frontend/`
 
-### Frontend (TypeScript/React)
-
-- **TypeScript version:** 5.7.3, strict mode
-- **React:** 19 with Next.js 16.3.0; `'use client'` directive for client components
-- **Tailwind CSS v4:** Custom CSS variables (`--muted-foreground`, `--border`, `--surface`, etc.); `twMerge(clsx(...))` via `cn()` utility
-- **Class variants:** `cva` (class-variance-authority) for component variants like `buttonVariants`
-- **Icon library:** `lucide-react` for all icons — e.g., `import { Activity, AlertTriangle, Bell } from 'lucide-react'`
-- **Animation:** `framer-motion` (`AnimatePresence`, `motion`) for transitions
-- **Data fetching:** Native `fetch` API wrapped in `apiFetch<T>()` with `AbortSignal` support; `credentials: 'include'` for cookies
-- **Error handling:** `ApiError` class extends `Error` with `status`, `statusText`, `message`, `isRetryable`, `requestId`, `endpoint`; `formatError()` for display formatting
-- **State management:** React `useState`, `useEffect`, `useCallback`, `useRef`; custom `useLiveData<T>()` hook for polling with visibility awareness and AbortController dedup
-- **Mapper pattern:** `mapSignal()` in `lib/mappers.ts` transforms raw API responses into typed `Signal` objects; `RawSignalPayload` interface for raw data
-- **No hardcoded colors:** `scripts/check-banned-classes.mjs` enforces no `bg-slate-*`, `text-slate-*`, `border-slate-*`, or hex-color Tailwind classes in components
-- **CSS class naming:** `camelCase` React props; `kebab-case` CSS class names (Tailwind utility classes)
-- **Component patterns:** Function components with explicit type annotations; `export function` for named exports; props destructured with types
+**Strictness:**
+- TypeScript strict mode ON in `frontend/tsconfig.json:7` (`"strict": true`, `"noEmit": true`, `"jsx": "react-jsx"`, path alias `"@/*": ["./*"]`). Zero-error `pnpm exec tsc --noEmit` is a DoD gate — never use `@ts-ignore`/`@ts-expect-error` to suppress (banned by `AGENTS.md` rule 5)
+- Pydantic v2 throughout backend: `BaseModel` + `Field(...)` with descriptions, `ConfigDict(from_attributes=True)` for ORM-mapped responses (e.g. `backend/app/schemas/auth.py:4-17`), `Field(default_factory=...)` for mutable defaults, `field_validator` for coercion (see `backend/app/schemas/__init__.py:5`)
+- SQLAlchemy 2.0 classic-Column style (not `Mapped[]`): `Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)`, `Column(DateTime(timezone=True), default=utc_now)` — see `backend/app/models/__init__.py:1-33`. All datetimes timezone-aware via `utc_now()` helper
 
 ## Import Organization
 
-### Python Backend
+**Order:**
+1. Stdlib (`asyncio`, `os`, `sys`, `pathlib`, `datetime`, `uuid`, `time`)
+2. Third-party (`fastapi`, `structlog`, `sqlalchemy`, `pydantic`, `httpx`, `react`, `lucide-react`)
+3. First-party `app.*` / `@/*` (`from app.core.logging import get_logger`, `import type { Signal } from '@/types/api'`, `from '@/components/metaradar'`)
+4. Relative / local (`./ProfileCard.css`)
 
-```python
-# 1. Future imports (always first)
-from __future__ import annotations
-
-# 2. Standard library
-import os
-import sys
-import uuid
-from datetime import datetime, timezone
-from typing import Any, Dict, List, Optional, Tuple
-
-# 3. Third-party
-from fastapi import APIRouter, Depends, HTTPException, Request, status
-from sqlalchemy.ext.asyncio import AsyncSession
-from pydantic import BaseModel, Field, field_validator
-
-# 4. Local app imports (absolute paths from project root)
-from app.core.config import settings
-from app.db.session import get_db
-from app.models import Signal, AuditLog
-from app.schemas import SignalSchema, SignalListResponse
-```
-
-- **Path alias:** `app.` prefix resolved via `sys.path.insert(0, str(base_dir / "backend"))` in `conftest.py` and `tests/`
-- **Barrel files:** `backend/app/schemas/__init__.py` re-exports all schemas so endpoints do `from app.schemas import SignalSchema` instead of deep imports
-- **Lazy imports:** Used sparingly inside functions to avoid circular imports — e.g., `from app.services.auth_service import get_session_user` inside a function body
-
-### TypeScript/React Frontend
-
-```typescript
-// 1. Type-only imports
-import type { Signal, HealthResponse } from '@/types/api'
-
-// 2. Regular imports (aliased via @/)
-import { ApiError, mapSignal } from '@/lib/api'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/ui/button'
-```
-
-- **Path alias:** `@/` maps to `frontend/` (configured by Next.js)
-- **Type imports:** `import type { ... }` for type-only imports
-- **Named re-exports:** `lib/api.ts` re-exports aliases like `export const getOverview = fetchOverview`
-- **Default exports:** Rarely used; prefer named exports (`export function`, `export async function`)
+**Path Aliases:**
+- Frontend: `"@/*": ["./*"]` in `frontend/tsconfig.json:21-23` — always import via `@/` (`@/types/api`, `@/components/metaradar`), never deep relative `../../../`
+- Backend: `sys.path.insert(0, str(base_dir / "backend"))` preamble in every `scripts/*.py` and `tests/*.py` so `from app.main import app` works from repo root (see `scripts/export_openapi.py:6-10`, `tests/conftest.py:8-9`, `tests/test_foundation.py:8-9`). CI sets `PYTHONPATH: backend:.` instead (`.github/workflows/ci.yml:58,69`)
+- `pytest.ini: pythonpath = backend .` makes the alias work under pytest without the preamble
 
 ## Error Handling
 
-### Backend Strategy
-
-- **HTTP errors:** `fastapi.HTTPException` with appropriate status codes:
-  - `401_UNAUTHORIZED` — missing/invalid credentials
-  - `403_FORBIDDEN` — RBAC denial, origin mismatch, CSRF failure, rate limit
-  - `404_NOT_FOUND` — resource not found
-  - `409_CONFLICT` — invalid state transition, terminal state modification
-  - `422_UNPROCESSABLE_ENTITY` — empty prompt, validation failure
-  - `429_TOO_MANY_REQUESTS` — rate limit exceeded
-- **Validation:** Pydantic `field_validator` for schema-level validation; `Field(..., ge=1, le=5)` for numeric bounds; custom validators like `validate_stakeholder_function`
-- **Runtime errors:** `pytest.raises(PermissionError)` for expected exceptions; `try/except Exception` with `logger.debug` for non-critical audit failures
-- **State machine:** `validate_state_transition()` function centralizes all FSM validation with specific `HTTPException` messages per failure mode
-- **Audit log immutability:** SQLAlchemy `@event.listens_for(AuditLog, "before_update")` and `before_delete` raise `PermissionError`; PostgreSQL triggers also block raw SQL updates/deletes
-
-### Frontend Strategy
-
-- **`ApiError` class:** Custom error class with `status`, `statusText`, `message`, `isRetryable`, `requestId`, `endpoint` fields
-- **`formatError()` function:** Maps `ApiError` to display-friendly `FormattedError` with titles like "Resource Not Found" (404), "Rate Limit Exceeded" (429), "Authentication Error" (401/403), "Server Error" (500+), "Network Disconnected" (0)
-- **Network errors:** `AbortError` re-thrown as-is; all other errors wrapped in `ApiError(0, 'NetworkError', ...)`
-- **Graceful degradation:** `.catch(() => ({...defaultValue}))` patterns in `apiFetch` callers to provide fallback data when endpoints fail
-- **Console logging:** `console.error('Failed to clear cache:', err)` for user-action failures; no `alert()` usage
+**Patterns:**
+- Backend: raise `fastapi.HTTPException` with explicit status codes at endpoint layer; terminal-state guard returns **409** (verified in `scripts/test_e2e_vertical_slice.py:297-298` — re-mutating an `ACTIONED` signal must return 409). Auth/origin failures return **403** with `detail` strings `"Missing Origin/Referer"` / `"Untrusted request origin"` (see `tests/test_security.py:50-70`)
+- Never use bare `except:` or silent `try...except: pass` in production paths — banned by `AGENTS.md` rule 5. Test-only cleanup in `tests/conftest.py:43-45` is the sole `except Exception: pass` allowance (fixture teardown)
+- Frontend: `try/catch/finally` around every async mutation with user-visible error state — canonical example `handleFeedback` in `frontend/components/common/EvidenceDrawer.tsx:40-67` (`setSubmitting`/`setFeedbackSuccess`/`setFeedbackError` + `finally { setSubmitting(false) }`)
+- Frontend error UI: use `ErrorState` (`frontend/components/common/ErrorState.tsx`) with `title`, `message`, `requestId` (correlation ID with copy button), `endpoint`, `statusCode`, `onRetry`, `compact` props; `role="alert"` + `aria-live="assertive"` required. Empty states use `EmptyState` (`frontend/components/common/EmptyState.tsx`)
+- Backend validation errors: Pydantic `Field(ge=1, le=500)` range guards (e.g. `PipelineRunRequestSchema.batch_size` in `backend/app/schemas/__init__.py:429`); frontend numeric inputs mirror with `min`/`max` attributes (`EvidenceDrawer.tsx:253-271`)
 
 ## Logging
 
-### Framework
+**Framework:** `structlog` with JSON renderer (backend only). Frontend has no logger — use `console.error` sparingly (only in non-render paths, e.g. `ProfileCard.tsx:288`).
 
-- **Structured JSON logging:** `structlog` configured via `backend/app/core/logging.py`
-- **Standard library:** `logging` module used for module-level loggers via `logging.getLogger(__name__)`
-- **Default logger name:** `"metaradar"` (main), `"metaradar.http"` (middleware), `"metaradar.main"` (app startup)
+**Patterns:**
+- Import via factory, never `structlog` directly in modules: `from app.core.logging import get_logger; logger = get_logger("ingestion_service")` (see `backend/app/services/ingestion.py:14-16`, `backend/app/providers/grok.py:17-21`). Module names: `"metaradar.main"`, `"metaradar.http"`, `"ingestion_router"`, `"grok_provider"`
+- Configure once: `configure_structlog(json_logs=True)` in `backend/app/main.py:26` and default-on-import in `backend/app/core/logging.py:55`. Processors: `merge_contextvars` + `add_log_level` + `TimeStamper(fmt="iso", utc=True)` + `StackInfoRenderer` + `_scrub_secrets` + `JSONRenderer` (`backend/app/core/logging.py:22-43`)
+- Request tracing: `CorrelationIdMiddleware` (`backend/app/core/middleware.py:11-73`) binds `request_id`/`correlation_id`/`path`/`method` to contextvars, echoes `X-Request-ID`/`X-Correlation-ID` response headers, and emits `logger.info("http_request_completed", status_code=..., duration_ms=...)` per request
+- Secret scrubbing is automatic (`_scrub_secrets` + `SecretScrubFilter` in `backend/app/core/logging.py:10-19`, `backend/app/core/redact.py:48`) — never log raw `email`, tokens, or keys; keys containing sensitive substrings render as `[REDACTED_SECRET]`, emails as `[REDACTED_PII]`
+- Log events in `snake_case`: `"http_request_completed"` — pass structured kwargs, never f-string interpolation
 
-### Patterns
+## Comments
 
-- **Configuration:** `configure_structlog(json_logs=True)` sets up processors: `merge_contextvars → add_log_level → TimeStamper → StackInfoRenderer → _scrub_secrets → JSONRenderer`
-- **Secret scrubbing:** `_scrub_secrets` processor redacts keys matching `SENSITIVE_KEYS` (`password`, `token`, `api_key`, `secret`, `authorization`, etc.) to `[REDACTED_SECRET]`; email keys to `[REDACTED_PII]`; all string values passed through `redact_text()`
-- **Correlation IDs:** `CorrelationIdMiddleware` binds `request_id` and `correlation_id` to structlog contextvars via `structlog.contextvars.bind_contextvars()` for async-safe trace logging
-- **Request telemetry:** `logger.info("http_request_completed", status_code=..., duration_ms=...)` emitted on every request completion
-- **Module-level loggers:** `logger = logging.getLogger(__name__)` pattern in each module; used with `logger.info()`, `logger.warning()`, `logger.error()`, `logger.debug()`
-- **String formatting:** `%s` style in logging calls — e.g., `logger.debug("Failed to record failed login audit: %s", e)` (not f-strings in logging)
-- **Structured events:** `logger.info("service_startup", message="...", version=...)` — event name as first positional arg, context as kwargs
+**When to Comment:**
+- Every module with non-obvious honesty limits gets a docstring — canonical example `export_contracts()` in `scripts/export_openapi.py:14-23` documents that `frontend/types/api.ts` is a re-emitted static template, NOT generated, and drift must be caught by human review
+- Middleware/classes carry purpose docstrings (`CorrelationIdMiddleware` in `backend/app/core/middleware.py:12-17`, `SecurityHeadersMiddleware` in `:76-79`)
+- E2E harness header comment enumerates the 6-function workflow steps (`scripts/test_e2e_vertical_slice.py:1-12`)
+- Inline comments only for non-obvious guards — e.g. `# Skip comment lines` in `scripts/check-banned-classes.mjs:60`, `# Clear prior task context` in `backend/app/core/middleware.py:27`, `# Inject mock client into gemma provider` in `tests/test_foundation.py:81`
 
-## Security & Privacy Invariants
+**JSDoc/TSDoc:**
+- Not used. Props are documented via TypeScript interfaces with optional `?` markers (`EvidenceDrawerProps`, `ProfileCardProps`, `ErrorStateProps`). Pydantic fields carry `description=` strings instead (e.g. `SignalReviewRequest.status` in `backend/app/schemas/__init__.py:173`)
 
-- **PII/PHI Scrubbing:** `PIIPHIScrubber` (in `backend/app/services/pii.py`) scrubs emails, phones, SSNs, MRNs, and DOBs from text before ingestion; replaces with `[EMAIL_REDACTED]`, `[PHONE_REDACTED]`, `[SSN_REDACTED]`, `[MRN_REDACTED]`, `[PATIENT_DOB_REDACTED]`
-- **Secret redaction:** `backend/app/core/redact.py` provides `redact_value()`, `redact_mapping()`, `redact_text()` for scrubbing API keys, passwords, tokens from log messages and query params
-- **Audit log immutability:** `AuditLog` model has SQLAlchemy event listeners that raise `PermissionError` on UPDATE and DELETE; PostgreSQL triggers enforce this at the database level
-- **Session security:** `SESSION_COOKIE_NAME = "metaradar_session"` with `httponly=True`, `samesite="lax"`; `CSRF_COOKIE_NAME = "metaradar_csrf"` with `httponly=False` (accessible to JS for `X-CSRF-Token` header)
-- **CSRF validation:** Session-bound HMAC-SHA256 CSRF tokens via `generate_session_bound_csrf()` and `verify_session_bound_csrf()` in `backend/app/core/security.py`
-- **Origin validation:** `require_preauth_origin` dependency enforces exact scheme+host+port matching against `CORS_ORIGINS` on all pre-auth endpoints; blocks spoofed origins like `http://localhost:3000.evil.com`
-- **Rate limiting:** `auth_rate_limit` dependency on auth endpoints (configurable via `AUTH_RATE_LIMIT_PER_MINUTE`); `mutation_rate_limit` on mutation endpoints
-- **Password hashing:** `bcrypt` with `gensalt()` for password hashing; `hashlib.sha256` for session token hashing; `hmac.compare_digest` for constant-time comparison
-- **Session tokens:** Timestamp-signed via `itsdangerous.TimestampSigner`; absolute timeout (8h) and idle timeout (1h) enforced
-- **Privacy gate:** `GrokProvider.validate_privacy_gate()` blocks external API calls for `CONFIDENTIAL` and `UNKNOWN` data classifications; only `PUBLIC` and `SYNTHETIC` pass through
-- **Banned CSS classes:** `scripts/check-banned-classes.mjs` enforces no hardcoded `bg-slate-*`, `text-slate-*`, `border-slate-*`, `dark:bg-*`, or arbitrary hex-color Tailwind classes in `frontend/components/`
-- **`from_attributes=True`:** Pydantic models use `ConfigDict(from_attributes=True)` to accept ORM objects safely
+## Function Design
+
+**Size:** Keep endpoint handlers thin (auth → service → schema); business logic lives in `backend/app/services/` and `backend/app/providers/`. React components under ~430 lines (`ProfileCard.tsx` 427 lines is the upper bound — extract subcomponents beyond that). E2E step blocks are sequential, one function-role per block.
+
+**Parameters:** Pydantic models for all request bodies (`SignalReviewRequest` with `status/reviewer/decision/notes/resulting_action/escalate/escalation_reason/resolve_escalation/is_override` in `backend/app/schemas/__init__.py:172-181`); query/path params typed inline. React props as single `Props` interface with defaults destructured in signature (`ProfileCard.tsx:46-68`).
+
+**Return Values:** Backend returns Pydantic response models (`PipelineRunResponseSchema`, `LeadershipSummaryResponse`, `HealthReadyResponse`); review endpoint returns full signal + audit write. Frontend handlers return `Promise<void>` and drive local state, never raw `fetch` responses. Test helpers return `Dict[str, Any]` / `List[Dict[str, Any]]` (`AuthenticatedDecisionClient` in `scripts/test_e2e_vertical_slice.py:89-144`).
+
+## Module Design
+
+**Exports:** Named exports for components (`export function EvidenceDrawer`, `export function ErrorState`, `export interface ...Props`); default export only for memoized top-level cards (`export default ProfileCard` via `React.memo` in `ProfileCard.tsx:426`). Backend uses plain module-level names, no `__all__`.
+
+**Barrel Files:** `frontend/components/metaradar.tsx` is the shared UI barrel (`Card`, `Badge` imported from `@/components/metaradar` in `EvidenceDrawer.tsx:5`, `ErrorState.tsx:4`). `scripts/check-banned-classes.mjs:39` explicitly excludes `metaradar.tsx` from the banned-class scan — keep shared primitives there. Backend `app/schemas/__init__.py` re-exports domain schemas from `auth.py`/`intelligence.py`/`registry.py`.
+
+## CSS / Styling Conventions (Vanilla CSS Tokens — MANDATORY)
+
+- **Use CSS variables, never hardcoded colors or slate utilities.** Canonical tokens in `frontend/app/globals.css:30-65` (`:root`) and `:67-97` (`.dark`): `--background`, `--surface`, `--surface-secondary`, `--surface-elevated`, `--foreground`, `--muted-foreground`, `--border`, `--primary`, `--accent`, `--success`, `--warning`, `--danger`, `--signal`, `--panel`, `--radius`. Reference as `var(--surface-secondary)`, `var(--foreground)`, `border-[var(--border)]`.
+- **Banned:** `bg-slate-*`, `text-slate-*`, `border-slate-*` (incl. `dark:` variants) and arbitrary hex `bg-[#...]`/`text-[#...]`/`border-[#...]` — CI fails via `pnpm run check:banned-classes` (`frontend/package.json:14`, `.github/workflows/ci.yml:100`). Tailwind layout utilities (`flex`, `grid`, `gap-2`, `p-3.5`, `rounded`, `text-xs`) are fine; only color utilities are gated.
+- **Per-component CSS files** co-located with the component (`ProfileCard.css`, `Stepper.css`, `Counter.css`, `star-portal/styles.css`) use `pc-` prefixed classes (`.pc-card-wrapper`, `.pc-behind`, `.pc-card-shell` in `ProfileCard.tsx:344-346`).
+- **`'use client'` directive** is the first line of every interactive component (`ProfileCard.tsx:1`, `EvidenceDrawer.tsx:1`, `ErrorState.tsx:1`).
+- **Accessibility:** dialogs carry `role="dialog" aria-modal="true" aria-label=...` (`EvidenceDrawer.tsx:89-96`); errors `role="alert" aria-live="assertive"`; icon buttons always have `aria-label`.
+
+## Commit / Branch Conventions
+
+- **Branches:** `feature/*` (new feature), `fix/*` (bug), `refactor/*`, `security/*`, `docs/*` per `docs/rules/DEVELOPMENT_WORKFLOW.md:9-14`. Observed: `feature/phase-12-hackathon-mvp`, `feature/phase-11-productionization`, `fix/concerns-md-audit-fixes`. **NEVER push directly to `main`** — always PR from short-lived branches (`AGENTS.md` rule 3, `DEVELOPMENT_WORKFLOW.md:16`).
+- **Commits:** atomic, conventional-prefix style — `fix:`, `docs:`, `docs(readme):`, `docs(pitch):`, `fix(ui):`, `fix(scheduler):`, `fix(codebase):`, `fix(ui, auth):` (see `git log --oneline`). Never commit `.env`, keys, or credentials (`AGENTS.md` rule 7, `docs/rules/SECURITY_STANDARDS.md:5`).
+- **DoD footer on every phase:** typecheck + lint + build + pytest + contract sync + security + docker + CI + docs + git-safety checkboxes per `docs/rules/DEFINITION_OF_DONE.md:5-16`. If any gate cannot be verified, status is **BLOCKED**.
 
 ---
 
-*Convention analysis: 2026-09-01*
+*Convention analysis: 2026-09-19*
