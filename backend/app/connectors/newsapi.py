@@ -73,7 +73,8 @@ class NewsAPIConnector(SourceConnector):
 
         # --- quota gate: read state BEFORE any network call (D-20) ---
         quota_remaining, quota_window_date = await self._read_quota(session, profile_id)
-        today = date.today().isoformat()
+        today = datetime.now(timezone.utc).date().isoformat()
+
 
         if quota_remaining is not None and quota_remaining <= 0 and quota_window_date == today:
             self.status = "degraded"

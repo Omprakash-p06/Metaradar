@@ -125,6 +125,9 @@ class Settings(BaseSettings):
     SCHEDULER_EMA_INTERVAL_MINUTES: int = 30
     SCHEDULER_FDA_INTERVAL_MINUTES: int = 30
     SCHEDULER_NEWS_INTERVAL_MINUTES: int = 15
+    SCHEDULER_BIOPHARMA_DIVE_INTERVAL_MINUTES: int = 30
+    SCHEDULER_FIERCE_PHARMA_INTERVAL_MINUTES: int = 30
+    SCHEDULER_ET_PHARMA_INTERVAL_MINUTES: int = 30
     SCHEDULER_JITTER_PERCENT: int = 10
     SCHEDULER_MAX_BACKOFF_MINUTES: int = 120
     SCHEDULER_FAILURE_THRESHOLD: int = 3
@@ -132,6 +135,18 @@ class Settings(BaseSettings):
 
 
 settings = Settings()
+
+
+def validate_production_settings() -> None:
+    """
+    Verifies that the application is not running in production with insecure defaults.
+    Raises RuntimeError if production is misconfigured.
+    """
+    if settings.is_production:
+        if settings.SECRET_KEY in ("dev-secret-change-in-production", "", None):
+            raise RuntimeError("FATAL: Cannot run in production with default SECRET_KEY.")
+        if settings.DEMO_MODE:
+            raise RuntimeError("FATAL: DEMO_MODE must be False in production.")
 
 
 def configuration_error_for(source_id: str) -> Optional[str]:
@@ -146,4 +161,5 @@ def configuration_error_for(source_id: str) -> Optional[str]:
         if not key or key.lower() in ("your_xai_api_key_here", "placeholder", "xxx", "none"):
             return "CONFIGURATION_ERROR: XAI_API_KEY missing (required when ENABLE_GROK_FALLBACK=true) — get a key from https://console.x.ai and set XAI_API_KEY in .env"
     return None
+
 

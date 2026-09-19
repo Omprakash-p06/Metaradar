@@ -9,6 +9,8 @@ PATTERNS = {
     "mrn": r"\b(?:MRN|Medical\s*Record\s*Number|Patient\s*ID|Chart\s*#?)[:\s]*#?[A-Za-z0-9-]{5,12}\b",
     "patient_dob": r"\b(?:DOB|Date\s*of\s*Birth|Born)[:\s]*\d{1,4}[/-]\d{1,2}[/-]\d{2,4}\b",
     "national_id": r"\b(?:National\s*ID|NHS\s*#?|CPR\s*#?)[:\s]*\d{6,12}\b",
+    "clinical_subject": r"\b(?:Subject|Participant|Volunteer)\s*ID[:\s]*#?[A-Za-z0-9-]{4,16}\b",
+    "patient_name": r"\bPatient(?:\s+Name)?[:\s]+[A-Z][a-z]+(?:\s+[A-Z][a-z]+)+\b",
 }
 
 
@@ -40,8 +42,21 @@ class PIIPHIScrubber:
         _, has_pii, _ = PIIPHIScrubber.scrub(text)
         if has_pii:
             return DataClassification.CONFIDENTIAL
-        if source_type in ["synthetic", "demo"]:
+        src = source_type.lower().strip()
+        if src in ["synthetic", "demo"]:
             return DataClassification.SYNTHETIC
-        if source_type in ["pubmed", "clinical_trials", "fda", "ema", "newsapi", "congress", "biopharmadive", "fiercepharma"]:
+        if src in [
+            "pubmed",
+            "clinical_trials",
+            "fda",
+            "ema",
+            "newsapi",
+            "congress",
+            "biopharmadive",
+            "fiercepharma",
+            "fierce_pharma",
+            "et_pharma",
+        ]:
             return DataClassification.PUBLIC
         return DataClassification.UNKNOWN
+

@@ -2,7 +2,8 @@
 
 **Novo Nordisk GBS Hackathon 2026 — Problem Statement #3: Rare Disease Competitive Intelligence Radar**  
 *Pilot Implementation: Haemophilia A & Haemophilia B*  
-*Team: MS Ramaiah Institute of Technology (MSRIT), Bangalore*
+*Team: MS Ramaiah Institute of Technology (MSRIT), Bangalore*  
+*Companion Guide: [TAB_BY_TAB_STAKEHOLDER_SCRIPT.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/pitch/TAB_BY_TAB_STAKEHOLDER_SCRIPT.md) (Comprehensive Tab Breakdown & Word-by-Word Presenter Script)*
 
 ---
 

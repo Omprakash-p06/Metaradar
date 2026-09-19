@@ -69,10 +69,14 @@ class SourceScheduler:
             "ema": settings.SCHEDULER_EMA_INTERVAL_MINUTES,
             "fda": settings.SCHEDULER_FDA_INTERVAL_MINUTES,
             "newsapi": settings.SCHEDULER_NEWS_INTERVAL_MINUTES,
+            "biopharmadive": settings.SCHEDULER_BIOPHARMA_DIVE_INTERVAL_MINUTES,
+            "fierce_pharma": settings.SCHEDULER_FIERCE_PHARMA_INTERVAL_MINUTES,
+            "et_pharma": settings.SCHEDULER_ET_PHARMA_INTERVAL_MINUTES,
         }
         for conn in ALL_CONNECTORS:
             interval = intervals.get(conn.source_id, 30)
             self._jobs[conn.source_id] = ScheduledJobState(conn.source_id, interval)
+
 
     def start(self):
         if not settings.ENABLE_BACKGROUND_SCHEDULER:
