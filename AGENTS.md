@@ -6,14 +6,14 @@ This file governs all AI agents working on the MetaRadar codebase.
 
 All rules defined in `docs/rules/` and `.agents/rules/` are mandatory global process standards:
 
-1. **[ENGINEERING_STANDARDS.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/rules/ENGINEERING_STANDARDS.md)**: Absolute non-negotiable software quality, type safety, and honest execution telemetry.
-2. **[DEFINITION_OF_DONE.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/rules/DEFINITION_OF_DONE.md)**: Complete DoD verification matrix required before declaring any task done.
-3. **[DEVELOPMENT_WORKFLOW.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/rules/DEVELOPMENT_WORKFLOW.md)**: Strict branch workflow (`feature/*`, `fix/*`), atomic commits, and pull requests.
-4. **[ARCHITECTURE_RULES.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/rules/ARCHITECTURE_RULES.md)**: Approved Next.js 16 + FastAPI + PostgreSQL 16 + Local Gemma stack.
-5. **[TESTING_STRATEGY.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/rules/TESTING_STRATEGY.md)**: Mandatory executable testing gates (TSC, ESLint, Next build, pytest, contract sync).
-6. **[SECURITY_STANDARDS.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/rules/SECURITY_STANDARDS.md)**: Zero secret leaks, PII/PHI scrubbing, and Grok privacy gate.
-7. **[CI_CD_STANDARDS.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/rules/CI_CD_STANDARDS.md)**: Automated CI pipeline standards.
-8. **[RELEASE_PROCESS.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/rules/RELEASE_PROCESS.md)**: Release verification and deployment readiness.
+1. **[ENGINEERING_STANDARDS.md](docs/rules/ENGINEERING_STANDARDS.md)**: Absolute non-negotiable software quality, type safety, and honest execution telemetry.
+2. **[DEFINITION_OF_DONE.md](docs/rules/DEFINITION_OF_DONE.md)**: Complete DoD verification matrix required before declaring any task done.
+3. **[DEVELOPMENT_WORKFLOW.md](docs/rules/DEVELOPMENT_WORKFLOW.md)**: Strict branch workflow (`feature/*`, `fix/*`), atomic commits, and pull requests.
+4. **[ARCHITECTURE_RULES.md](docs/rules/ARCHITECTURE_RULES.md)**: Approved Next.js 16 + FastAPI + PostgreSQL 16 + Local Gemma stack.
+5. **[TESTING_STRATEGY.md](docs/rules/TESTING_STRATEGY.md)**: Mandatory executable testing gates (TSC, ESLint, Next build, pytest, contract sync).
+6. **[SECURITY_STANDARDS.md](docs/rules/SECURITY_STANDARDS.md)**: Zero secret leaks, PII/PHI scrubbing, and Grok privacy gate.
+7. **[CI_CD_STANDARDS.md](docs/rules/CI_CD_STANDARDS.md)**: Automated CI pipeline standards.
+8. **[RELEASE_PROCESS.md](docs/rules/RELEASE_PROCESS.md)**: Release verification and deployment readiness.
 
 ## Core Rules
 

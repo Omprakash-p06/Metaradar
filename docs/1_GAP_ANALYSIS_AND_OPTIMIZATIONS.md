@@ -2,7 +2,7 @@
 
 > [!IMPORTANT]
 > **HISTORICAL REFERENCE DOCUMENT**  
-> *Note: This document is a secondary/historical reference and must not override the Master Plan. The sole canonical and authoritative specification for MetaRadar is [METARADAR_MASTER_PLAN_v5.0.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/METARADAR_MASTER_PLAN_v5.0.md).*
+> *Note: This document is a secondary/historical reference and must not override the Master Plan. The sole canonical and authoritative specification for MetaRadar is [METARADAR_MASTER_PLAN_v5.0.md](METARADAR_MASTER_PLAN_v5.0.md).*
 
 ---
 
@@ -464,7 +464,7 @@ async def get_dashboard(role: str):
 ---
 
 ### **Gap 13: Stakeholder Calibration Loop Not Yet Implemented**
-**Problem:** AI scoring is a static baseline. The system learns nothing from the Novo Nordisk stakeholders who actually use it — relevance weights never adapt to real preferences. No Human-in-the-Loop (HITL) mechanism exists anywhere in the pipeline.
+**Problem:** AI scoring is a static baseline. The system learns nothing from the Enterprise stakeholders who actually use it — relevance weights never adapt to real preferences. No Human-in-the-Loop (HITL) mechanism exists anywhere in the pipeline.
 
 **Resolution: Stakeholder Calibration Loop (HITL)**
 ```sql
@@ -516,7 +516,7 @@ class StakeholderCalibrationService:
 ---
 
 ### **Gap 14: Four-Question Framework Not Mapped to UI Components**
-**Problem:** MetaRadar's core intelligence objective — answering four practical questions for Novo Nordisk — is not explicitly represented in the UI. Every dashboard component, signal card, and API endpoint must map to at least one of Q1–Q4.
+**Problem:** MetaRadar's core intelligence objective — answering four practical questions for Enterprise Biopharma — is not explicitly represented in the UI. Every dashboard component, signal card, and API endpoint must map to at least one of Q1–Q4.
 
 **Resolution: Four-Question Framework UI Mapping**
 ```
@@ -526,11 +526,11 @@ Q1 WHAT CHANGED?     → Panel 1: Signal Feed
   UI: Real-time signal feed, sorted by recency + relevance, tagged by signal type
 
 Q2 WHY DOES IT MATTER?  → Panel 2: Impact Analysis
-  Clinical/commercial significance: impact on Novo Nordisk's Haemophilia portfolio
+  Clinical/commercial significance: impact on Enterprise's Haemophilia portfolio
   (concizumab, mim8), patient population affected, competitive threat, regulatory implications
   UI: Relevance score + breakdown, confluence events, "This matters because..." 2-sentence AI explanation
 
-Q3 WHICH NOVO NORDISK FUNCTION SHOULD REVIEW IT?  → Panel 3: Routing
+Q3 WHICH ENTERPRISE FUNCTION SHOULD REVIEW IT?  → Panel 3: Routing
   Medical Affairs (clinical) / Regulatory (filings) / Market Access (reimbursement/HTA) /
   Commercial (competitor moves) / R&D (pipeline)
   UI: Function badges with confidence scores + stakeholder review prompt
@@ -562,7 +562,7 @@ LIFECYCLE_STATES = [
 ]
 
 # Example tracked development:
-#   mim8 (Novo Nordisk, bispecific, Haemophilia A)
+#   mim8 (Enterprise Biopharma, bispecific, Haemophilia A)
 #   ├─ 2024-05 announced → Phase 3 initiation
 #   ├─ 2026-01 results_in → Phase 3 primary endpoint met
 #   ├─ 2026-03 under_review → FDA/EMA submission expected
@@ -1007,7 +1007,7 @@ class ComplianceAuditLogger:
 
 # Usage — any taxonomy/score change triggers an audit entry:
 await audit_logger.log_action(
-    user_id="john.smith@novonordisk.com",
+    user_id="john.smith@enterprise.com",
     action="taxonomy_edit",
     entity="emicizumab",
     before={"competitors": ["concizumab", "mim8"]},
@@ -1117,7 +1117,7 @@ PHARMA_ONTOLOGY = {
         "concizumab": {
             "brand_names": ["Alhemo"],
             "mechanism": "Anti-TFPI monoclonal antibody",
-            "manufacturer": "Novo Nordisk",
+            "manufacturer": "Enterprise Biopharma",
             "indications": ["Haemophilia A", "Haemophilia B", "with/without inhibitors"],
             "formulations": ["subcutaneous injection"],
             "competitors": ["emicizumab", "fitusiran", "marstacimab"]
@@ -1125,7 +1125,7 @@ PHARMA_ONTOLOGY = {
         "mim8": {
             "brand_names": ["Investigational"],
             "mechanism": "Next-generation bispecific antibody (Factor IXa/Factor X bridge)",
-            "manufacturer": "Novo Nordisk",
+            "manufacturer": "Enterprise Biopharma",
             "indications": ["Haemophilia A", "Haemophilia B"],
             "formulations": ["subcutaneous injection"],
             "competitors": ["emicizumab"]
@@ -1274,19 +1274,19 @@ runner = graph.compile()
 
 ---
 
-## **HACKATHON ALIGNMENT (Judging Criteria from Novo Nordisk Analysis)**
+## **HACKATHON ALIGNMENT (Judging Criteria from Enterprise Analysis)**
 
-Every engineering decision above maps to a scored judging criterion (see Novo Nordisk Analysis doc):
+Every engineering decision above maps to a scored judging criterion (see Enterprise Analysis doc):
 
 | Criterion (Weight) | What MetaRadar Delivers | Where |
 |---|---|---|
 | **Innovation (25%)** | The **Five Advanced Analyses** — Confluence Detection, Signal Lifecycle Tracking, Red-Team Contradiction Analysis, Missing-Signal Detection, Stakeholder Learning Loop — plus Haemophilia Pharma Ontology and Traceable Intelligence. No open-source tool combines these | Opt. 11-18, Gap 13-17 |
 | **Technical (25%)** | LangGraph 10-agent pipeline (incl. lifecycle/red-team/missing-signal agents), FastAPI + Next.js, pgvector hybrid search, Docker Compose | Opt. 15, Gap 6 |
-| **Business Impact (20%)** | Addresses real Novo Nordisk pain: gene therapy disrupting the prophylaxis paradigm, Roche emicizumab dominance, HTA decisions on Hemgenix/Roctavian, and *silent readouts / stalled submissions* caught by missing-signal detection | Business Context below |
+| **Business Impact (20%)** | Addresses real Enterprise Biopharma pain: gene therapy disrupting the prophylaxis paradigm, Roche emicizumab dominance, HTA decisions on Hemgenix/Roctavian, and *silent readouts / stalled submissions* caught by missing-signal detection | Business Context below |
 | **Feasibility (15%)** | Free APIs only, local ML models (Gemma 3 4B Q4 on the RTX 3050 4 GB GPU; NLI reuses BART-MNLI on CPU — zero extra download), public data sources (CDA-compliant), clear MVP→production path | Gap 1, Gap 6 |
 | **Presentation (15%)** | B.Pharm narrates domain; CSE narrates architecture; working demo + 2-page report; live calibration + missing-signal + contradiction demo | Team split |
 
-**Business Context (must be stated in demo) — NOVO NORDISK HAEMOPHILIA CONTEXT:**
+**Business Context (must be stated in demo) — ENTERPRISE HAEMOPHILIA CONTEXT:**
 - **Portfolio:** Concizumab (Alhemo) — anti-TFPI, EU approved 2023, subcutaneous prophylaxis for Haemophilia A and B with and without inhibitors. Mim8 — next-generation bispecific antibody in Phase 3, potentially superior to emicizumab with broader coverage (Haemophilia A AND B). Key strategic asset for the coming 5 years.
 - **Strategic Challenge:** Roche's Hemlibra (emicizumab) is the dominant non-factor therapy in Haemophilia A. Gene therapies (Hemgenix, Roctavian) have recently reached approval — the treatment paradigm is shifting from chronic prophylaxis to potential cure. If gene therapy achieves durable (10+ year) factor expression, the market for prophylaxis drugs like concizumab and mim8 could shrink.
 - MetaRadar tracks: (a) gene therapy durability data, (b) inhibitor development in gene therapy patients, (c) competitor pipeline (Pfizer marstacimab, Sanofi fitusiran), (d) HTA decisions globally, (e) patient advocacy positions.
@@ -1309,7 +1309,7 @@ Every engineering decision above maps to a scored judging criterion (see Novo No
 | **Security** | Data leaks | Role-based access | Encryption | **GDPR compliant** |
 | **No Visibility** | Blind debugging | Structured logging | Monitoring | **5-min diagnosis** |
 | **Isolated Signals** | No strategic story | Signal Confluence Engine | Cross-source convergence | **Strategic alerts** |
-| **No Domain Context** | Generic CI tool | Pharma Ontology (B.Pharm) | Entity enrichment | **Novo-specific** |
+| **No Domain Context** | Generic CI tool | Pharma Ontology (B.Pharm) | Entity enrichment | **Enterprise-specific** |
 | **No Audit Trail** | Regulatory unusable | Traceable Reasoning | Evidence chain | **Regulatory-grade** |
 | **No Prediction** | Reactive only | Temporal Pattern Matching | Timeline stages | **Predictive edge** |
 | **No Raw Data Replay** | Data loss on failure | Bronze `raw_signals` table | Re-process from raw | **Zero data loss** |
@@ -1440,7 +1440,7 @@ Presentation Risks:
 ☐ Have laptop + phone as backups
 ☐ Test projector 1 hour before
 ☐ Have B.Pharm team explain domain parts (ontology, confluence clinical sense, treatment paradigm)
-☐ Tie demo to Novo Nordisk pain: gene therapy disruption + Roche emicizumab competition (Business Impact criterion)
+☐ Tie demo to Enterprise Biopharma pain: gene therapy disruption + Roche emicizumab competition (Business Impact criterion)
 
 Judge Scenarios:
 ☐ "Make it pull live ClinicalTrials.gov data" → Already can (third LIVE source)
@@ -1459,9 +1459,9 @@ Judge Scenarios:
 
 ## **DATA GUARDRAILS & RESPONSIBLE AI**
 
-> "All data used in MetaRadar is sourced exclusively from public APIs, academic publications, and synthetic/mock records. No confidential Novo Nordisk strategy, patient-level data, internal forecasts, or non-public information is used at any point. This is compliant with the Novo Nordisk GBS Hackathon 2026 data guardrails and the signed Confidentiality Agreement."
+> "All data used in MetaRadar is sourced exclusively from public APIs, academic publications, and synthetic/mock records. No confidential Enterprise strategy, patient-level data, internal forecasts, or non-public information is used at any point. This is compliant with the Enterprise Decision Intelligence Summit 2026 data guardrails and the signed Confidentiality Agreement."
 
-> "AI-generated action suggestions are provided for discussion and consideration only. All final decisions and actions require review and approval by qualified Novo Nordisk professionals. MetaRadar does not automate any clinical, regulatory, or commercial decisions."
+> "AI-generated action suggestions are provided for discussion and consideration only. All final decisions and actions require review and approval by qualified Enterprise Biopharma professionals. MetaRadar does not automate any clinical, regulatory, or commercial decisions."
 
 > **INTERNAL DECISION SUPPORT ONLY:** MetaRadar must NOT provide treatment recommendations, make medical conclusions, claim product superiority without appropriate evidence, make unsupported competitor comparisons, determine safety causality, replace expert review, or autonomously execute business actions. For safety/regulatory/high-impact signals: **AI suggests → human reviews → human decides.**
 
@@ -1469,7 +1469,7 @@ Judge Scenarios:
 
 ## LATEST KICKOFF ALIGNMENT — NEW GAPS & RESOLUTIONS (Aug 12, 2026)
 
-The following gaps were identified against the latest Novo Nordisk kickoff requirements and are resolved in SRS/SDD/UI/Master Plan. Full canonical definitions live in `docs/2_SRS_Software_Requirements_Specification.md` (FR-2.2.2, FR-2.2.5–2.2.7, FR-2.6.1, AC-9..AC-14).
+The following gaps were identified against the latest Enterprise kickoff requirements and are resolved in SRS/SDD/UI/Master Plan. Full canonical definitions live in `docs/2_SRS_Software_Requirements_Specification.md` (FR-2.2.2, FR-2.2.5–2.2.7, FR-2.6.1, AC-9..AC-14).
 
 | # | New Gap | Resolution | Where |
 |---|---|---|---|

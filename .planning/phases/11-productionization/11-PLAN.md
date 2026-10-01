@@ -4,7 +4,7 @@
 **Status:** Planned (Revision 11.2 — Execution-Ready)  
 **Goal:** Deliver a complete, functional, role-enforced decision-intelligence platform with authenticated RBAC, an explicit review/escalation state machine, database-level append-only auditing, session-bound CSRF, verified pharma provenance, operational function workspaces, per-function calibration, and cross-functional E2E verification.  
 **Requirements:** REQ-P11-01 … REQ-P11-48  
-**Context & Decisions:** [11-CONTEXT.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/11-productionization/11-CONTEXT.md)
+**Context & Decisions:** [11-CONTEXT.md](11-CONTEXT.md)
 
 ---
 

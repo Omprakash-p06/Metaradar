@@ -2,7 +2,7 @@
 
 **Phase:** 12 - Hackathon MVP (Final Enterprise Polish & Cross-Functional Governance)  
 **Status:** Approved Specification  
-**Design Reference:** MetaRadar Dark Glassmorphic Design System (`globals.css`) & Novo Nordisk Enterprise Standards  
+**Design Reference:** MetaRadar Dark Glassmorphic Design System (`globals.css`) & Enterprise Architecture Standards  
 **Target Viewports:** Desktop (1920x1080, 1440x900), Laptop (1280x800), Tablet/Responsive (1024x768)
 
 ---
@@ -40,7 +40,7 @@ Phase 12 elevates MetaRadar from a developer-focused prototype to a **judge-read
 
 ### 2.1 Role-Based Color Palette & Accent Mapping
 
-Every Novo Nordisk persona is visually anchored by a distinct semantic color token used across cards, badges, chips, and glowing borders:
+Every Enterprise persona is visually anchored by a distinct semantic color token used across cards, badges, chips, and glowing borders:
 
 | Role ID | Persona Display Name | Semantic Color | Light Token | Dark Token | Border Glow |
 |:---|:---|:---:|:---:|:---:|:---:|
@@ -82,7 +82,7 @@ Every Novo Nordisk persona is visually anchored by a distinct semantic color tok
 - **Ambient Lighting:** Subtle radial background gradients (`rgba(37, 99, 199, 0.08)` and `rgba(21, 154, 156, 0.06)`) centered behind the auth card.
 - **Brand Header:**
   - MetaRadar Logo with glowing radar wave indicator.
-  - Subtitle: *"Enterprise Haemophilia Decision Intelligence Radar — Novo Nordisk GBS Hackathon 2026"*.
+  - Subtitle: *"Enterprise Haemophilia Decision Intelligence Radar — Enterprise Decision Intelligence Summit 2026"*.
 
 #### Section 1: Role Quick-Select Rail
 - Horizontal flex row with 6 styled persona pills.
@@ -300,4 +300,4 @@ sequenceDiagram
 
 ## 6. Sign-Off & Execution Readiness
 
-This UI design contract is finalized, fully aligned with the **100-Point Novo Nordisk GBS Hackathon Rubric**, and ready for immediate implementation in Phase 12 execution waves.
+This UI design contract is finalized, fully aligned with the **100-Point Enterprise Decision Intelligence Initiative Rubric**, and ready for immediate implementation in Phase 12 execution waves.

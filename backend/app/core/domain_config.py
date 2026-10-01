@@ -24,7 +24,7 @@ class AssetConfig(BaseModel):
     approval_status: str
     approval_date: Optional[str] = None
     jurisdiction: Optional[str] = None
-    is_novo_nordisk: bool = False
+    is_internal_asset: bool = False
 
 
 class ConfluenceConfig(BaseModel):

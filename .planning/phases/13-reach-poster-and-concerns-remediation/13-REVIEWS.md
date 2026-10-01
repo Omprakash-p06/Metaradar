@@ -18,7 +18,7 @@ source_authorities:
 
 ## Executive Consensus Summary
 
-All three reviewer perspectives (**Gemini** on Architecture & Security, **Codex** on Visual Design & Presentation Synthesis, and **Claude** on Verification, Invariants & Conference Rubric Compliance) have independently and collectively reviewed the Phase 13 specifications across [13-01-PLAN.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/13-reach-poster-and-concerns-remediation/13-01-PLAN.md) and [13-02-PLAN.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/13-reach-poster-and-concerns-remediation/13-02-PLAN.md):
+All three reviewer perspectives (**Gemini** on Architecture & Security, **Codex** on Visual Design & Presentation Synthesis, and **Claude** on Verification, Invariants & Conference Rubric Compliance) have independently and collectively reviewed the Phase 13 specifications across [13-01-PLAN.md](13-01-PLAN.md) and [13-02-PLAN.md](13-02-PLAN.md):
 
 > **Phase 13 is unanimously APPROVED.** The phase delivers a dual-track accomplishment: it establishes a print-ready, competition-grade scientific poster and presentation suite tailored to REACH 2026 guidelines, while concurrently resolving high-priority security, privacy, and scheduling concerns documented in `.planning/codebase/CONCERNS.md` and `INTEGRATIONS.md` without regressing any existing baseline invariants.
 

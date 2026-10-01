@@ -1,6 +1,4 @@
-# MetaRadar: Master Stakeholder Presentation Script & Easy-Speech Walkthrough Guide
-
-**Novo Nordisk GBS Hackathon 2026 — Problem Statement #3: Rare Disease Competitive Intelligence Radar**  
+**MetaRadar: Master Stakeholder Presentation Script & Easy-Speech Walkthrough Guide**  
 *Pilot Focus: Haemophilia A & Haemophilia B Competitive Surveillance*  
 *Document Release Date: 2026-09-02 | Version: 5.1 Hardened Production Baseline*  
 *Team: MS Ramaiah Institute of Technology (MSRIT), Bangalore*
@@ -14,8 +12,8 @@ Keep this box open while speaking. If you see a difficult word, use the easy pho
 | Difficult Biopharma / Tech Word | How to Say It (Phonetic) | Simple Plain-English Meaning |
 |---------------------------------|--------------------------|------------------------------|
 | **Haemophilia** | *[HEE-moh-FEEL-ee-uh]* | Rare bleeding disorder |
-| **Mim8** | *[MIM-eight]* | Novo Nordisk's next-gen antibody shot |
-| **Concizumab (Alhemo)** | *[kon-si-ZOO-mab] / [al-HEE-moh]* | Novo Nordisk's anti-TFPI antibody |
+| **Mim8** | *[MIM-eight]* | Next-gen FVIII mimetic antibody shot |
+| **Concizumab (Alhemo)** | *[kon-si-ZOO-mab] / [al-HEE-moh]* | Anti-TFPI antibody |
 | **Emicizumab (Hemlibra)** | *[EM-i-SIZ-oo-mab] / [hem-LEE-bruh]* | Roche's competing weekly/monthly shot |
 | **Altuviiio** | *[al-TOO-vee-oh]* | Sanofi's once-weekly factor replacement |
 | **Roctavian** | *[rok-TAY-vee-un]* | BioMarin's AAV5 gene therapy |
@@ -149,7 +147,7 @@ Whenever you show any screen, follow this simple 3-step rhythm:
 
 #### Spoken Presenter Script (Read Out Loud)
 
-> *"Let us start with the **Executive Overview**. This is the single cockpit for Novo Nordisk leaders.  
+> *"Let us start with the **Executive Overview**. This is the single cockpit for enterprise leaders.  
 > 
 > Notice the top alert banner: MetaRadar immediately flags that we have **2 urgent team escalations waiting for executive approval**.  
 > 
@@ -181,7 +179,7 @@ Whenever you show any screen, follow this simple 3-step rhythm:
 │ Target: Factor 8 | Type: Bispecific Shot | Source: BioPharma Dive & ClinicalTrials.gov        │
 ├───────────────────────────────────────────────────────────────────────────────────────────────┤
 │ 🟠 HIGH | Priority Score: 76 | Published: 6 hours ago | 3 Sources                             │
-│ FDA Grants Priority Review for Novo Nordisk's Concizumab in Haemophilia B with Inhibitors    │
+│ FDA Grants Priority Review for Concizumab in Haemophilia B with Inhibitors                 │
 │ Target: TFPI | Type: Anti-TFPI Shot | Source: OpenFDA Drugs@FDA                               │
 ├───────────────────────────────────────────────────────────────────────────────────────────────┤
 │ 🟡 MEDIUM | Priority Score: 58 | Published: 1 day ago | 2 Sources                             │
@@ -301,7 +299,7 @@ Whenever you show any screen, follow this simple 3-step rhythm:
 │ CLINICAL PIPELINE PROGRESSION                                                                 │
 │ Drug Lifecycle Tracker                                                                        │
 ├───────────────────────────────────────────────────────────────────────────────────────────────┤
-│ DRUG: Mim8 [MIM-eight] (Next-Gen Antibody Shot) | Maker: Novo Nordisk                         │
+│ DRUG: Mim8 [MIM-eight] (Next-Gen Antibody Shot) | Maker: Enterprise Portfolio                  │
 │ Target: Haemophilia A & B with/without Inhibitors                                             │
 │                                                                                               │
 │ ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐   ┌──────────────┐  │
@@ -311,7 +309,7 @@ Whenever you show any screen, follow this simple 3-step rhythm:
 │                                                                                               │
 │ Latest Milestone: Phase 3 primary trial completed; filing preparation started.                │
 ├───────────────────────────────────────────────────────────────────────────────────────────────┤
-│ DRUG: Concizumab [kon-si-ZOO-mab] / Alhemo [al-HEE-moh] | Maker: Novo Nordisk                 │
+│ DRUG: Concizumab [kon-si-ZOO-mab] / Alhemo [al-HEE-moh] | Maker: Enterprise Portfolio          │
 │ Status: Approved in Canada & Europe / Under FDA Review in the US                              │
 └───────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -421,7 +419,7 @@ Whenever you show any screen, follow this simple 3-step rhythm:
 ├─────────────────────────────────┴─────────────────┴─────────────────┴─────────────────────────┤
 │ ┌───────────────────────────────────────────┐ ┌─────────────────────────────────────────────┐ │
 │ │ 🧪 Mim8 [MIM-eight] Program               │ │ 🧪 Concizumab [kon-si-ZOO-mab] Program      │ │
-│ │ Maker: Novo Nordisk | Stage: Phase 3      │ │ Maker: Novo Nordisk | Stage: Approved / BLA │ │
+│ │ Maker: Enterprise Portfolio | Phase 3     │ │ Maker: Enterprise Portfolio | Approved/BLA  │ │
 │ │ Target: Haemophilia A/B with Inhibitors   │ │ Type: Anti-TFPI Antibody                    │ │
 │ │ Evidence: 8 Linked Records                │ │ Evidence: 6 Linked Records                  │ │
 │ └───────────────────────────────────────────┘ └─────────────────────────────────────────────┘ │
@@ -597,7 +595,7 @@ Whenever you show any screen, follow this simple 3-step rhythm:
 
 #### Spoken Presenter Script (Read Out Loud)
 
-> *"For a healthcare leader like Novo Nordisk, audit safety is essential. This is our **Audit Trail**.  
+> *"For an enterprise healthcare leader, audit safety is essential. This is our **Audit Trail**.  
 > 
 > Every pipeline step and executive approval is saved here with a unique tracking ID.  
 > 
@@ -655,7 +653,7 @@ When clicking any signal, the **Signal Detail View** opens with our clean **Four
 │ [FACT] Roche’s Phase 3 study reported that once-monthly shots achieved a median of 0.0 bleeds │
 │ in 89 adult Haemophilia A patients without inhibitors.                                        │
 │                                                                                               │
-│ Q2: WHY DOES IT MATTER? (Strategic Impact on Novo Nordisk)                                    │
+│ Q2: WHY DOES IT MATTER? (Strategic Impact on Enterprise Portfolio)                          │
 │ [INTERPRETATION] This directly challenges Mim8's [MIM-eight] once-monthly dosing narrative.   │
 │ If emicizumab matches our convenience, Mim8’s main advantage will rely on higher efficacy in  │
 │ difficult inhibitor patients.                                                                 │
@@ -724,7 +722,7 @@ Follow this exact 3-minute sequence during your live pitch:
 | # | Tough Question from Judges | Your Simple, Confident Answer |
 |---|---------------------------|-------------------------------|
 | **1** | *"How do you prevent the AI from making up fake data?"* | *"MetaRadar separates facts from opinions. Facts are extracted directly from primary text and labeled `[FACT]`. Every statement in Athena has a clickable link to a real PubMed PMID or trial ID."* |
-| **2** | *"Is private Novo Nordisk data safe from leaking to cloud AI?"* | *"100% safe. MetaRadar runs **Local Gemma 3** [JEM-uh three] completely offline on local hardware. No private data is ever sent to public AI servers."* |
+| **2** | *"Is private enterprise data safe from leaking to cloud AI?"* | *"100% safe. MetaRadar runs **Local Gemma 3** [JEM-uh three] completely offline on local hardware. No private data is ever sent to public AI servers."* |
 | **3** | *"How is this different from a standard RSS news feed?"* | *"An RSS feed just dumps raw text. MetaRadar groups news across 8 sources in 48 hours, catches conflicting claims using AI, spots missing trial disclosures, and delivers Four-Question Decision Briefs with leadership approvals."* |
 | **4** | *"Why did you use math for priority scoring instead of asking an AI?"* | *"AI scores change unpredictably every time you ask. Our 4-factor math formula (Novelty + Clinical + Regulatory + Freshness) is 100% transparent, explainable, and consistent."* |
 | **5** | *"What happens if an external website goes down?"* | *"All connectors have automatic safety retries and rate governors. If a site is down, MetaRadar serves saved records without crashing."* |
@@ -734,4 +732,4 @@ Follow this exact 3-minute sequence during your live pitch:
 
 ---
 
-*Document Author: Team MetaRadar (MSRIT Bangalore) | Novo Nordisk GBS Hackathon 2026 Problem Statement #3*
+*Document Author: Team MetaRadar (MSRIT Bangalore) | Rare Disease Decision Intelligence Platform*

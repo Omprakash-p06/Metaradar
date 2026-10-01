@@ -57,7 +57,7 @@ def upgrade():
         'companies',
         sa.Column('company_id', sa.String(100), primary_key=True),
         sa.Column('name', sa.String(255), nullable=False),
-        sa.Column('is_novo_nordisk', sa.Boolean(), nullable=False, server_default='false'),
+        sa.Column('is_internal_asset', sa.Boolean(), nullable=False, server_default='false'),
     )
 
     # 5. Assets Table

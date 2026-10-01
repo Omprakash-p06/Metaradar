@@ -174,7 +174,7 @@ def generate_svg() -> str:
         <tspan fill="#94A3B8"> (M. S. Ramaiah University of Applied Sciences / MSRIT, Bengaluru)</tspan>
       </text>
       <text x="840" y="320" fill="#94A3B8" font-size="20" font-weight="500" text-anchor="middle">
-        Novo Nordisk GBS Hackathon · Problem Statement #3: Autonomous Trial Intelligence &amp; Cross-Functional Governance
+        Autonomous Trial Intelligence &amp; Cross-Functional Governance Platform
       </text>
     </g>
 

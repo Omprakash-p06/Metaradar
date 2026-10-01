@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 Generate the Master MetaRadar Pitch Deck (.pptx)
-Novo Nordisk GBS Hackathon 2026 — Problem Statement #3: Rare Disease Competitive Intelligence Radar
+MetaRadar: Autonomous Rare Disease Competitive Intelligence Radar
 Style: Swiss Professional High-Contrast Dark Theme with Pure Absolute Positioning
 """
 
@@ -140,7 +140,7 @@ def create_presentation():
     # =========================================================================
     # SLIDE 1: Team & Project Overview
     # =========================================================================
-    s1 = add_slide_base(1, "Novo Nordisk GBS Hackathon 2026 · Problem Statement #3", "MetaRadar: Autonomous Rare Disease Competitive Intelligence Radar")
+    s1 = add_slide_base(1, "MetaRadar Platform Architecture", "MetaRadar: Autonomous Rare Disease Competitive Intelligence Radar")
     
     # Left Box: Institutional & Team Profile
     add_card(s1, 0.6, 1.35, 5.85, 5.55)
@@ -462,7 +462,7 @@ def create_presentation():
 
     add_entry(tf8, "Milestone 1 — Enterprise SSO & RBAC (M 1–2)", "SAML 2.0 / Okta / Azure AD integration for automated persona provisioning across 6 functional roles with fine-grained approval permissions.", TEXT_WHITE, TEXT_MUTED, 9.2, 6)
 
-    add_entry(tf8, "Milestone 2 — Internal Data Lake Mirroring (M 2–3)", "Direct connectors to Novo Nordisk internal clinical data lake mirrors and historical congress slide repositories for enriched baseline comparisons.", TEXT_WHITE, TEXT_MUTED, 9.2, 6)
+    add_entry(tf8, "Milestone 2 — Internal Data Lake Mirroring (M 2–3)", "Direct connectors to enterprise clinical data lake mirrors and historical congress slide repositories for enriched baseline comparisons.", TEXT_WHITE, TEXT_MUTED, 9.2, 6)
 
     add_entry(tf8, "Milestone 3 — Indication Expansion (M 3–4)", "Extend disease ontology beyond Haemophilia A/B to Sickle Cell Disease, Beta-Thalassemia, and Ultra-Rare Coagulopathies with multi-asset tracking.", TEXT_WHITE, TEXT_MUTED, 9.2, 6)
 
@@ -493,7 +493,7 @@ def create_presentation():
     # =========================================================================
     # SLIDE 7: Business Impact, Value Proposition & Key Takeaways
     # =========================================================================
-    s7 = add_slide_base(7, "Strategic Value & Executive Summary", "Business Impact: Why MetaRadar Matters for Novo Nordisk")
+    s7 = add_slide_base(7, "Strategic Value & Executive Summary", "Business Impact: Why MetaRadar Matters for Rare Disease Portfolios")
 
     # Left Column: Business & Healthcare Value
     add_card(s7, 0.6, 1.35, 5.85, 5.55)

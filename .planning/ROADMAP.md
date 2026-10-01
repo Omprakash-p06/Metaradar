@@ -5,7 +5,7 @@
 ### Milestone v5.1 — Full Platform Architecture & Intelligence Experience (SHIPPED 2026-08-19)
 
 - **Status:** COMPLETED & VERIFIED (Phases 00–06, 16 plans, 100% test pass rate)
-- **Archive:** [v5.1-ROADMAP.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/milestones/v5.1-ROADMAP.md) | [v5.1-REQUIREMENTS.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/milestones/v5.1-REQUIREMENTS.md) | [v5.1-MILESTONE-AUDIT.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/v5.1-MILESTONE-AUDIT.md)
+- **Archive:** [v5.1-ROADMAP.md](milestones/v5.1-ROADMAP.md) | [v5.1-REQUIREMENTS.md](milestones/v5.1-REQUIREMENTS.md) | [v5.1-MILESTONE-AUDIT.md](v5.1-MILESTONE-AUDIT.md)
 
 ### Phase 00: Baseline Stabilization & Quality Governance
 - **Goal:** Set up Next.js 16 + FastAPI core foundation, async Alembic migrations, PII/PHI scrubber, and Red-Team registry.
@@ -39,7 +39,7 @@
 
 ### Milestone v5.1 Extension — Trustworthy Intelligence & Platform Hardening (SHIPPED 2026-08-21)
 
-> **Reference Document:** [docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md)  
+> **Reference Document:** [docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md](../docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md)  
 > **Status:** COMPLETED & VERIFIED (Phases 07–08, 4 plans, 100% test pass rate)  
 > **Core Objective:** Eliminate fabricated/placeholder telemetry, enforce end-to-end data provenance, upgrade structured observability, modularize frontend architecture, and harden test invariants.
 
@@ -97,7 +97,7 @@
 - **Priority:** P0 (auth/RBAC/provenance) → P1 (operational UI) → P2 (security hardening)
 - **Requirements:** REQ-P11-01 … REQ-P11-48
 - **Status:** Completed & Verified
-- **Context:** [11-CONTEXT.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/11-productionization/11-CONTEXT.md)
+- **Context:** [11-CONTEXT.md](phases/11-productionization/11-CONTEXT.md)
 - **Plans:**
   - [x] 11-01-PLAN.md — Identity & Auth Foundation (User/Session models, bcrypt, /auth/* endpoints)
   - [x] 11-02-PLAN.md — Server-Side RBAC & Review Enforcement (role filtering, permission matrix, queue endpoint)
@@ -122,7 +122,7 @@
 - **Priority:** P0 (login/credentials) → P1 (approval workflow) → P2 (documentation)
 - **Requirements:** REQ-P12-01 … REQ-P12-25
 - **Status:** Completed & Verified
-- **Context:** [12-CONTEXT.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/12-hackathon-mvp/12-CONTEXT.md)
+- **Context:** [12-CONTEXT.md](phases/12-hackathon-mvp/12-CONTEXT.md)
 - **Plans:**
   - [x] 12-01-PLAN.md — Fixed Role Credentials + Login Page + Auth Routing
   - [x] 12-02-PLAN.md — Approval Request Workflow: Backend (migration 015, 3 endpoints, schemas)
@@ -143,8 +143,8 @@
 - **Goal:** Single master SVG poster combining 6 visual diagrams/badges, converted to 3402 × 4536 PNG; structured <250-word abstract; PII clinical ID regexes; connector source ID normalization; production boot guard; NewsAPI UTC clock robustness; scheduler explicit intervals.
 - **Priority:** P0 (Poster Visuals & PII/Privacy) → P1 (Production Guard & UTC Clock) → P2 (Scheduler Intervals)
 - **Status:** Completed & Verified
-- **Context:** [13-CONTEXT.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/13-reach-poster-and-concerns-remediation/13-CONTEXT.md)
-- **Summary:** [13-SUMMARY.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/13-reach-poster-and-concerns-remediation/13-SUMMARY.md)
+- **Context:** [13-CONTEXT.md](phases/13-reach-poster-and-concerns-remediation/13-CONTEXT.md)
+- **Summary:** [13-SUMMARY.md](phases/13-reach-poster-and-concerns-remediation/13-SUMMARY.md)
 - **Plans:**
   - [x] 13-01-PLAN.md — REACH 2026 Poster Generation (Multi-Image SVG Synthesis & PNG Conversion)
   - [x] 13-02-PLAN.md — Codebase Concerns & Integrations Remediation (PII, Boot Guard, UTC Clock, Scheduler)
@@ -190,6 +190,6 @@ Future milestone initiatives (v6.0+) can be planned and tracked here using `/gsd
 - **Priority:** P0 (backend live + DB migrations) → P1 (frontend live + CORS/auth) → P2 (Gemini adapter + docs)
 - **Requirements:** REQ-P15-01 … REQ-P15-12
 - **Status:** Planned
-- **Context:** [`15-CONTEXT.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/15-free-tier-cloud-deployment/15-CONTEXT.md)
+- **Context:** [`15-CONTEXT.md`](phases/15-free-tier-cloud-deployment/15-CONTEXT.md)
 
 

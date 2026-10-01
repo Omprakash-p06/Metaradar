@@ -94,7 +94,7 @@ class Company(Base):
 
     company_id = Column(String(100), primary_key=True)
     name = Column(String(255), nullable=False)
-    is_novo_nordisk = Column(Boolean, default=False, nullable=False)
+    is_internal_asset = Column(Boolean, default=False, nullable=False)
 
 
 class Asset(Base):

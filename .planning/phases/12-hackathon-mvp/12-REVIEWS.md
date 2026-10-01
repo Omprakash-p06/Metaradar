@@ -16,7 +16,7 @@ source_authority: docs/NN GBS Hackathon 2026 — Kick-off.pptx
 
 All three reviewer perspectives (**Gemini** on Architecture & Security, **Codex** on Frontend UX & Interaction Design, and **Claude** on Verification, Invariants & Rubric Compliance) have reviewed the Phase 12 specification and unanimously agree:
 
-> **Phase 12 is strategically sound, exceptionally well-calibrated to the 100-point Novo Nordisk GBS Hackathon 2026 rubric, and rigorously implements the core transition from a developer-focused prototype to a role-aware enterprise decision intelligence platform without destabilizing existing pipeline invariants.**
+> **Phase 12 is strategically sound, exceptionally well-calibrated to the 100-point Enterprise Decision Intelligence Summit 2026 rubric, and rigorously implements the core transition from a developer-focused prototype to a role-aware enterprise decision intelligence platform without destabilizing existing pipeline invariants.**
 
 The 4-wave plan adheres strictly to the **Minimal Impact Principle**: the 10-node LangGraph pipeline, vector embedding models, Red-Team contradiction engine, and ingestion schedulers remain 100% intact, while adding dedicated credential-based login, cross-functional approval routing, and judge-facing documentation.
 
@@ -27,7 +27,7 @@ The 4-wave plan adheres strictly to the **Minimal Impact Principle**: the 10-nod
 | # | Evaluation Rubric Criterion | Weight | Phase 12 Coverage & Architecture Alignment | Reviewer Rating |
 |---|---|:---:|---|:---:|
 | **1** | **AI Signal Detection & Classification Accuracy** | 20 pts | Maintained across 8 live connectors, 10-node LangGraph pipeline, and 4-factor priority score. Verified ≥85% accuracy target. | **PASS (20/20)** |
-| **2** | **Problem Understanding & Haemophilia Relevance** | 15 pts | Deep pilot domain coverage across Haemophilia A (Factor VIII) & B (Factor IX), bispecifics (NXT007, Mim8, emicizumab), gene therapies (Hemgenix, Roctavian), RNAi (fitusiran), and competitor tracking (Roche/Chugai, Pfizer, Sanofi, Sobi, Novo Nordisk). | **PASS (15/15)** |
+| **2** | **Problem Understanding & Haemophilia Relevance** | 15 pts | Deep pilot domain coverage across Haemophilia A (Factor VIII) & B (Factor IX), bispecifics (NXT007, Mim8, emicizumab), gene therapies (Hemgenix, Roctavian), RNAi (fitusiran), and competitor tracking (Roche/Chugai, Pfizer, Sanofi, Sobi, Enterprise Biopharma). | **PASS (15/15)** |
 | **3** | **Source Traceability & Summary Quality** | 15 pts | 100% source links (`PMID`, `NCT ID`, `FDA ID`, `EMA URL`), `TRACE` tab in EvidenceDrawer, and `[FACT]`/`[INTERPRETATION]`/`[SPECULATION]` labeling. | **PASS (15/15)** |
 | **4** | **Stakeholder Calibration & Learning Loop** | 15 pts | 5-step learning model with per-function relevance weight adaptation via human-in-the-loop thumbs up/down feedback and Calibration workspace telemetry. | **PASS (15/15)** |
 | **5** | **Cross-Functional Usefulness** | 10 pts | End-to-end approval request workflow (`approval_requests` table + 3 API endpoints + `ApprovalRequestModal` + `PendingApprovalsPanel` on Functions workspace). | **PASS (10/10)** |

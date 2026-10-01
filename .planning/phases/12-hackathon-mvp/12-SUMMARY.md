@@ -1,7 +1,7 @@
 # Phase 12 Summary: Hackathon MVP & Cross-Functional Governance
 
 **Execution Status**: `COMPLETED` (100% Verified)  
-**Target Milestone**: Hackathon MVP Presentation Readiness (Novo Nordisk GBS Hackathon 2026)  
+**Target Milestone**: Hackathon MVP Presentation Readiness (Enterprise Decision Intelligence Summit 2026)  
 **Branch**: `feature/phase-12-hackathon-mvp`
 
 ---

@@ -11,7 +11,7 @@
 
 **Allowed:** public information, public APIs, public scientific publications, public company announcements, mock data, synthetic data (labeled `is_synthetic=true`).
 
-**Prohibited:** confidential Novo Nordisk strategy, internal forecasts, patient-level data, patient-identifiable data (PII/PHI — scrubbed before persistence), non-public information, confidential documents, promotional/external-facing content.
+**Prohibited:** confidential Enterprise strategy, internal forecasts, patient-level data, patient-identifiable data (PII/PHI — scrubbed before persistence), non-public information, confidential documents, promotional/external-facing content.
 
 ### 1.2 System role
 
@@ -93,4 +93,4 @@ These guardrails align with current FDA thinking on AI credibility in drug devel
 
 ---
 
-*Risk Register v1.3 · August 13, 2026 · Novo Nordisk GBS Hackathon 2026 — Problem Statement #3 · Team: Aura Pharmers (MSRIT) · Team Lead: Sanjana Rathore B.*
+*Risk Register v1.3 · August 13, 2026 · Enterprise Decision Intelligence Summit 2026 — Problem Statement #3 · Team: Aura Pharmers (MSRIT) · Team Lead: Sanjana Rathore B.*

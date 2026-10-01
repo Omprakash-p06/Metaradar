@@ -4,11 +4,11 @@
 **Version:** 3.4  
 **Date:** August 2026  
 **Design Framework:** shadcn/ui + TailwindCSS 4  
-**Scope Note:** Revised for Novo Nordisk GBS Hackathon 2026 kickoff — replaced Signal Feed + Trend layout with the **Four-Question Panel layout (Q1–Q4)**, added stakeholder review widget (HITL calibration), and haemophilia-themed examples (v2.0); extended with the **Five Advanced Analyses** UI — lifecycle timeline, red-team contradiction panel, and missing-signal warnings (v2.1). **v3.2 (Aug 13, 2026):** integrated the B.Pharm domain research UI (Master Plan v4.0 §12) — domain metadata row (disease/factor/inhibitor/population/modality), evidence-maturity label, evidence-context panels (Q5–Q7), Red-Team evidence-check flags, "WHY THIS ROUTING", and "WATCH FOR NEXT" on the signal card; advanced clinical-evidence fields remain expandable so the default card is never overloaded. **v3.3 (Aug 13, 2026):** provider-agnostic reasoning layer (Master Plan v5.0 §13) — UI shows the active reasoning provider and the degraded-mode banner *"AI reasoning unavailable — showing source-grounded factual summary"* whenever BART degraded factual mode is active; `ProviderBadge` renders model metadata (provider/model/fallback reason) non-intrusively on signal cards. **v3.4 (Aug 13, 2026):** pre-implementation hardening (Master Plan v5.1 §14.15) — canonical reusable component contract (`SignalCard · EvidenceBadge · PriorityBadge · FunctionBadge · LifecycleTimeline · ConfluenceAlert · RedTeamPanel · CalibrationWidget · WatchAlert · AthenaPanel`); the component list below maps existing components to these canonical names; source-freshness badges (real-time/near-real-time/delayed/batch/adapter-ready/synthetic) are shown honestly per connector; a health footer renders `/api/v1/health` + per-source `/api/v1/health/connectors` states (a failed optional source shows degraded, never dead).
+**Scope Note:** Revised for Enterprise Decision Intelligence Summit 2026 kickoff — replaced Signal Feed + Trend layout with the **Four-Question Panel layout (Q1–Q4)**, added stakeholder review widget (HITL calibration), and haemophilia-themed examples (v2.0); extended with the **Five Advanced Analyses** UI — lifecycle timeline, red-team contradiction panel, and missing-signal warnings (v2.1). **v3.2 (Aug 13, 2026):** integrated the B.Pharm domain research UI (Master Plan v4.0 §12) — domain metadata row (disease/factor/inhibitor/population/modality), evidence-maturity label, evidence-context panels (Q5–Q7), Red-Team evidence-check flags, "WHY THIS ROUTING", and "WATCH FOR NEXT" on the signal card; advanced clinical-evidence fields remain expandable so the default card is never overloaded. **v3.3 (Aug 13, 2026):** provider-agnostic reasoning layer (Master Plan v5.0 §13) — UI shows the active reasoning provider and the degraded-mode banner *"AI reasoning unavailable — showing source-grounded factual summary"* whenever BART degraded factual mode is active; `ProviderBadge` renders model metadata (provider/model/fallback reason) non-intrusively on signal cards. **v3.4 (Aug 13, 2026):** pre-implementation hardening (Master Plan v5.1 §14.15) — canonical reusable component contract (`SignalCard · EvidenceBadge · PriorityBadge · FunctionBadge · LifecycleTimeline · ConfluenceAlert · RedTeamPanel · CalibrationWidget · WatchAlert · AthenaPanel`); the component list below maps existing components to these canonical names; source-freshness badges (real-time/near-real-time/delayed/batch/adapter-ready/synthetic) are shown honestly per connector; a health footer renders `/api/v1/health` + per-source `/api/v1/health/connectors` states (a failed optional source shows degraded, never dead).
 
 > [!IMPORTANT]
 > **HISTORICAL REFERENCE DOCUMENT**  
-> *Note: This document is a secondary/historical reference and must not override the Master Plan. The sole canonical and authoritative specification for MetaRadar is [METARADAR_MASTER_PLAN_v5.0.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/METARADAR_MASTER_PLAN_v5.0.md).*
+> *Note: This document is a secondary/historical reference and must not override the Master Plan. The sole canonical and authoritative specification for MetaRadar is [METARADAR_MASTER_PLAN_v5.0.md](METARADAR_MASTER_PLAN_v5.0.md).*
 
 ---
 
@@ -334,7 +334,7 @@ export const DisclaimerBadge = () => (
 │                                                            │
 │ Entity Filter:                                            │
 │ ☑ Drugs: emicizumab, mim8, concizumab, fitusiran          │
-│ ☐ Companies: Roche, Novo Nordisk, Sanofi, Pfizer, CSL     │
+│ ☐ Companies: Roche, Enterprise Biopharma, Sanofi, Pfizer, CSL     │
 │ ☐ Indications: Haemophilia A, Haemophilia B, Inhibitors   │
 │ ☐ Modalities: Gene therapy, Bispecific, Anti-TFPI, RNAi   │
 │                                                            │
@@ -484,7 +484,7 @@ Analysis 2 (Signal Lifecycle Tracking) output. Each tracked development renders 
 │ Filters: [Entity ▼] [State: All ▼] [Modality ▼]                │
 ├─────────────────────────────────────────────────────────────────┤
 │ ┌───────────────────────────────────────────────────────────┐ │
-│ │ mim8 · Novo Nordisk · Bispecific · Haemophilia A          │ │
+│ │ mim8 · Enterprise Biopharma · Bispecific · Haemophilia A          │ │
 │ │ ┌──────┬──────────┬──────────────┬─────────────┐         │ │
 │ │ │ 2024 │  2025    │  2026-01     │  NEXT ▶     │         │ │
 │ │ │announced        │results_in    │ submission  │         │ │
@@ -589,7 +589,7 @@ Natural-language query interface (Week 4 RAG feature). Judging hook: "we don't j
 │  [Ask]  (function-scoped: Medical Affairs)                      │
 ├─────────────────────────────────────────────────────────────────┤
 │  Answer (grounded in 4 signals, last 7 days):                    │
-│  "Novo Nordisk's mim8 Phase 3 programme in Haemophilia A       │
+│  "Enterprise's mim8 Phase 3 programme in Haemophilia A       │
 │   met its primary endpoint; analysts expect submission vs      │
 │   emicizumab positioning. No new safety signals reported.      │
 │   Durability beyond 12 months not yet published."              │
@@ -597,7 +597,7 @@ Natural-language query interface (Week 4 RAG feature). Judging hook: "we don't j
 ├─────────────────────────────────────────────────────────────────┤
 │  Supporting signals:                                             │
 │  [1] ClinicalTrials.gov — mim8 Phase 3 (HA) registered         │
-│  [2] Reuters — Novo Nordisk press release on readout           │
+│  [2] Reuters — Enterprise Biopharma press release on readout           │
 │  [3] PubMed — mim8 vs emicizumab comparator data               │
 │  [4] Reddit r/Hemophilia — HCP/patient reaction                │
 └─────────────────────────────────────────────────────────────────┘
@@ -664,7 +664,7 @@ Function-filtered weekly digest reusing the SAME intelligence pipeline (no secon
 │  │ [Sign In] [Forgot Password?] │  │
 │  └──────────────────────────────┘  │
 │                                    │
-│  Built for Novo Nordisk Teams      │
+│  Built for Enterprise Teams      │
 │                                    │
 └────────────────────────────────────┘
 ```
@@ -1280,7 +1280,7 @@ module.exports = {
 |---|---|---|
 | 1.0 | 2026-07-26 | Initial MVP wireframes |
 | 1.1 | 2026-07-28 | Aligned with Refined Architecture: added Confluence Alerts page (§3.2), Ask Athena page (§3.3), Narrative Briefs view (§3.4), traceable evidence chain on signal cards (§2.2), confluence diagram viz (§5.2), confluence/pattern/evidence badges (§4.3), custom intelligence components (§11) |
-| 2.0 | 2026-08-12 | Novo Nordisk kickoff revision: Four-Question panel layout (Q1–Q4) replaces Signal Feed + Trend (§2.1, §3.1, §15); stakeholder review widget on Q3 role badges (HITL calibration); haemophilia entity filters + signal types (§2.3); "Haemophilia gene therapy signal volume (7d)" chart; haemophilia-themed examples throughout |
+| 2.0 | 2026-08-12 | Enterprise kickoff revision: Four-Question panel layout (Q1–Q4) replaces Signal Feed + Trend (§2.1, §3.1, §15); stakeholder review widget on Q3 role badges (HITL calibration); haemophilia entity filters + signal types (§2.3); "Haemophilia gene therapy signal volume (7d)" chart; haemophilia-themed examples throughout |
 | 2.1 | 2026-08-12 | Five Advanced Analyses UI: lifecycle timeline page (§3.2A) + state badges; red-team contradiction page (§3.2B) + dual-evidence panel; missing-signal page (§3.2C) + confidence-by-silence meter; analysis strip on dashboard (§3.1); analysis flags on Q1 feed and Q2/Q4 panels (§2.2, §15); design principles 12-14 |
 
 ---

@@ -4,8 +4,8 @@
 > **Subtitle:** Near-Real-Time Competitive Intelligence Radar  
 > **Version:** 5.1 (Canonical Master Architecture Specification & Hardened Operational Platform)  
 > **Active Milestone:** Milestone v5.1 Extension — Trustworthy Intelligence & Platform Hardening (Phases 07–08: Completed & Verified)  
-> **Reference Specification:** [`docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md)  
-> **Target Pilot Domain:** Haemophilia within Rare Disease (Novo Nordisk GBS Hackathon Problem Statement #3)  
+> **Reference Specification:** [`docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md`](../docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md)  
+> **Target Pilot Domain:** Haemophilia within Rare Disease (Enterprise Decision Intelligence Initiative Problem Statement #3)  
 > **Core Principle:** *"A conventional AI system summarizes documents. MetaRadar builds an evidence story around a development."*
 
 ---
@@ -19,7 +19,7 @@
 
 ## What This Is
 
-MetaRadar is a near-real-time competitive intelligence platform that converts fragmented multi-source public signals (PubMed, ClinicalTrials.gov, NewsAPI, OpenFDA, EMA RSS, congress abstracts) into structured evidence stories, development timelines, and role-tailored strategic actions for Novo Nordisk cross-functional teams.
+MetaRadar is a near-real-time competitive intelligence platform that converts fragmented multi-source public signals (PubMed, ClinicalTrials.gov, NewsAPI, OpenFDA, EMA RSS, congress abstracts) into structured evidence stories, development timelines, and role-tailored strategic actions for Enterprise Biopharma cross-functional teams.
 
 ## Core Value
 
@@ -82,6 +82,6 @@ Instead of broadcasting unlinked news feeds to every user, MetaRadar processes e
 
 Every routed signal is presented via four structured decision panels:
 - **Q1: What changed?** (Factual evidence summary with source provenance)
-- **Q2: Why does it matter?** (Strategic impact on Novo Nordisk's portfolio vs. competitors like emicizumab, Hemgenix, Roctavian)
+- **Q2: Why does it matter?** (Strategic impact on Enterprise's portfolio vs. competitors like emicizumab, Hemgenix, Roctavian)
 - **Q3: Which function is impacted?** (Relevance scores for Medical Affairs, Regulatory, Safety, Access, Comms, Leadership)
 - **Q4: What action is recommended?** (Specific, role-tailored strategic recommendations with FACT/INTERPRETATION/SPECULATION labels)

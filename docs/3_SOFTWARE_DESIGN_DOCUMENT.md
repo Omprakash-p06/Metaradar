@@ -4,11 +4,11 @@
 **Version:** 2.4  
 **Date:** August 2026  
 **Team:** Aura Pharmers — MSRIT (2 CSE + 3 B.Pharm) · **Team Lead: Sanjana Rathore B.**  
-**Scope Note:** Revised for Novo Nordisk GBS Hackathon 2026 kickoff (Aug 12, 2026) — added **Stakeholder Calibration Loop (HITL)**, Four-Question Framework wiring, and haemophilia-specific design updates (v2.0), then extended with the **Five Advanced Analyses** (v2.1): Confluence Detection, Signal Lifecycle Tracking, Red-Team Contradiction Analysis, Missing-Signal Detection, and Stakeholder Learning Loop. **v2.2 (Aug 13, 2026):** integrated the B.Pharm domain research (Master Plan v4.0 §12) — canonical domain-classification fields + `DomainClassifier` service, nullable clinical-evidence fields, evidence-maturity ladder, access as a separate intelligence event (8 access subtypes + `access_info` JSONB), and the extended Red-Team evidence-check suite A–S. **v2.3 (Aug 13, 2026):** provider-agnostic reasoning layer (Master Plan v5.0 §13) — `LLMProvider` interface (`LocalGemmaProvider` / `XAIProvider` / `BartDegradedProvider`), `LLM_PROVIDER=local|xai|auto`, two output schemas (FULL INTELLIGENCE vs DEGRADED FACTUAL SUMMARY), external-LLM privacy gate for hosted Grok, Grok JSON-Schema structured-output validation, per-output model metadata. Architecture, data sources, and embedding model are unchanged (Docker Compose footprint unchanged through v2.3 — v2.4 removes Celery → 4 services); the six primary functions remain Medical Affairs · Regulatory · Safety/PV · Market Access · Medical Communications · Leadership. **v2.4 (Aug 13, 2026):** pre-implementation architecture hardening (Master Plan v5.1 §14) — Gemma deployment target corrected to **local GPU (NVIDIA RTX 3050, 4 GB VRAM, Q4/int4)** with `LLM_DEVICE`/`LLM_DTYPE`/`MAX_CONTEXT_TOKENS`/`MAX_OUTPUT_TOKENS`; scheduling consolidated to **ONE in-process APScheduler** (Celery removed — 4-service Docker Compose, `/models` volume, healthchecks); canonical entity layer added to the schema (`sources · companies · assets · trials · developments · events` + evidence relationships); scoring/calibration versioning fields (`scoring_model_version`, `scoring_config_version`, `score_breakdown`, baseline-vs-calibrated routing, `calibration_version`); formal LangGraph state contract (reducers, initial state, `node_calibrate → END`); health endpoints `/api/v1/health/ready|models|connectors`; deterministic dedup + source-independence before Confluence; Alembic migrations and versioned Redis caching.
+**Scope Note:** Revised for Enterprise Decision Intelligence Summit 2026 kickoff (Aug 12, 2026) — added **Stakeholder Calibration Loop (HITL)**, Four-Question Framework wiring, and haemophilia-specific design updates (v2.0), then extended with the **Five Advanced Analyses** (v2.1): Confluence Detection, Signal Lifecycle Tracking, Red-Team Contradiction Analysis, Missing-Signal Detection, and Stakeholder Learning Loop. **v2.2 (Aug 13, 2026):** integrated the B.Pharm domain research (Master Plan v4.0 §12) — canonical domain-classification fields + `DomainClassifier` service, nullable clinical-evidence fields, evidence-maturity ladder, access as a separate intelligence event (8 access subtypes + `access_info` JSONB), and the extended Red-Team evidence-check suite A–S. **v2.3 (Aug 13, 2026):** provider-agnostic reasoning layer (Master Plan v5.0 §13) — `LLMProvider` interface (`LocalGemmaProvider` / `XAIProvider` / `BartDegradedProvider`), `LLM_PROVIDER=local|xai|auto`, two output schemas (FULL INTELLIGENCE vs DEGRADED FACTUAL SUMMARY), external-LLM privacy gate for hosted Grok, Grok JSON-Schema structured-output validation, per-output model metadata. Architecture, data sources, and embedding model are unchanged (Docker Compose footprint unchanged through v2.3 — v2.4 removes Celery → 4 services); the six primary functions remain Medical Affairs · Regulatory · Safety/PV · Market Access · Medical Communications · Leadership. **v2.4 (Aug 13, 2026):** pre-implementation architecture hardening (Master Plan v5.1 §14) — Gemma deployment target corrected to **local GPU (NVIDIA RTX 3050, 4 GB VRAM, Q4/int4)** with `LLM_DEVICE`/`LLM_DTYPE`/`MAX_CONTEXT_TOKENS`/`MAX_OUTPUT_TOKENS`; scheduling consolidated to **ONE in-process APScheduler** (Celery removed — 4-service Docker Compose, `/models` volume, healthchecks); canonical entity layer added to the schema (`sources · companies · assets · trials · developments · events` + evidence relationships); scoring/calibration versioning fields (`scoring_model_version`, `scoring_config_version`, `score_breakdown`, baseline-vs-calibrated routing, `calibration_version`); formal LangGraph state contract (reducers, initial state, `node_calibrate → END`); health endpoints `/api/v1/health/ready|models|connectors`; deterministic dedup + source-independence before Confluence; Alembic migrations and versioned Redis caching.
 
 > [!IMPORTANT]
 > **HISTORICAL REFERENCE DOCUMENT**  
-> *Note: This document is a secondary/historical reference and must not override the Master Plan. The sole canonical and authoritative specification for MetaRadar is [METARADAR_MASTER_PLAN_v5.0.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/METARADAR_MASTER_PLAN_v5.0.md).*
+> *Note: This document is a secondary/historical reference and must not override the Master Plan. The sole canonical and authoritative specification for MetaRadar is [METARADAR_MASTER_PLAN_v5.0.md](METARADAR_MASTER_PLAN_v5.0.md).*
 
 ---
 
@@ -537,7 +537,7 @@ class SignalConfluenceEngine:
 
 **Pharma Ontology Enrichment** (`services/ontology_service.py`) — B.Pharm-authored JSON that enriches extracted entities and validates drug/company accuracy (see `entities/pharma_ontology.py`). Resolves "Hemlibra" → emicizumab → bispecific antibody → Roche → Haemophilia A competitor, flags competitor drugs at zero API cost, and provides the validation layer that answers "how do you ensure pharma accuracy?".
 
-**Stakeholder Calibration Loop** (`services/calibration_service.py` + `agents/calibration_agent.py`) — the HITL learning loop (new in v2.0). Simulated (and real) Novo Nordisk stakeholder personas rate routing accuracy per signal (`POST /api/v1/feedback`). `StakeholderCalibrationService.recalibrate(role)` recomputes the role × signal-type weights (`scoring_weights` table) and persists a `calibration_history` row:
+**Stakeholder Calibration Loop** (`services/calibration_service.py` + `agents/calibration_agent.py`) — the HITL learning loop (new in v2.0). Simulated (and real) Enterprise stakeholder personas rate routing accuracy per signal (`POST /api/v1/feedback`). `StakeholderCalibrationService.recalibrate(role)` recomputes the role × signal-type weights (`scoring_weights` table) and persists a `calibration_history` row:
 
 ```python
 # services/calibration_service.py
@@ -1194,7 +1194,7 @@ CREATE INDEX idx_briefs_entity_role ON briefs(entity, role, created_at DESC);
 -- Entities table (for entity-centric queries)
 CREATE TABLE entities (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    name VARCHAR(255) NOT NULL,        -- "emicizumab", "Novo Nordisk"
+    name VARCHAR(255) NOT NULL,        -- "emicizumab", "Enterprise Biopharma"
     type VARCHAR(50) NOT NULL,         -- 'drug', 'company', 'indication'
     canonical_name VARCHAR(255),       -- Standardized name
     created_at TIMESTAMP DEFAULT NOW()
@@ -1511,7 +1511,7 @@ Displayed as a muted label on every signal card summary, confluence alert, and n
 
 4. EXTRACT ENTITIES (Batch NLP)
    ├─ Extract drugs: "emicizumab", "mim8", "concizumab", "Hemgenix"
-   ├─ Extract companies: "Roche", "Novo Nordisk", "CSL Behring", "BioMarin"
+   ├─ Extract companies: "Roche", "Enterprise Biopharma", "CSL Behring", "BioMarin"
    ├─ Extract indications: "Haemophilia A", "Haemophilia B", "inhibitor development"
    └─ Extract phases: "Phase 3", "FDA approval", "CHMP opinion"
    = 2400 entities extracted
@@ -1522,8 +1522,8 @@ Displayed as a muted label on every signal card summary, confluence alert, and n
    └─ "FDA approves fitusiran" → REGULATORY_MILESTONE
 
 6. ENRICH WITH PHARMA ONTOLOGY (B.Pharm, local JSON)
-   ├─ "Hemlibra" → emicizumab → bispecific antibody → Roche → NOVO COMPETITOR
-   ├─ "Alhemo" → concizumab → anti-TFPI → Novo Nordisk (own asset)
+   ├─ "Hemlibra" → emicizumab → bispecific antibody → Roche → COMPETITOR ASSET
+   ├─ "Alhemo" → concizumab → anti-TFPI → Enterprise Biopharma (own asset)
    └─ Validation layer: catches NER false positives before storage
 
 7. SCORE RELEVANCE
@@ -1908,7 +1908,7 @@ def test_ontology_enrichment():
     enriched = ontology_service.enrich_signal(signal)
     assert enriched["context"]["drug_class"] == "Bispecific antibody"
     assert enriched["context"]["manufacturer"] == "Roche/Genentech"
-    assert enriched["context"]["novo_competitor"] is True
+    assert enriched["context"]["competitor_asset"] is True
 
 # Unit test: Stakeholder Calibration recalibrates weights (HITL, NEW v2.0)
 @pytest.mark.asyncio
@@ -2168,7 +2168,7 @@ logger.info(
 
 ## **11. DESIGN VS. JUDGING CRITERIA MAPPING**
 
-This design is explicitly engineered against the Novo Nordisk judging criteria (see Novo Nordisk Analysis doc):
+This design is explicitly engineered against the Enterprise evaluation criteria (see Enterprise Analysis doc):
 
 | Criterion (Weight) | Design Element |
 |---|---|
@@ -2180,7 +2180,7 @@ This design is explicitly engineered against the Novo Nordisk judging criteria (
 
 **Key differentiators over existing open-source tools (Refined Architecture doc):**
 1. Confluence detection (not aggregation)
-2. Pharma ontology (B.Pharm-built, knows Hemlibra = emicizumab = Roche competitor; Alhemo = concizumab = Novo Nordisk asset)
+2. Pharma ontology (B.Pharm-built, knows Hemlibra = emicizumab = Roche competitor; Alhemo = concizumab = Enterprise asset)
 3. Traceable intelligence (regulatory-grade audit trail)
 4. Temporal pattern recognition (gene therapy milestone parade / regulatory filing surge)
 5. Role-specific narratives (not one report for everyone)

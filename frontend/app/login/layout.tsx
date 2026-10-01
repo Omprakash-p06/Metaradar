@@ -2,7 +2,7 @@ import React from 'react'
 
 export const metadata = {
   title: 'Sign In — MetaRadar Haemophilia Intelligence',
-  description: 'Enterprise Haemophilia Decision Intelligence Radar — Novo Nordisk GBS Hackathon 2026',
+  description: 'Enterprise Haemophilia Decision Intelligence Radar — Autonomous Rare Disease Platform',
 }
 
 export default function LoginLayout({ children }: { children: React.ReactNode }) {

@@ -13,7 +13,7 @@ info_count: 2
 
 ## Executive Summary
 
-Phase 6 source code changes were reviewed across backend APIs, schemas, database seeders, frontend components, CSS tokens, launchers, and automated contract tests. The review confirmed strict adherence to the [ENGINEERING_STANDARDS.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/rules/ENGINEERING_STANDARDS.md) and [DEFINITION_OF_DONE.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/rules/DEFINITION_OF_DONE.md).
+Phase 6 source code changes were reviewed across backend APIs, schemas, database seeders, frontend components, CSS tokens, launchers, and automated contract tests. The review confirmed strict adherence to the [ENGINEERING_STANDARDS.md](../../../docs/rules/ENGINEERING_STANDARDS.md) and [DEFINITION_OF_DONE.md](../../../docs/rules/DEFINITION_OF_DONE.md).
 
 - **Total Files Scoped:** 19 source/test files
 - **Critical Vulnerabilities:** 0

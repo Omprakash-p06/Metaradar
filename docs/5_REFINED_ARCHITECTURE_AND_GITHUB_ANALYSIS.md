@@ -8,7 +8,7 @@
 
 > [!IMPORTANT]
 > **HISTORICAL REFERENCE DOCUMENT**  
-> *Note: This document is a secondary/historical reference and must not override the Master Plan. The sole canonical and authoritative specification for MetaRadar is [METARADAR_MASTER_PLAN_v5.0.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/METARADAR_MASTER_PLAN_v5.0.md).*
+> *Note: This document is a secondary/historical reference and must not override the Master Plan. The sole canonical and authoritative specification for MetaRadar is [METARADAR_MASTER_PLAN_v5.0.md](METARADAR_MASTER_PLAN_v5.0.md).*
 
 ---
 
@@ -124,7 +124,7 @@ Formatter Agent:   Creates Plotly visualizations + exports
 | **General AI/tech focus** | Tracks arXiv, GitHub releases, AI policy. No drug names, no HTA, no clinical phases. |
 | **No role-based access** | Single user/single view. Not multi-tenant. |
 | **No velocity scoring** | Deduplicates and summarizes but doesn't detect *accelerating* signals. |
-| **No entity relationship graph** | Doesn't know that "Hemlibra" = "emicizumab" = bispecific antibody = Roche product / Novo Nordisk competitor. |
+| **No entity relationship graph** | Doesn't know that "Hemlibra" = "emicizumab" = bispecific antibody = Roche product / Enterprise Biopharma competitor. |
 | **Push-only** | You receive alerts. Can't query: "What happened with mim8 this week?" |
 
 **What we borrow:**
@@ -249,14 +249,14 @@ Currently, 800 signals float independently. There's no concept of:
 Current plan delivers raw signals with summaries. It doesn't answer:
 - "What is happening with mim8 this month?"
 - "What changed in the haemophilia treatment landscape this week?"
-- "Should Novo Nordisk be worried about Hemgenix 3-year durability data vs prophylaxis?"
+- "Should Enterprise Biopharma be worried about Hemgenix 3-year durability data vs prophylaxis?"
 
 **4. Scoring is Static**
 Current scoring: `source_credibility * 0.7 + keyword_match * 0.3`
 This is a fixed formula. No learning, no context, no adaptation.
 
 **5. No Stakeholder Feedback Loop (HITL)**
-No mechanism for Novo Nordisk functions to tell the system whether routing was right. A Regulatory Affairs analyst who constantly gets clinical-only signals has no way to fix it. Routing never improves → trust decays → analysts revert to manual inbox scanning.
+No mechanism for Enterprise functions to tell the system whether routing was right. A Regulatory Affairs analyst who constantly gets clinical-only signals has no way to fix it. Routing never improves → trust decays → analysts revert to manual inbox scanning.
 
 **6. No Traceable Reasoning**
 Current plan: Signal appears with a score. User doesn't know *why* it's important.
@@ -445,7 +445,7 @@ PHARMA_ONTOLOGY = {
         "concizumab": {
             "brand_names": ["Alhemo"],
             "mechanism": "Anti-TFPI monoclonal antibody",
-            "manufacturer": "Novo Nordisk",
+            "manufacturer": "Enterprise Biopharma",
             "indications": ["haemophilia_a", "haemophilia_b", "with/without inhibitors"],
             "formulations": ["subcutaneous injection"],
             "competitors": ["emicizumab", "fitusiran", "marstacimab"]
@@ -453,7 +453,7 @@ PHARMA_ONTOLOGY = {
         "mim8": {
             "brand_names": ["Investigational"],
             "mechanism": "Next-generation bispecific antibody",
-            "manufacturer": "Novo Nordisk",
+            "manufacturer": "Enterprise Biopharma",
             "indications": ["haemophilia_a", "haemophilia_b"],
             "formulations": ["subcutaneous injection"],
             "competitors": ["emicizumab"],
@@ -479,7 +479,7 @@ PHARMA_ONTOLOGY = {
         },
     },
     "companies": {
-        "Novo Nordisk Rare Disease": {
+        "Enterprise Rare Disease": {
             "portfolio": ["concizumab", "mim8", "esparin_egidiama"],
             "pipeline_focus": ["haemophilia_a", "haemophilia_b", "rare bleeding disorders"],
             "key_competitors": ["Roche", "Sanofi", "Pfizer", "BioMarin", "CSL Behring", "Takeda"],
@@ -509,8 +509,8 @@ def enrich_signal(signal: dict, entities: dict) -> dict:
 ```
 
 **Why this matters:**
-- When "Hemlibra" appears in a Reddit post, the system knows it's emicizumab + Roche + Novo competitor
-- When "mim8" or "concizumab" appears, system flags it as a Novo Nordisk own-asset signal (own-pipeline awareness)
+- When "Hemlibra" appears in a Reddit post, the system knows it's emicizumab + Roche + Enterprise competitor
+- When "mim8" or "concizumab" appears, system flags it as a Enterprise internal-asset signal (own-pipeline awareness)
 - When "Hemgenix" appears, system knows it's a gene-therapy competitive threat to prophylaxis
 - Zero additional API calls. Just a local dictionary lookup.
 - B.Pharm team owns and maintains this ontology (their biggest contribution)
@@ -1213,7 +1213,7 @@ This is the section that judges will find most impressive — domain-expert coll
     "non_factor_therapy_update": {
       "description": "Bispecific / anti-TFPI / RNAi therapy progress",
       "keywords": ["emicizumab", "Hemlibra", "concizumab", "mim8", "fitusiran", "marstacimab"],
-      "example": "Novo Nordisk mim8 Phase 3 meets primary endpoint in Haemophilia A"
+      "example": "Enterprise Biopharma mim8 Phase 3 meets primary endpoint in Haemophilia A"
     },
     "inhibitor_development_signal": {
       "description": "Inhibitor development reports or thromboembolic risk",
@@ -1284,10 +1284,10 @@ This is the section that judges will find most impressive — domain-expert coll
 - "MetaRadar: The Haemophilia Intelligence Radar — From Signal Noise to Treatment Strategy"
 - "MetaRadar: Where Haemophilia Signals Converge into Strategy"
 - "MetaRadar: From Inbox Noise to Strategic Signal in Rare Disease"
-- "MetaRadar: Real-Time Haemophilia Intelligence for Every Novo Nordisk Function"
+- "MetaRadar: Real-Time Haemophilia Intelligence for Every Enterprise Biopharma Function"
 
 **Positioning Statement (for judges):**
-> "MetaRadar is not a news aggregator. It's a pharmaceutical intelligence layer that runs **five advanced analyses** on every signal — confluence detection, signal lifecycle tracking, red-team contradiction checks, missing-signal early-warning, and a stakeholder learning loop — so Novo Nordisk functions see not just *what changed*, but *where a development sits*, *whether the evidence contradicts itself*, *what should have happened but didn't*, and *which routing the people who use it have taught the system*."
+> "MetaRadar is not a news aggregator. It's a pharmaceutical intelligence layer that runs **five advanced analyses** on every signal — confluence detection, signal lifecycle tracking, red-team contradiction checks, missing-signal early-warning, and a stakeholder learning loop — so Enterprise functions see not just *what changed*, but *where a development sits*, *whether the evidence contradicts itself*, *what should have happened but didn't*, and *which routing the people who use it have taught the system*."
 
 ---
 
@@ -1420,14 +1420,14 @@ What MetaRadar does DIFFERENTLY — THE FIVE ADVANCED ANALYSES:
    submissions) fire early-warning alerts with confidence that grows with silence.
 
 5. STAKEHOLDER LEARNING LOOP (HITL)
-   Novo Nordisk functions rate routing accuracy inline (⭐ 1-5); weights recalibrate via
+   Enterprise functions rate routing accuracy inline (⭐ 1-5); weights recalibrate via
    StakeholderCalibrationService; Q3 confidence badges visibly improve. Simulated
    personas prove it live in the demo.
 
 PLUS — the supporting intelligence layer:
 6. PHARMA ONTOLOGY
    Built by B.Pharm domain experts. Knows "Hemlibra" = "emicizumab" = Roche competitor;
-   "mim8" = "concizumab" = Novo Nordisk assets. Tracks competitor relationships, not just keywords.
+   "mim8" = "concizumab" = Enterprise assets. Tracks competitor relationships, not just keywords.
 
 7. TRACEABLE INTELLIGENCE
    Every insight shows source chain (which signals → why it matters).

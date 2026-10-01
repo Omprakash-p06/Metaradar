@@ -88,7 +88,7 @@ Rename user-facing UI labels:
 - RSS URL: `https://pharma.economictimes.indiatimes.com/rss/topstories` (primary) + `https://pharma.economictimes.indiatimes.com/rss/drug_approvals`
 - Tier: 3 (Discovery)
 - Pattern: Mirror `EMARSSConnector`, same approach as Fierce Pharma
-- Keyword filter: haemophilia, hemophilia, gene therapy, FDA approval, EMA, Novo Nordisk, emicizumab, fitusiran
+- Keyword filter: haemophilia, hemophilia, gene therapy, FDA approval, EMA, Enterprise Biopharma, emicizumab, fitusiran
 
 ### D-09-07: BioPharma Dive — Link-Level Discovery Only
 BioPharma Dive does not expose an RSS feed. Do not scrape or crawl.

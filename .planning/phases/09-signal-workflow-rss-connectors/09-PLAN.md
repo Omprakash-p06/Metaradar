@@ -449,7 +449,7 @@ Add connector profiles for `fierce_pharma` and `et_pharma`:
       - id: haemophilia_pharma_news
         rss_url: "https://www.fiercepharma.com/rss/xml"
         keywords: ["haemophilia", "hemophilia", "emicizumab", "fitusiran", "concizumab",
-                   "mim8", "gene therapy", "Novo Nordisk", "FDA approval", "EMA", "Alhemo",
+                   "mim8", "gene therapy", "Enterprise Biopharma", "FDA approval", "EMA", "Alhemo",
                    "Hemlibra", "Hemgenix", "Hympavzi", "Qfitlia"]
 
   et_pharma:
@@ -461,7 +461,7 @@ Add connector profiles for `fierce_pharma` and `et_pharma`:
       - id: haemophilia_pharma_news
         rss_url: "https://pharma.economictimes.indiatimes.com/rss/topstories"
         keywords: ["haemophilia", "hemophilia", "bleeding disorder", "gene therapy",
-                   "Novo Nordisk", "Roche", "CSL Behring", "Sanofi", "emicizumab", "fitusiran"]
+                   "Enterprise Biopharma", "Roche", "CSL Behring", "Sanofi", "emicizumab", "fitusiran"]
       - id: drug_approvals
         rss_url: "https://pharma.economictimes.indiatimes.com/rss/drug_approvals"
         keywords: ["haemophilia", "hemophilia", "factor VIII", "factor IX", "rare disease"]

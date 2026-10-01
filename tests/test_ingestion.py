@@ -220,7 +220,7 @@ async def test_pubmed_pii_scrub():
 # T-P1-03 — ClinicalTrials.gov
 # --------------------------------------------------------------------------- #
 
-def _ct_study(nct_id, title, conditions, interventions, sponsor="Novo Nordisk", date_str="2025-06-01"):
+def _ct_study(nct_id, title, conditions, interventions, sponsor="Enterprise Sponsor", date_str="2025-06-01"):
     return {
         "protocolSection": {
             "identificationModule": {

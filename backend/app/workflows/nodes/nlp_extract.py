@@ -78,14 +78,14 @@ def extract_entities_from_text(
                         "brand_name": asset_cfg.brand_name,
                         "generic_name": asset_cfg.generic_name,
                         "company": asset_cfg.company,
-                        "is_novo_nordisk": asset_cfg.is_novo_nordisk
+                        "is_internal_asset": asset_cfg.is_internal_asset
                     })
                     if asset_cfg.company and asset_cfg.company not in extracted_companies:
                         extracted_companies.append(asset_cfg.company)
                     break
 
     # Additional company keywords
-    known_companies = ["Novo Nordisk", "Roche", "CSL Behring", "BioMarin", "Sanofi", "Pfizer", "Chugai", "Takeda", "Bayer", "Spark Therapeutics"]
+    known_companies = ["Enterprise Portfolio", "Roche", "CSL Behring", "BioMarin", "Sanofi", "Pfizer", "Chugai", "Takeda", "Bayer", "Spark Therapeutics"]
     for comp in known_companies:
         if comp not in extracted_companies and re.search(rf"\b{re.escape(comp)}\b", full_text, re.IGNORECASE):
             extracted_companies.append(comp)

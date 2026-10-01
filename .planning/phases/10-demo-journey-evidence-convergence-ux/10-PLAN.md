@@ -20,15 +20,15 @@ Phase 10: Undeniable Demo Journey, Evidence Convergence, BioPharma Dive & UX Ref
 
 ## Wave Breakdown
 
-### [Wave 1: 10-01-PLAN.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/10-demo-journey-evidence-convergence-ux/10-01-PLAN.md)
+### [Wave 1: 10-01-PLAN.md](10-01-PLAN.md)
 - **Objective:** Connect verified BioPharma Dive RSS feed (`https://www.biopharmadive.com/feeds/news/`), upgrade domain config from `configured_no_feed` to active source, and implement adaptive NewsAPI quota governor (30m/90m/pause) with UI quota badge.
 - **Key Files:** `backend/app/connectors/biopharma_dive.py`, `backend/app/connectors/__init__.py`, `config/haemophilia.yaml`, `backend/app/services/scheduler.py`, `tests/test_connector_health.py`.
 
-### [Wave 2: 10-02-PLAN.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/10-demo-journey-evidence-convergence-ux/10-02-PLAN.md)
+### [Wave 2: 10-02-PLAN.md](10-02-PLAN.md)
 - **Objective:** Build `EvidenceConvergenceWidget`, `PriorityScoreExplainer`, and `RedTeamCounterFactuals` components; integrate source hierarchy tags (`EVIDENCE PRIMARY`, `VALIDATION`, `DISCOVERY`) across `SignalCard` and `SignalDetailWorkspace`.
 - **Key Files:** `frontend/components/signals/EvidenceConvergenceWidget.tsx`, `frontend/components/signals/PriorityScoreExplainer.tsx`, `frontend/components/signals/RedTeamCounterFactuals.tsx`, `frontend/components/signals/SignalCard.tsx`, `frontend/components/signals/SignalDetailWorkspace.tsx`.
 
-### [Wave 3: 10-03-PLAN.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/10-demo-journey-evidence-convergence-ux/10-03-PLAN.md)
+### [Wave 3: 10-03-PLAN.md](10-03-PLAN.md)
 - **Objective:** Refine main dashboard into a daily executive briefing view, build automated 5-scenario E2E test harness (`scripts/test_demo_scenarios_e2e.py`), and execute complete test matrix.
 - **Key Files:** `frontend/app/page.tsx`, `scripts/test_demo_scenarios_e2e.py`, `tests/test_signal_routing_workflow.py`.
 

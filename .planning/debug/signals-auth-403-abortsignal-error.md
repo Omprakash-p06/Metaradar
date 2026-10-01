@@ -24,13 +24,13 @@ updated: 2026-08-28
    - The browser's native `Window.fetch()` threw `TypeError: Failed to read the 'signal' property from 'RequestInit': Failed to convert value to 'AbortSignal'`.
 
 ## Key Changes & Fixes Applied
-1. **Role-Aware Query Filtering in [SignalList.tsx](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/signals/SignalList.tsx)**:
+1. **Role-Aware Query Filtering in [SignalList.tsx](../../frontend/components/signals/SignalList.tsx)**:
    - Integrated `useAuth()` to check current role permissions (`LEADERSHIP`, `ADMIN`, `DEVELOPER`).
    - Dynamically included `all_functions: true` only when the active persona is privileged, allowing functional users (`MEDICAL_AFFAIRS`, `REGULATORY`, etc.) to query their scoped signals seamlessly without 403 errors.
    - Defensive validation for `signal` inside `loadSignals` to guarantee only genuine `AbortSignal` instances are forwarded.
-2. **Strict `AbortSignal` Validation in [frontend/lib/api.ts](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/lib/api.ts)**:
+2. **Strict `AbortSignal` Validation in [frontend/lib/api.ts](../../frontend/lib/api.ts)**:
    - Updated `apiFetch` and `fetchCsrfToken` to enforce `if (typeof AbortSignal !== 'undefined' && signal instanceof AbortSignal)` before populating `fetchOptions.signal`.
-3. **Safe Event Decoupling in [ErrorState.tsx](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/common/ErrorState.tsx)**:
+3. **Safe Event Decoupling in [ErrorState.tsx](../../frontend/components/common/ErrorState.tsx)**:
    - Updated `ErrorState` retry buttons to execute `onClick={() => onRetry?.()}` so click events are not forwarded to retry handlers.
 
 ## Verification Evidence

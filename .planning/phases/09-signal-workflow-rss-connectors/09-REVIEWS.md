@@ -1,8 +1,8 @@
 # Phase 09 Cross-AI Peer Review (09-REVIEWS.md)
 
 **Phase:** Phase 09 — Real Signal Workflow, NewsAPI Provenance Fix & Pharma RSS Discovery Connectors  
-**Plan Under Review:** [`.planning/phases/09-signal-workflow-rss-connectors/09-PLAN.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/09-signal-workflow-rss-connectors/09-PLAN.md)  
-**Context & Decisions:** [`.planning/phases/09-signal-workflow-rss-connectors/09-CONTEXT.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/09-signal-workflow-rss-connectors/09-CONTEXT.md)  
+**Plan Under Review:** [`.planning/phases/09-signal-workflow-rss-connectors/09-PLAN.md`](09-PLAN.md)  
+**Context & Decisions:** [`.planning/phases/09-signal-workflow-rss-connectors/09-CONTEXT.md`](09-CONTEXT.md)  
 **Date:** 2026-08-26  
 **Review Status:** **APPROVED WITH RECOMMENDATIONS (PASS)**
 

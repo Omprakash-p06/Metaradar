@@ -1,6 +1,6 @@
 # MetaRadar 5-Minute Hackathon Demo Script
 
-**Novo Nordisk GBS Hackathon 2026 — Problem Statement #3: Rare Disease Competitive Intelligence Radar**  
+**Enterprise Decision Intelligence — Strategic Signal Radar (Rare Disease)**  
 *Pilot Domain: Haemophilia A & B*
 
 ---

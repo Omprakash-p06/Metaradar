@@ -137,18 +137,18 @@
 
 ## Phase 12: Hackathon MVP — Full NN GBS Kick-Off Specification & Alignment (ACTIVE / PLANNED)
 
-> **Source Authority:** `docs/NN GBS Hackathon 2026 — Kick-off.pptx` (Novo Nordisk GBS Problem Statement #3: Haemophilia Intelligence Radar)
+> **Source Authority:** `docs/NN GBS Hackathon 2026 — Kick-off.pptx` (Enterprise Biopharma GBS Problem Statement #3: Haemophilia Intelligence Radar)
 
 ### 1. The 4 Practical Questions Framework
 - [ ] **REQ-P12-01 [Q1: What changed?]**: Ingest, detect, and classify updates across Haemophilia A (Factor VIII) and Haemophilia B (Factor IX) with concise, factual summaries.
-- [ ] **REQ-P12-02 [Q2: Why does it matter?]**: AI assessment of potential impact on patients, competitors (Roche/Chugai, Pfizer, Sanofi, Sobi), the market, and Novo Nordisk.
+- [ ] **REQ-P12-02 [Q2: Why does it matter?]**: AI assessment of potential impact on patients, competitors (Roche/Chugai, Pfizer, Sanofi, Sobi), the market, and Enterprise Biopharma.
 - [ ] **REQ-P12-03 [Q3: Who should review it?]**: Deterministic routing recommendation to the 6 enterprise functions (`MEDICAL_AFFAIRS`, `REGULATORY`, `SAFETY`, `MARKET_ACCESS`, `COMMUNICATIONS`, `LEADERSHIP`).
 - [ ] **REQ-P12-04 [Q4: What action is needed?]**: Strategic recommendation categorization (`Review`, `Monitor`, `Escalate`, `Briefing Update`, `FAQ Preparation`) labeled with `[FACT]`, `[INTERPRETATION]`, and `[SPECULATION]`.
 
 ### 2. Pilot Therapy Area & In-Scope Coverage
 - [ ] **REQ-P12-05 [Modalities Scope]**: Tracking of Factor therapies, Non-factor therapies, Bispecifics (e.g. emicizumab, NXT007, Mim8), Gene therapies (Hemgenix, Roctavian), and RNAi (fitusiran).
 - [ ] **REQ-P12-06 [Congress & Public Sources]**: Ingestion coverage of major medical congresses (ISTH, EAHAD, ASH abstracts), clinical trial registries (ClinicalTrials.gov), health agencies (FDA, EMA), scientific journals (PubMed), and pharma discovery feeds.
-- [ ] **REQ-P12-07 [Competitor Tracking]**: Tracking of key competitor movements across Roche/Chugai, Pfizer, Sanofi, Sobi, and Novo Nordisk.
+- [ ] **REQ-P12-07 [Competitor Tracking]**: Tracking of key competitor movements across Roche/Chugai, Pfizer, Sanofi, Sobi, and Enterprise Biopharma.
 - [ ] **REQ-P12-08 [Strict Out-of-Scope Enforcement]**: Zero use of confidential NN strategy, zero patient-identifiable data (PII/PHI), and zero promotional or external-facing content.
 
 ### 3. Stakeholder Learning Model (AI + Human-in-the-Loop Calibration)

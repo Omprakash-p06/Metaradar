@@ -94,7 +94,7 @@ async def node_synthesize(state: MetaRadarState) -> Dict[str, Any]:
                 f"Synthesize intelligence for haemophilia asset '{asset_id}' ({company}) "
                 f"under signal type '{sig_type}'. Generate Four-Question breakdown:\n"
                 f"Q1 (What changed?): Facts citing trial or regulatory event.\n"
-                f"Q2 (Why it matters?): Strategic implications for Novo Nordisk portfolio.\n"
+                f"Q2 (Why it matters?): Strategic implications for enterprise portfolio.\n"
                 f"Q3 (Impacted functions?): Relevant stakeholder functions.\n"
                 f"Q4 (Recommended action?): Actionable strategic guidance.\n"
                 f"Tag all sentences with [FACT], [INTERPRETATION], or [SPECULATION]."

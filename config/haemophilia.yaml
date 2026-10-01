@@ -33,24 +33,24 @@ assets:
   - id: "concizumab"
     brand_name: "Alhemo"
     generic_name: "concizumab"
-    company: "Novo Nordisk"
+    company: "Enterprise Portfolio"
     mechanism: "anti-TFPI monoclonal antibody"
     modality: "subcutaneous monoclonal antibody"
     indication: "Haemophilia A and B with inhibitors"
     approval_status: "approved"
     approval_date: "2024-12"
     jurisdiction: "FDA"
-    is_novo_nordisk: true
+    is_internal_asset: true
   - id: "mim8"
     brand_name: "mim8"
     generic_name: "mim8"
-    company: "Novo Nordisk"
+    company: "Enterprise Portfolio"
     mechanism: "FVIIIa-mimetic bispecific antibody"
     modality: "subcutaneous bispecific antibody"
     indication: "Haemophilia A with and without inhibitors"
     approval_status: "in_clinical_trials"
     jurisdiction: "Global Phase 3"
-    is_novo_nordisk: true
+    is_internal_asset: true
   - id: "emicizumab"
     brand_name: "Hemlibra"
     generic_name: "emicizumab"
@@ -60,7 +60,7 @@ assets:
     indication: "Haemophilia A with and without inhibitors"
     approval_status: "approved"
     jurisdiction: "FDA / EMA"
-    is_novo_nordisk: false
+    is_internal_asset: false
   - id: "etranacogene_dezaparvovec"
     brand_name: "Hemgenix"
     generic_name: "etranacogene dezaparvovec"
@@ -70,7 +70,7 @@ assets:
     indication: "Haemophilia B"
     approval_status: "approved"
     jurisdiction: "FDA / EMA"
-    is_novo_nordisk: false
+    is_internal_asset: false
   - id: "valoctocogene_roxaparvovec"
     brand_name: "Roctavian"
     generic_name: "valoctocogene roxaparvovec"
@@ -81,7 +81,7 @@ assets:
     approval_status: "approved"
     approval_date: "2023-06"
     jurisdiction: "FDA / EMA"
-    is_novo_nordisk: false
+    is_internal_asset: false
   - id: "fitusiran"
     brand_name: "Qfitlia"
     generic_name: "fitusiran"
@@ -92,7 +92,7 @@ assets:
     approval_status: "approved"
     approval_date: "2025-03"
     jurisdiction: "FDA"
-    is_novo_nordisk: false
+    is_internal_asset: false
   - id: "marstacimab"
     brand_name: "Hympavzi"
     generic_name: "marstacimab"
@@ -103,7 +103,7 @@ assets:
     approval_status: "approved"
     approval_date: "2024-10"
     jurisdiction: "FDA / EMA"
-    is_novo_nordisk: false
+    is_internal_asset: false
 
 signal_types:
   - id: "CLINICAL_TRIAL"
@@ -229,8 +229,8 @@ connectors:
       - id: haemophilia_trials
         conditions: ["hemophilia A", "hemophilia B", "haemophilia", "Factor VIII deficiency", "Factor IX deficiency"]
         interventions: ["emicizumab", "fitusiran", "marstacimab", "concizumab", "mim8", "fidanacogene", "etranacogene", "valoctocogene", "efanesoctocog alfa", "Alhemo", "Hemlibra", "Hemgenix", "Roctavian", "Qfitlia", "Hympavzi"]
-      - id: novo_pipeline
-        sponsor_keywords: ["Novo Nordisk"]
+      - id: internal_pipeline
+        sponsor_keywords: ["Enterprise Portfolio"]
         conditions: ["hemophilia A", "hemophilia B", "haemophilia"]
 
   newsapi:
@@ -241,7 +241,7 @@ connectors:
     rolling_window_days: 7
     profiles:
       - id: haemophilia_market
-        query: "haemophilia OR hemophilia (Roche OR CSL OR Novo OR Sanofi OR BioMarin OR Pfizer)"
+        query: "haemophilia OR hemophilia (Roche OR CSL OR Sanofi OR BioMarin OR Pfizer)"
         language: en
       - id: gene_therapy_news
         query: "gene therapy haemophilia OR hemophilia (Hemgenix OR Roctavian OR fidanacogene)"
@@ -256,7 +256,7 @@ connectors:
     profiles:
       - id: haemophilia_pharma_news
         rss_url: "https://www.fiercepharma.com/rss/xml"
-        keywords: ["haemophilia", "hemophilia", "emicizumab", "fitusiran", "concizumab", "mim8", "gene therapy", "Novo Nordisk", "FDA approval", "EMA", "Alhemo", "Hemlibra", "Hemgenix", "Hympavzi", "Qfitlia", "factor VIII", "factor IX"]
+        keywords: ["haemophilia", "hemophilia", "emicizumab", "fitusiran", "concizumab", "mim8", "gene therapy", "FDA approval", "EMA", "Alhemo", "Hemlibra", "Hemgenix", "Hympavzi", "Qfitlia", "factor VIII", "factor IX"]
 
   et_pharma:
     freshness_class: delayed
@@ -267,7 +267,7 @@ connectors:
     profiles:
       - id: haemophilia_pharma_news
         rss_url: "https://pharma.economictimes.indiatimes.com/rss/topstories"
-        keywords: ["haemophilia", "hemophilia", "bleeding disorder", "gene therapy", "Novo Nordisk", "Roche", "CSL Behring", "Sanofi", "emicizumab", "fitusiran"]
+        keywords: ["haemophilia", "hemophilia", "bleeding disorder", "gene therapy", "Roche", "CSL Behring", "Sanofi", "emicizumab", "fitusiran"]
       - id: drug_approvals
         rss_url: "https://pharma.economictimes.indiatimes.com/rss/drug_approvals"
         keywords: ["haemophilia", "hemophilia", "factor VIII", "factor IX", "rare disease", "drug approval", "FDA", "EMA"]
@@ -284,7 +284,7 @@ connectors:
     profiles:
       - id: haemophilia_biopharmadive
         rss_url: "https://www.biopharmadive.com/feeds/news/"
-        keywords: ["haemophilia", "hemophilia", "emicizumab", "fitusiran", "concizumab", "mim8", "gene therapy", "Novo Nordisk", "Roche", "Sanofi", "BioMarin", "Pfizer", "CSL Behring", "FDA", "EMA", "approval", "clinical trial", "phase 3", "phase iii", "rare disease", "clotting factor"]
+        keywords: ["haemophilia", "hemophilia", "emicizumab", "fitusiran", "concizumab", "mim8", "gene therapy", "Roche", "Sanofi", "BioMarin", "Pfizer", "CSL Behring", "FDA", "EMA", "approval", "clinical trial", "phase 3", "phase iii", "rare disease", "clotting factor"]
 
 
   fda:

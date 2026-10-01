@@ -317,12 +317,12 @@ def test_resolve_canonical_provenance_newsapi_article_url():
     """NewsAPI signals must preserve and pass-through the direct article URL."""
     from app.services.provenance_urls import resolve_canonical_provenance
 
-    article_url = "https://www.fiercepharma.com/pharma/novo-nordisks-mim8-shows-robust-efficacy-phase-3-haemophilia-trial"
+    article_url = "https://www.fiercepharma.com/pharma/mim8-shows-robust-efficacy-phase-3-haemophilia-trial"
     url, status = resolve_canonical_provenance(
         source_id="newsapi",
         existing_url=article_url,
         external_id=article_url,
-        title_or_content="Novo Nordisk Mim8 readout",
+        title_or_content="Mim8 Phase 3 readout",
     )
     assert url == article_url
     assert status == "available"
@@ -347,8 +347,8 @@ async def test_fierce_pharma_provenance_integration():
     """Fierce Pharma RSS XML -> connector parse -> raw_payload provenance"""
     rss_xml = """
     <item>
-        <title>Novo Nordisk scores breakthrough designation for Mim8</title>
-        <link>https://www.fiercepharma.com/pharma/novo-nordisk-scores-breakthrough-designation-mim8</link>
+        <title>Breakthrough designation granted for Mim8</title>
+        <link>https://www.fiercepharma.com/pharma/breakthrough-designation-mim8</link>
         <description>Next-generation subcutaneous factor VIII mimetic receives priority regulatory pathway.</description>
         <pubDate>Mon, 23 Feb 2026 12:00:00 GMT</pubDate>
     </item>
@@ -356,16 +356,16 @@ async def test_fierce_pharma_provenance_integration():
     item = ET.fromstring(rss_xml.strip())
     connector = FiercePharmaRSSConnector()
     retrieved_at = datetime.now(timezone.utc)
-    guid = "https://www.fiercepharma.com/pharma/novo-nordisk-scores-breakthrough-designation-mim8"
-    title = "Novo Nordisk scores breakthrough designation for Mim8"
+    guid = "https://www.fiercepharma.com/pharma/breakthrough-designation-mim8"
+    title = "Breakthrough designation granted for Mim8"
     description = "Next-generation subcutaneous factor VIII mimetic receives priority regulatory pathway."
     payload = connector._parse_item(item, guid, title, description, retrieved_at)
 
     assert payload is not None
-    assert payload.url == "https://www.fiercepharma.com/pharma/novo-nordisk-scores-breakthrough-designation-mim8"
+    assert payload.url == "https://www.fiercepharma.com/pharma/breakthrough-designation-mim8"
     assert payload.raw_payload.get("source_name") == "Fierce Pharma"
     assert payload.raw_payload.get("signal_type") == "NEWS"
-    assert payload.raw_payload.get("url") == "https://www.fiercepharma.com/pharma/novo-nordisk-scores-breakthrough-designation-mim8"
+    assert payload.raw_payload.get("url") == "https://www.fiercepharma.com/pharma/breakthrough-designation-mim8"
 
 
 @pytest.mark.asyncio

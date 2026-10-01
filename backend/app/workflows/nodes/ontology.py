@@ -49,7 +49,7 @@ async def node_ontology_enrich(state: MetaRadarState) -> Dict[str, Any]:
                         "approval_status": cfg.approval_status,
                         "approval_date": cfg.approval_date,
                         "jurisdiction": cfg.jurisdiction,
-                        "is_novo_nordisk": cfg.is_novo_nordisk,
+                        "is_internal_asset": cfg.is_internal_asset,
                         "is_known_ontology": True
                     })
                 else:

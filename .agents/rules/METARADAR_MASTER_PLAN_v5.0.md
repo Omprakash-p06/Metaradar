@@ -3,7 +3,7 @@
 **Project:** MetaRadar — Near-Real-Time Competitive Intelligence Radar  
 **Version:** 5.1 (Canonical Master Specification · B.Pharm Domain Research Integrated · Provider-Agnostic Reasoning Layer · Pre-Implementation Architecture Hardening)  
 **Date:** August 13, 2026  
-**Target Event:** Novo Nordisk GBS Hackathon 2026 (Problem Statement #3: "From Inbox Noise to Strategic Signal | Pilot Area: Haemophilia within Rare Disease")  
+**Target Focus:** Autonomous Rare Disease Competitive Intelligence Radar ("From Inbox Noise to Strategic Signal | Pilot Area: Haemophilia within Rare Disease")  
 **Team:** Aura Pharmers — MS Ramaiah Institute of Technology (MSRIT), Cross-Disciplinary (2 CSE + 3 B.Pharm)  
 **Team Lead:** Sanjana Rathore B.  
 **Specification Status:** **SOLE AUTHORITATIVE MASTER PLAN** (All other documentation files are secondary historical references).
@@ -18,7 +18,7 @@
 
 > **CANONICAL PRINCIPLE**  
 > *"A conventional AI system summarizes documents. MetaRadar builds an evidence story around a development."*  
-> MetaRadar converts fragmented public signals into evidence-backed developments and role-specific actions for Novo Nordisk teams.
+> MetaRadar converts fragmented public signals into evidence-backed developments and role-specific actions for enterprise teams.
 
 ---
 
@@ -50,7 +50,7 @@ Pharma teams spend hours manually scouring inbox feeds and unlinked news dashboa
 | Publication | Medical Affairs | Medical Communications · other functions depending on content |
 
 > These are the **initial routing matrix only**; all routes are adjustable through stakeholder calibration (mechanism 5). Adding a route never requires a new engine — it adjusts `scoring_weights` rows.
-* **Primary Focus:** Monitoring clinical trials, publication readouts, congress abstracts, safety signals, and competitor drug positioning affecting Novo Nordisk's haemophilia portfolio (concizumab, mim8) against key market competitors (Roche's emicizumab, CSL Behring's Hemgenix, BioMarin's Roctavian, Sanofi's fitusiran, Pfizer's marstacimab).
+* **Primary Focus:** Monitoring clinical trials, publication readouts, congress abstracts, safety signals, and competitor drug positioning affecting internal haemophilia portfolio assets (concizumab, mim8) against key market competitors (Roche's emicizumab, CSL Behring's Hemgenix, BioMarin's Roctavian, Sanofi's fitusiran, Pfizer's marstacimab).
 
 ---
 
@@ -544,7 +544,7 @@ Before any Grok API call:
 PUBLIC/SYNTHETIC CHECK → PII/PHI CHECK → CONFIDENTIALITY CHECK → ALLOWED? YES → GROK / NO → BLOCK
 ```
 
-NEVER send: confidential Novo Nordisk strategy · internal forecasts · launch plans · patient-level information · PII/PHI · non-public information · confidential documents. If the external call is blocked: use **local Gemma if available → otherwise BART degraded mode → otherwise source-only display.**
+NEVER send: confidential enterprise strategy · internal forecasts · launch plans · patient-level information · PII/PHI · non-public information · confidential documents. If the external call is blocked: use **local Gemma if available → otherwise BART degraded mode → otherwise source-only display.**
 
 xAI API data handling does **not** override the hackathon's stricter public/synthetic-only rule: xAI does not use API inputs/outputs for training without explicit permission, but requests/responses are normally retained ~30 days for abuse auditing (encrypted at rest, auto-deleted) unless applicable stricter retention arrangements (e.g., Zero Data Retention) are used (official: https://docs.x.ai/developers/faq/security).
 
@@ -669,7 +669,7 @@ Adapters: `PubMedConnector` · `NewsAPIConnector` · `ClinicalTrialsConnector` �
 * **Ontology quality gate (before any ontology data enters production/demo databases):** `generic_name · brand_name · company · mechanism · disease · factor · inhibitor_population · approval_status · approval_date · jurisdiction · source · last_verified`. Stale or manually-guessed product information is rejected. Approval status is tracked as an **updatable fact** (with source + last_verified), never treated as permanent/static.
 * **Verified FDA product mappings (do not swap):**
   - **fitusiran → Qfitlia** (Sanofi; FDA-approved March 2025 for routine prophylaxis, haemophilia A/B ± inhibitors)
-  - **concizumab → Alhemo** (Novo Nordisk; FDA-approved December 2024 for prophylaxis in haemophilia A/B with inhibitors)
+  - **concizumab → Alhemo** (Enterprise Portfolio; FDA-approved December 2024 for prophylaxis in haemophilia A/B with inhibitors)
   - **marstacimab → Hympavzi** (Pfizer; approved 2024, expanded June 2026 to ages 6+ haemophilia A/B ± inhibitors)
 
 ### 14.6 LangGraph State Contract (formal)
@@ -755,5 +755,5 @@ No additional pipeline exists. The hardening decisions in §14 do not change the
 ---
 
 *Master Specification Approved & Frozen: August 2026*  
-*Novo Nordisk GBS Hackathon 2026 — Problem Statement #3*  
+*MetaRadar Autonomous Rare Disease Competitive Intelligence Radar*  
 *Team: Aura Pharmers — MSRIT (2 CSE + 3 B.Pharm) · Team Lead: Sanjana Rathore B.*

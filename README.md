@@ -11,10 +11,10 @@
 
   **Evidence-Grounded Competitive Intelligence Radar for Rare Diseases (Haemophilia A & B)**
 
-  [![Hackathon](https://img.shields.io/badge/Novo%20Nordisk%20GBS%20Hackathon-2026-blue)](#)
-  [![Problem Statement](https://img.shields.io/badge/Problem%20Statement-%233%20Rare%20Disease%20Radar-purple)](#)
+  [![Platform](https://img.shields.io/badge/MetaRadar-v5.5%20Enterprise-blue)](#)
+  [![Focus](https://img.shields.io/badge/Focus-Rare%20Disease%20Radar-purple)](#)
   [![Pilot](https://img.shields.io/badge/Pilot-Haemophilia%20A%20%26%20B-red)](#)
-  [![Status](https://img.shields.io/badge/Status-Hackathon%20Evaluation%20Build-blue)](#)
+  [![Status](https://img.shields.io/badge/Status-Evaluation%20Build-blue)](#)
   [![Tests](https://img.shields.io/badge/Pytest-186%20Passed%2C%201%20Skipped-brightgreen)](#)
   [![Contract](https://img.shields.io/badge/OpenAPI%203.1-Synchronized-blue)](#)
   [![Data](https://img.shields.io/badge/Data-8%20Monitored%20Sources-green)](#)
@@ -25,7 +25,7 @@
 
 MetaRadar organizes fragmented public information across the haemophilia treatment landscape into **evidence-linked developments, multi-source confluence alerts, zero-shot contradiction flags, missing milestone alerts, and role-scoped intelligence briefs**.
 
-The platform is purpose-built for the **Novo Nordisk GBS Hackathon 2026 — Problem Statement #3 (Rare Disease Competitive Intelligence Radar)**, with **Haemophilia A and Haemophilia B** as the initial clinical pilot.
+The platform is purpose-built as an **Autonomous Rare Disease Competitive Intelligence Radar**, with **Haemophilia A and Haemophilia B** as the initial clinical pilot.
 
 ---
 
@@ -403,7 +403,7 @@ Detailed technical documentation is organized in [`docs/`](docs/):
 # Team
 
 **MS Ramaiah Institute of Technology (MSRIT), Bangalore, Karnataka, India**  
-*Novo Nordisk GBS Hackathon 2026 — Problem Statement #3: Rare Disease Competitive Intelligence Radar*
+*MetaRadar — Rare Disease Competitive Intelligence Radar*
 
 - **Sanjana Rathore B.** (Team Lead) — B.Pharm (Domain Owner, Medical Affairs Strategy, Clinical Endpoints)
 - **Ishaaq Ahmed Khan** — B.Pharm (Haemophilia Treatment Map, Asset Lifecycles, Expected Events FSM)

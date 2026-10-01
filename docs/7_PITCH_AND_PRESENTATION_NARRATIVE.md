@@ -4,12 +4,12 @@
 **Version:** 3.1  
 **Date:** August 13, 2026  
 > **v3.1 (Aug 13, 2026):** Aligned with Master Plan v4.0 B.Pharm domain-research integration — the pitch now reflects canonical haemophilia domain classification (disease/factor/inhibitor/population/modality), the evidence-maturity ladder (regulatory > peer-review/registry > congress > company > media), access-as-separate-event (approval ≠ reimbursement ≠ availability ≠ access), the 19 Red-Team evidence checks, and the seven-question output (Q1–Q4 + evidence strength / uncertainty / watch-next). Six primary functions unchanged.
-**Target Event:** Novo Nordisk GBS Hackathon 2026 (Problem Statement #3: "From Inbox Noise to Strategic Signal | Pilot Area: Haemophilia within Rare Disease")  
+**Target Event:** Enterprise Strategic Signal Intelligence ("From Inbox Noise to Strategic Signal | Pilot Area: Haemophilia within Rare Disease")  
 **Team:** MS Ramaiah Institute of Technology (MSRIT) — Cross-Disciplinary (2 CSE + 3 B.Pharm)
 
 > [!IMPORTANT]
 > **HISTORICAL REFERENCE DOCUMENT**  
-> *Note: This document is a secondary/historical reference and must not override the Master Plan. The sole canonical and authoritative specification for MetaRadar is [METARADAR_MASTER_PLAN_v5.0.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/METARADAR_MASTER_PLAN_v5.0.md).*
+> *Note: This document is a secondary/historical reference and must not override the Master Plan. The sole canonical and authoritative specification for MetaRadar is [METARADAR_MASTER_PLAN_v5.0.md](METARADAR_MASTER_PLAN_v5.0.md).*
 
 ---
 
@@ -88,7 +88,7 @@ Do **NOT** present these as five unrelated AI features. Present them as **five q
 * **Progression Chain:**  
   `Announced → In Trial → Interim Result → Final Result → Congress/Publication → Regulatory Development → Approved → Post-Market / Discontinued`
 * **Explanation:** MetaRadar connects isolated updates into a chronological development story so an analyst immediately sees where an asset sits and where it is going next.
-* **Haemophilia Example:** mim8 (Novo Nordisk bispecific): Phase 3 trial initiation (2024) → Primary endpoint readout (Jan 2026) → Regulatory submission expected (Q3 2026).
+* **Haemophilia Example:** mim8 (Enterprise Biopharma bispecific): Phase 3 trial initiation (2024) → Primary endpoint readout (Jan 2026) → Regulatory submission expected (Q3 2026).
 
 ### Analysis 3: RED-TEAM CONTRADICTION ANALYSIS
 * **Question Asked:** *"Before we consider this signal important, what evidence challenges or qualifies it?"*
@@ -114,8 +114,8 @@ The Five Intelligence Mechanisms directly feed the Four-Question Decision Interf
 | Decision Question | Source Mechanism(s) | Operational Content Rendered in UI |
 |---|---|---|
 | **Q1 — WHAT CHANGED?** | Entity/Event Extraction + **Confluence** | Real-time signal feed, entity tags, signal type badges, converged multi-source alerts |
-| **Q2 — WHY DOES IT MATTER?** | **Lifecycle** + **Red-Team Contradiction** + Ontology | Evidence strength, position on lifecycle timeline, competitive impact on Novo Nordisk portfolio, contradicting evidence & devil's advocate review |
-| **Q3 — WHICH NOVO NORDISK FUNCTION SHOULD REVIEW IT?** | **Stakeholder Calibration (HITL)** + Matrix Routing | Calibrated function badges with confidence percentages (Medical Affairs, Regulatory, Safety/PV, Market Access, Medical Communications, Leadership; extended: Commercial, R&D) |
+| **Q2 — WHY DOES IT MATTER?** | **Lifecycle** + **Red-Team Contradiction** + Ontology | Evidence strength, position on lifecycle timeline, competitive impact on Enterprise portfolio, contradicting evidence & devil's advocate review |
+| **Q3 — WHICH ENTERPRISE FUNCTION SHOULD REVIEW IT?** | **Stakeholder Calibration (HITL)** + Matrix Routing | Calibrated function badges with confidence percentages (Medical Affairs, Regulatory, Safety/PV, Market Access, Medical Communications, Leadership; extended: Commercial, R&D) |
 | **Q4 — WHAT INTERNAL ACTION MAY BE REQUIRED?** | **Missing-Signal** + Synthesized Evidence | AI-generated action suggestions based on evidence, lifecycle stage, and missing-signal alerts, prefaced *"Suggested — requires human review"* |
 
 ---
@@ -342,14 +342,14 @@ Every answer follows a strict 2-part structure:
 ---
 
 ### Q14: Why is this different from a news dashboard?
-* **Non-Technical Answer:** A news dashboard shows a list of individual headlines; MetaRadar turns scattered headlines into an evidence story with clear next steps for Novo Nordisk.
+* **Non-Technical Answer:** A news dashboard shows a list of individual headlines; MetaRadar turns scattered headlines into an evidence story with clear next steps for Enterprise Biopharma.
 * **Technical Implementation:** News dashboards display unlinked, flat article feeds sorted by timestamp. MetaRadar applies spaCy NER + pharma ontology mapping, 48-hour confluence clustering, FSM lifecycle progression, NLI contradiction detection, and HITL weight calibration to convert raw feeds into strategic decision panels.
 
 ---
 
 ### Q15: Why is this different from ChatGPT/Claude simply summarizing articles?
 * **Non-Technical Answer:** Summarizing five articles gives you five separate summaries; MetaRadar combines them, checks if they contradict, tracks where the drug is on its timeline, and tells each function what to do.
-* **Technical Implementation:** Document summarization operates on individual text inputs without domain context or history. MetaRadar performs multi-document entity normalization against a specialized Haemophilia ontology, tracks temporal state across months of data, performs pairwise NLI contradiction checks, and applies role-routing matrices calibrated by Novo Nordisk stakeholder feedback.
+* **Technical Implementation:** Document summarization operates on individual text inputs without domain context or history. MetaRadar performs multi-document entity normalization against a specialized Haemophilia ontology, tracks temporal state across months of data, performs pairwise NLI contradiction checks, and applies role-routing matrices calibrated by Enterprise stakeholder feedback.
 
 ---
 
@@ -384,7 +384,7 @@ To ensure judges understand that MetaRadar is an **evidence-to-decision system**
    * *Presenter:* "Instead of listing three separate news cards, MetaRadar's **Confluence Engine** detects that all three signals converge on Hemgenix within a 48-hour window, merging them into one High-Confluence Strategic Alert."
 
 3. **Step 3: Lifecycle Stage Tracking**
-   * *Presenter:* "MetaRadar's **Lifecycle Tracker** connects this update to Hemgenix's historical timeline, moving its status from *Approved* to *Post-Market Durability Tracking* and showing where it stands relative to Novo Nordisk's concizumab and mim8."
+   * *Presenter:* "MetaRadar's **Lifecycle Tracker** connects this update to Hemgenix's historical timeline, moving its status from *Approved* to *Post-Market Durability Tracking* and showing where it stands relative to Enterprise's concizumab and mim8."
 
 4. **Step 4: Red-Team Contradiction Analysis**
    * *Presenter:* "Here is where conventional AI fails and MetaRadar excels. Our **Red-Team Contradiction Agent** compares the positive ASH abstract claim (*'Sustained Factor IX expression'*) with a real-world patient cohort publication (*'15% of patients show declining factor expression at 36 months'*). It surfaces BOTH evidence chains with a devil's-advocate review note."
@@ -395,7 +395,7 @@ To ensure judges understand that MetaRadar is an **evidence-to-decision system**
 6. **Step 6: The Four-Question Decision Interface (relevance-based routing)**
    * *Presenter:* "All five mechanisms feed directly into our Four-Question Interface:
      * **Q1 What changed?** Hemgenix 3-year durability data & real-world cohort discrepancy (Confluence alert); ISTH 2026 FRONTIER4 abstract linked as NEW EVIDENCE for the existing trial development.
-     * **Q2 Why does it matter?** Directly impacts Novo Nordisk's mim8 subcutaneous positioning vs single-dose gene therapy.
+     * **Q2 Why does it matter?** Directly impacts Enterprise's mim8 subcutaneous positioning vs single-dose gene therapy.
      * **Q3 Who should review it?** Not everyone — relevance-based routing. Medical Affairs (primary, 91%), Medical Communications (82%), Regulatory (64%), with an explicit routing reason: *'Clinical efficacy/safety data with potential implications for scientific understanding and future regulatory review.'*
      * **Q4 What action may be required?** Role-aware actions: *Suggested — Medical Affairs to draft briefing note; Medical Communications to prepare scientific FAQ.* (AI suggests, never executes; human review required.)"
 
@@ -418,5 +418,5 @@ All project documentation files have been audited and verified for complete inte
 | `3_SOFTWARE_DESIGN_DOCUMENT.md` | ✅ Complete | Added conceptual architecture before technical architecture, detailed 10-agent LangGraph pipeline, database schemas |
 | `4_UI_DESIGN_DOCUMENT.md` | ✅ Complete | Updated positioning, Four-Question UI layout driven by 5 analyses, presenter notes |
 | `5_REFINED_ARCHITECTURE_AND_GITHUB_ANALYSIS.md` | ✅ Complete | Replaced absolute claims with relative evaluated open-source comparison, 10-agent pipeline alignment |
-| `6_NOVO_NORDISK_ANALYSIS_AND_HACKATHON_INTELLIGENCE.md` | ✅ Complete | Updated judge defense Q&A to 2-part non-technical first/technical second structure across 16 questions |
+| `6_ENTERPRISE_ANALYSIS_AND_COMPETITIVE_INTELLIGENCE.md` | ✅ Complete | Updated judge defense Q&A to 2-part non-technical first/technical second structure across 16 questions |
 | `CLAUDE.md` & `.planning/PROJECT.md` | ✅ Complete | Synchronized project description, 10-agent pipeline list, and core value pitch line |

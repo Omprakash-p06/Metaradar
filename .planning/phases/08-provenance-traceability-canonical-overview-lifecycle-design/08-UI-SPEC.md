@@ -2,8 +2,8 @@
 
 **Phase:** 08  
 **Topic:** Provenance Traceability + Canonical Overview/Lifecycle Design System Hardening  
-**Canonical Reference:** `DashboardPage` + `LifecyclePage` in [`metaradar.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/metaradar.tsx)  
-**Design token source:** [`frontend/app/globals.css`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/app/globals.css) CSS custom properties  
+**Canonical Reference:** `DashboardPage` + `LifecyclePage` in [`metaradar.tsx`](../../../frontend/components/metaradar.tsx)  
+**Design token source:** [`frontend/app/globals.css`](../../../frontend/app/globals.css) CSS custom properties  
 **Status:** CONTRACT — Binding for all implementation work in Phase 08  
 
 ---
@@ -340,7 +340,7 @@ Add below the summary text, above the footer:
 
 ## 5. Workspace Audit — Component by Component
 
-### `/signals` — [SignalList.tsx](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/signals/SignalList.tsx) + [SignalCard.tsx](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/signals/SignalCard.tsx)
+### `/signals` — [SignalList.tsx](../../../frontend/components/signals/SignalList.tsx) + [SignalCard.tsx](../../../frontend/components/signals/SignalCard.tsx)
 
 | Issue | Fix |
 |---|---|
@@ -351,7 +351,7 @@ Add below the summary text, above the footer:
 
 ---
 
-### `/confluence` — [ConfluenceWorkspace.tsx](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/confluence/ConfluenceWorkspace.tsx)
+### `/confluence` — [ConfluenceWorkspace.tsx](../../../frontend/components/confluence/ConfluenceWorkspace.tsx)
 
 | Issue | Fix |
 |---|---|
@@ -361,7 +361,7 @@ Add below the summary text, above the footer:
 
 ---
 
-### `/red-team` — [ContradictionWorkspace.tsx](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/contradictions/ContradictionWorkspace.tsx)
+### `/red-team` — [ContradictionWorkspace.tsx](../../../frontend/components/contradictions/ContradictionWorkspace.tsx)
 
 | Issue | Fix |
 |---|---|
@@ -371,37 +371,37 @@ Add below the summary text, above the footer:
 
 ---
 
-### `/missing-signals` — [MissingSignalsWorkspace.tsx](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/missing-signals/MissingSignalsWorkspace.tsx)
+### `/missing-signals` — [MissingSignalsWorkspace.tsx](../../../frontend/components/missing-signals/MissingSignalsWorkspace.tsx)
 
 Apply: `<SectionTitle>`, `.panel`, `.missingsignal-tint`, `.badge`, `.empty-state`
 
 ---
 
-### `/developments` — [DevelopmentsWorkspace.tsx](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/developments/DevelopmentsWorkspace.tsx)
+### `/developments` — [DevelopmentsWorkspace.tsx](../../../frontend/components/developments/DevelopmentsWorkspace.tsx)
 
 Apply: `<SectionTitle>`, `.panel`, `.timeline-track`, `.timeline-node`, `.badge`
 
 ---
 
-### `/intelligence` — [AthenaWorkspace.tsx](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/intelligence/AthenaWorkspace.tsx)
+### `/intelligence` — [AthenaWorkspace.tsx](../../../frontend/components/intelligence/AthenaWorkspace.tsx)
 
 Verify: `.athena-card`, `.athena-orbit`, `.prompt-list`, `.ask-row`, `.answer-card`, `.confidence` classes are in use. Replace any hardcoded color values.
 
 ---
 
-### `/functions` — [FunctionsWorkspace.tsx](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/functions/FunctionsWorkspace.tsx)
+### `/functions` — [FunctionsWorkspace.tsx](../../../frontend/components/functions/FunctionsWorkspace.tsx)
 
 Apply: `<SectionTitle>`, `.panel`, `.badge`, `.generic-grid`
 
 ---
 
-### `/calibrate` — [CalibrationWorkspace.tsx](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/calibration/CalibrationWorkspace.tsx)
+### `/calibrate` — [CalibrationWorkspace.tsx](../../../frontend/components/calibration/CalibrationWorkspace.tsx)
 
 Verify: `.calibration-widget-card`, `.role-pill`, `.role-pill-active`, `.star-btn`, `.star-active`, `.submit-feedback-btn`, `.recalibrate-btn`, `.before-after-panel`, `.comparison-card` are applied.
 
 ---
 
-### `/sources` — [SourcesOperationsWorkspace.tsx](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/sources/SourcesOperationsWorkspace.tsx)
+### `/sources` — [SourcesOperationsWorkspace.tsx](../../../frontend/components/sources/SourcesOperationsWorkspace.tsx)
 
 | Issue | Fix |
 |---|---|
@@ -426,13 +426,13 @@ Verify: `.calibration-widget-card`, `.role-pill`, `.role-pill-active`, `.star-bt
 
 ---
 
-### `/observability` — [ActivityStreamWorkspace.tsx](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/observability/ActivityStreamWorkspace.tsx)
+### `/observability` — [ActivityStreamWorkspace.tsx](../../../frontend/components/observability/ActivityStreamWorkspace.tsx)
 
 Apply: `<SectionTitle>`, `.panel`, `.data-table-container > .data-table`, `.badge`
 
 ---
 
-### `/settings` — [SettingsWorkspace.tsx](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/settings/SettingsWorkspace.tsx)
+### `/settings` — [SettingsWorkspace.tsx](../../../frontend/components/settings/SettingsWorkspace.tsx)
 
 Apply: `<SectionTitle>`, `.panel`, `.badge`  
 Add: Credential status display — show `CONFIGURATION_ERROR: <VAR> missing` with official URL to obtain the key.
@@ -549,35 +549,35 @@ The `/health/connectors` or `/sources` API response must include per connector:
 
 ### Frontend
 
-- [ ] [`EvidenceDrawer.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/common/EvidenceDrawer.tsx)
+- [ ] [`EvidenceDrawer.tsx`](../../../frontend/components/common/EvidenceDrawer.tsx)
   - [ ] Replace all hardcoded colors with CSS vars (§3.1)
   - [ ] Add SOURCE PROVENANCE section (§3.2)
   - [ ] Add "Open Original Source" / "SOURCE URL UNAVAILABLE" (§3.3)
   - [ ] Add TRACE section (§3.4)
-- [ ] [`SignalCard.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/signals/SignalCard.tsx)
+- [ ] [`SignalCard.tsx`](../../../frontend/components/signals/SignalCard.tsx)
   - [ ] Migrate to `.panel`, `.badge`, CSS vars (§4.1)
   - [ ] Add provenance metadata row (§4.2)
-- [ ] [`DataModeBadge.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/common/DataModeBadge.tsx)
+- [ ] [`DataModeBadge.tsx`](../../../frontend/components/common/DataModeBadge.tsx)
   - [ ] Use `.badge` class
   - [ ] `TEST FIXTURE` → danger tone
   - [ ] Never label synthetic as `LIVE`
-- [ ] [`SignalList.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/signals/SignalList.tsx)
+- [ ] [`SignalList.tsx`](../../../frontend/components/signals/SignalList.tsx)
   - [ ] Add `<SectionTitle>`
   - [ ] Use `.filter-bar` canonical classes
-- [ ] [`SourcesOperationsWorkspace.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/sources/SourcesOperationsWorkspace.tsx)
+- [ ] [`SourcesOperationsWorkspace.tsx`](../../../frontend/components/sources/SourcesOperationsWorkspace.tsx)
   - [ ] Replace inline `h1` with `<SectionTitle>`
   - [ ] Migrate `getStatusBadge()` to CSS vars
   - [ ] Add CONFIGURATION_ERROR state display
   - [ ] Show full telemetry per connector
-- [ ] [`ContradictionWorkspace.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/contradictions/ContradictionWorkspace.tsx) — §5 audit
-- [ ] [`MissingSignalsWorkspace.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/missing-signals/MissingSignalsWorkspace.tsx) — §5 audit
-- [ ] [`DevelopmentsWorkspace.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/developments/DevelopmentsWorkspace.tsx) — §5 audit
-- [ ] [`AthenaWorkspace.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/intelligence/AthenaWorkspace.tsx) — §5 audit
-- [ ] [`FunctionsWorkspace.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/functions/FunctionsWorkspace.tsx) — §5 audit
-- [ ] [`CalibrationWorkspace.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/calibration/CalibrationWorkspace.tsx) — §5 audit
-- [ ] [`ActivityStreamWorkspace.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/observability/ActivityStreamWorkspace.tsx) — §5 audit
-- [ ] [`SettingsWorkspace.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/settings/SettingsWorkspace.tsx) — §5 audit
-- [ ] [`ConfluenceWorkspace.tsx`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/frontend/components/confluence/ConfluenceWorkspace.tsx)
+- [ ] [`ContradictionWorkspace.tsx`](../../../frontend/components/contradictions/ContradictionWorkspace.tsx) — §5 audit
+- [ ] [`MissingSignalsWorkspace.tsx`](../../../frontend/components/missing-signals/MissingSignalsWorkspace.tsx) — §5 audit
+- [ ] [`DevelopmentsWorkspace.tsx`](../../../frontend/components/developments/DevelopmentsWorkspace.tsx) — §5 audit
+- [ ] [`AthenaWorkspace.tsx`](../../../frontend/components/intelligence/AthenaWorkspace.tsx) — §5 audit
+- [ ] [`FunctionsWorkspace.tsx`](../../../frontend/components/functions/FunctionsWorkspace.tsx) — §5 audit
+- [ ] [`CalibrationWorkspace.tsx`](../../../frontend/components/calibration/CalibrationWorkspace.tsx) — §5 audit
+- [ ] [`ActivityStreamWorkspace.tsx`](../../../frontend/components/observability/ActivityStreamWorkspace.tsx) — §5 audit
+- [ ] [`SettingsWorkspace.tsx`](../../../frontend/components/settings/SettingsWorkspace.tsx) — §5 audit
+- [ ] [`ConfluenceWorkspace.tsx`](../../../frontend/components/confluence/ConfluenceWorkspace.tsx)
   - [ ] Inspector with per-evidence provenance (§7)
   - [ ] Fix `≥N distinct sources` wording to match backend threshold
 

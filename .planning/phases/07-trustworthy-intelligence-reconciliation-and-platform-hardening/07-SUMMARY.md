@@ -3,7 +3,7 @@
 **Execution Date:** 2026-08-20  
 **Phase Status:** COMPLETE  
 **Execution Mode:** Single-Wave Continuous Execution  
-**Reference Document:** [docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md)
+**Reference Document:** [docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md](../../../docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md)
 
 ---
 
@@ -47,15 +47,15 @@
 
 ## 2. Key Deliverables & Artifacts
 
-- [07-PLAN.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-PLAN.md)
-- [07-VALIDATION.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-VALIDATION.md)
-- [07-RESEARCH.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-RESEARCH.md)
-- [07-SPECIFICATION.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-SPECIFICATION.md)
-- [live-ingestion-provenance-and-end-to-end-validation.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/debug/live-ingestion-provenance-and-end-to-end-validation.md)
-- [STACK.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/codebase/STACK.md)
-- [INTEGRATIONS.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/codebase/INTEGRATIONS.md)
-- [ARCHITECTURE.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/codebase/ARCHITECTURE.md)
-- [STRUCTURE.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/codebase/STRUCTURE.md)
-- [CONVENTIONS.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/codebase/CONVENTIONS.md)
-- [TESTING.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/codebase/TESTING.md)
-- [CONCERNS.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/codebase/CONCERNS.md)
+- [07-PLAN.md](07-PLAN.md)
+- [07-VALIDATION.md](07-VALIDATION.md)
+- [07-RESEARCH.md](07-RESEARCH.md)
+- [07-SPECIFICATION.md](07-SPECIFICATION.md)
+- [live-ingestion-provenance-and-end-to-end-validation.md](../../debug/live-ingestion-provenance-and-end-to-end-validation.md)
+- [STACK.md](../../codebase/STACK.md)
+- [INTEGRATIONS.md](../../codebase/INTEGRATIONS.md)
+- [ARCHITECTURE.md](../../codebase/ARCHITECTURE.md)
+- [STRUCTURE.md](../../codebase/STRUCTURE.md)
+- [CONVENTIONS.md](../../codebase/CONVENTIONS.md)
+- [TESTING.md](../../codebase/TESTING.md)
+- [CONCERNS.md](../../codebase/CONCERNS.md)

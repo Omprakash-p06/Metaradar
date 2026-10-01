@@ -1,9 +1,9 @@
-# MetaRadar: Master Pitch Deck & Hackathon Odyssey
+# MetaRadar: Master Pitch Deck & Architecture Guide
 
-**Novo Nordisk GBS Hackathon 2026 — Problem Statement #3: Rare Disease Competitive Intelligence Radar**  
+**MetaRadar: Autonomous Rare Disease Competitive Intelligence Radar**  
 *Pilot Implementation: Haemophilia A & Haemophilia B*  
 *Team: MS Ramaiah Institute of Technology (MSRIT), Bangalore*  
-*Companion Guide: [TAB_BY_TAB_STAKEHOLDER_SCRIPT.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/pitch/TAB_BY_TAB_STAKEHOLDER_SCRIPT.md) (Comprehensive Tab Breakdown & Word-by-Word Presenter Script)*
+*Companion Guide: [TAB_BY_TAB_STAKEHOLDER_SCRIPT.md](TAB_BY_TAB_STAKEHOLDER_SCRIPT.md) (Comprehensive Tab Breakdown & Word-by-Word Presenter Script)*
 
 ---
 
@@ -50,9 +50,9 @@ The core failure of current solutions is **information fragmentation and ungroun
 
 ---
 
-### Q2: Problem Definition, Relevance to Novo Nordisk, Users & Difference vs News Dashboard
+### Q2: Problem Definition, Enterprise Relevance, Users & Difference vs News Dashboard
 - **The Problem**: Rare disease competitive intelligence suffers from severe data fragmentation, high noise-to-signal ratio, lack of clinical evidence synthesis, and unacceptable AI hallucination risk in high-stakes biopharma decisions.
-- **Relevance to Novo Nordisk**: Novo Nordisk is a global leader in rare blood disorders (Haemophilia A & B). With disruptive modality transitions—such as non-factor bispecifics (Mim8 vs Hemlibra), anti-TFPI agents (concizumab), and AAV gene therapies (Roctavian, Hemgenix)—Novo Nordisk teams need real-time, cross-functional intelligence to safeguard clinical pipelines, anticipate competitor shifts, and make rapid strategic decisions.
+- **Enterprise Relevance**: Biopharma leaders in rare blood disorders (Haemophilia A & B) face disruptive modality transitions—such as non-factor bispecifics (Mim8 vs Hemlibra), anti-TFPI agents (concizumab), and AAV gene therapies (Roctavian, Hemgenix). Teams need real-time, cross-functional intelligence to safeguard clinical pipelines, anticipate competitor shifts, and make rapid strategic decisions.
 - **Intended Users**: 6 distinct enterprise roles:
   1. *Medical Affairs*: Field guidance, ABR benchmarks, trial readout analysis.
   2. *Regulatory Affairs*: PDUFA dates, BLA/NDA filings, CHMP European opinions.
@@ -81,7 +81,7 @@ The core failure of current solutions is **information fragmentation and ungroun
 
 ### Q4: Focus Scope (Haemophilia A/B), Public Data Confirmation, Signals Included & Out of Scope
 - **Disease Focus**: Haemophilia A (Factor VIII deficiency) and Haemophilia B (Factor IX deficiency), covering severe/moderate cohorts with and without inhibitors.
-- **Public / Mock / Synthetic Data Confirmation**: **100% of data is derived strictly from public authoritative APIs, PubMed literature, open regulatory filings, and synthetic benchmark fixtures.** Zero proprietary, confidential, or internal Novo Nordisk data is ingested or transmitted.
+- **Public / Mock / Synthetic Data Confirmation**: **100% of data is derived strictly from public authoritative APIs, PubMed literature, open regulatory filings, and synthetic benchmark fixtures.** Zero proprietary, confidential, or internal enterprise data is ingested or transmitted.
 - **Types of Signals Included**:
   - Phase I–IV clinical trial readouts, patient enrollments, primary completion milestones.
   - Annualized Bleed Rate (ABR) and target joint resolution efficacy endpoints.
@@ -188,8 +188,8 @@ MetaRadar connects to **8 verified public and regulatory data sources** governed
 
 ---
 
-### Q10: Desired Clarifications, Feedback & Stakeholder Input from Novo Nordisk
-1. **Priority Weight Calibration**: Feedback on whether Novo Nordisk leadership prefers weighting non-factor bispecifics (Mim8 rivals) higher than AAV gene therapies in standard daily monitoring feeds.
+### Q10: Desired Clarifications, Feedback & Stakeholder Input from Enterprise Leaders
+1. **Priority Weight Calibration**: Feedback on whether enterprise leadership prefers weighting non-factor bispecifics (Mim8 rivals) higher than AAV gene therapies in standard daily monitoring feeds.
 2. **Escalation Governance**: Guidance on preferred escalation thresholds (e.g. should all Critical signals ≥75 trigger executive notification, or only those involving regulatory filings?).
 3. **Enterprise Integration**: Preferred SSO/SAML identity protocols (Okta, Azure AD) and GxP validation checklist requirements for enterprise staging deployment.
 
@@ -198,20 +198,20 @@ MetaRadar connects to **8 verified public and regulatory data sources** governed
 ## 4. Visual Architecture, Data Flow & Responsibility Diagrams
 
 ### 1. System Architecture Diagram
-- Vector SVG: [architecture.svg](file:///c:/Users/OM%20Prakash/Documents/novonordisk/pitch/architecture.svg)
-- Ultra-HD 2800px PNG: [architecture.png](file:///c:/Users/OM%20Prakash/Documents/novonordisk/pitch/pngs/architecture.png)
+- Vector SVG: [architecture.svg](architecture.svg)
+- Ultra-HD 2800px PNG: [architecture.png](pngs/architecture.png)
 
 ![MetaRadar Technical Architecture](architecture.svg)
 
 ### 2. End-to-End Data Flow Diagram
-- Vector SVG: [dataflow.svg](file:///c:/Users/OM%20Prakash/Documents/novonordisk/pitch/dataflow.svg)
-- Ultra-HD 2800px PNG: [dataflow.png](file:///c:/Users/OM%20Prakash/Documents/novonordisk/pitch/pngs/dataflow.png)
+- Vector SVG: [dataflow.svg](dataflow.svg)
+- Ultra-HD 2800px PNG: [dataflow.png](pngs/dataflow.png)
 
 ![MetaRadar Data Flow](dataflow.svg)
 
 ### 3. Decision Governance & Responsibility Flow Diagram
-- Vector SVG: [responsibility_flow.svg](file:///c:/Users/OM%20Prakash/Documents/novonordisk/pitch/responsibility_flow.svg)
-- Ultra-HD 2800px PNG: [responsibility_flow.png](file:///c:/Users/OM%20Prakash/Documents/novonordisk/pitch/pngs/responsibility_flow.png)
+- Vector SVG: [responsibility_flow.svg](responsibility_flow.svg)
+- Ultra-HD 2800px PNG: [responsibility_flow.png](pngs/responsibility_flow.png)
 
 ![MetaRadar Responsibility Flow](responsibility_flow.svg)
 
@@ -230,7 +230,7 @@ MetaRadar connects to **8 verified public and regulatory data sources** governed
 | **Team Lead** | Sanjana Rathore B. (B.Pharm, Final Year) — Domain Lead & Medical Affairs Strategy |
 | **Members** | Ishaaq Ahmed Khan (B.Pharm) • Usha Rathore (B.Pharm) • Omprakash Panda (ISE/CSE) • Veerendra Desai (ISE/CSE) |
 | **Project Title** | **MetaRadar** — Autonomous Evidence-Grounded Competitive Intelligence Radar for Rare Diseases |
-| **Hackathon Problem** | Problem Statement #3: Rare Disease Competitive Intelligence Radar — Novo Nordisk GBS Hackathon 2026 |
+| **Platform Scope** | Rare Disease Competitive Intelligence Radar |
 
 **1-Line Problem Statement:**
 > Pharmaceutical teams monitoring Haemophilia A & B spend 15+ hours per week manually sifting fragmented clinical feeds, missing critical signals, and receiving hallucinated AI summaries that cannot be verified or trusted.
@@ -358,7 +358,7 @@ Layer 4 — Delivery (UI):
   → Executive Sign-Off Queue → RBAC (6 personas)
 ```
 
-**Reference Diagrams**: [architecture.svg](file:///c:/Users/OM%20Prakash/Documents/novonordisk/pitch/architecture.svg) • [dataflow.svg](file:///c:/Users/OM%20Prakash/Documents/novonordisk/pitch/dataflow.svg)
+**Reference Diagrams**: [architecture.svg](architecture.svg) • [dataflow.svg](dataflow.svg)
 
 #### Core Components
 
@@ -449,7 +449,7 @@ Layer 4 — Delivery (UI):
 
 **Output delivered to Medical Affairs**:
 > **[FACT]** HAVEN-7 Phase 3 monthly emicizumab SC arm achieves median ABR 0.0 (n=89, previously treated, no inhibitors). Source: BioPharma Dive, ClinicalTrials NCT04023099.
-> **[INTERPRETATION]** ABR 0.0 is clinically significant and potentially stronger than Mim8's current projected ABR profile. This could pressure Novo Nordisk's non-inhibitor positioning.
+> **[INTERPRETATION]** ABR 0.0 is clinically significant and potentially stronger than Mim8's current projected ABR profile. This could pressure enterprise non-inhibitor positioning.
 > **⚠️ CONTRADICTION DETECTED**: HAVEN-6 Phase 4 real-world data (2024) shows median ABR 0.8 under routine care — clinical trial vs real-world gap of 0.8 ABR units.
 > **Suggested Action**: Update Medical Affairs competitive response brief on emicizumab real-world vs trial gap before next scientific advisory board.
 
@@ -493,7 +493,7 @@ The current MetaRadar codebase is a hackathon evaluation build (Docker container
 #### Business / Healthcare Value Proposition
 
 **Who benefits?**
-- **Novo Nordisk Rare Disease Teams** (Medical Affairs, Regulatory, Safety, Market Access, Executive Leadership) — the primary beneficiaries.
+- **Enterprise Rare Disease Teams** (Medical Affairs, Regulatory, Safety, Market Access, Executive Leadership) — the primary beneficiaries.
 - **Patients** — indirectly, through faster competitive intelligence leading to faster clinical strategy adjustments, better payer positioning, and reduced time-to-treatment access decisions.
 
 **How much?**
@@ -507,9 +507,9 @@ The current MetaRadar codebase is a hackathon evaluation build (Docker container
 
 #### Adoption Pathway
 
-1. **Pilot (Days 1–30)**: Deploy sandbox instance for 2–3 Medical Affairs and Market Access stakeholders at Novo Nordisk. Populate with Haemophilia A/B live signals. Collect HITL feedback on priority score calibration.
+1. **Pilot (Days 1–30)**: Deploy sandbox instance for 2–3 Medical Affairs and Market Access stakeholders. Populate with Haemophilia A/B live signals. Collect HITL feedback on priority score calibration.
 2. **Calibration (Days 30–60)**: Stakeholders rate signal relevance (1–5 stars); HITL Calibration Engine tunes scoring weights. Persona routing matrix refined. No code deployment required.
-3. **Production Integration (Days 60–90)**: SSO (Okta/Azure AD) wired into existing Novo Nordisk identity infrastructure. Microsoft Teams webhook alerts activated for Critical signals. Executive Sign-Off workflow integrated with existing governance calendar.
+3. **Production Integration (Days 60–90)**: SSO (Okta/Azure AD) wired into existing enterprise identity infrastructure. Microsoft Teams webhook alerts activated for Critical signals. Executive Sign-Off workflow integrated with existing governance calendar.
 4. **Scale (Quarter 2)**: Expand to Sickle Cell Disease and Thalassemia ontologies. Onboard additional therapeutic area teams.
 
 #### Evidence & Assumptions
@@ -524,11 +524,11 @@ The current MetaRadar codebase is a hackathon evaluation build (Docker container
 | 30-day pilot timeline | **ASSUMPTION** (based on Docker deployment simplicity and existing RBAC framework) |
 | Internal teams review Critical alerts within 24h | **ASSUMPTION** (organizational SLA to be agreed during pilot) |
 
-#### 3 Key Takeaways for Judges
+#### 3 Key Takeaways for Evaluators
 
 > 1. **MetaRadar is not a generic LLM wrapper.** It is an ensemble of 5 specialized, purpose-built intelligence engines (Multi-Source Confluence, Asset Lifecycle Tracker, Red-Team Contradiction Engine, Missing Signal FSM, HITL Calibration) that no commercial tool replicates.
 > 2. **MetaRadar is evaluation-ready today.** 186 tests passing, 0 TypeScript errors, 0 ESLint warnings, clean Next.js production build — built by a 5-person student team in 5 weeks with a 20-session documented debugging history.
-> 3. **MetaRadar protects lives and assets.** By ensuring every biopharma decision is grounded in verified, epistemically honest evidence — and by surfacing contradictions before they become costly strategic mistakes — MetaRadar directly protects patient safety, regulatory integrity, and Novo Nordisk's rare disease leadership position.
+> 3. **MetaRadar protects lives and assets.** By ensuring every biopharma decision is grounded in verified, epistemically honest evidence — and by surfacing contradictions before they become costly strategic mistakes — MetaRadar directly protects patient safety, regulatory integrity, and enterprise rare disease leadership position.
 
 ---
 

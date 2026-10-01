@@ -32,7 +32,7 @@
 ## 2. Investigation & Code Evidence
 
 ### Evidence Item 1: Conflation of "0 New Records" with "DEGRADED"
-In [ingestion.py](file:///c:/Users/OM%20Prakash/Documents/novonordisk/backend/app/services/ingestion.py#L79-L84):
+In [ingestion.py](../../backend/app/services/ingestion.py#L79-L84):
 ```python
 elif conn_fetched == 0:
     conn_status = "DEGRADED"
@@ -44,7 +44,7 @@ elif conn_new == 0:
 **Impact**: If a connector makes a successful HTTP 200 call but finds 0 new records since the last check, the system unconditionally marks the connector `DEGRADED`.
 
 ### Evidence Item 2: Connector Health Enum Over-simplification
-In [models/__init__.py](file:///c:/Users/OM%20Prakash/Documents/novonordisk/backend/app/models/__init__.py) & [health.py](file:///c:/Users/OM%20Prakash/Documents/novonordisk/backend/app/api/v1/endpoints/health.py):
+In [models/__init__.py](../../backend/app/models/__init__.py) & [health.py](../../backend/app/api/v1/endpoints/health.py):
 The current connector status only handles simple strings (`HEALTHY`, `DEGRADED`, `UNHEALTHY`, `CONFIGURATION_ERROR`, `NEVER_CONNECTED`).
 It lacks:
 - `CONNECTED` (API reachable)
@@ -55,7 +55,7 @@ It lacks:
 - `FAILED` (repeated connection, auth, or 5xx failures)
 
 ### Evidence Item 3: Lack of In-Process Async Scheduler in Lifespan
-In [main.py](file:///c:/Users/OM%20Prakash/Documents/novonordisk/backend/app/main.py#L30-L48):
+In [main.py](../../backend/app/main.py#L30-L48):
 FastAPI `lifespan` initializes logging and domain config, but does not launch an `asyncio.Task` or background job runner (e.g., source scheduler loop with per-source intervals and backoff).
 
 ### Evidence Item 4: Legacy Folders & Lockfile Drift

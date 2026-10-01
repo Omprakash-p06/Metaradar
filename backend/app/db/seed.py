@@ -77,11 +77,11 @@ async def seed_data():
 
         # 3. Companies
         companies_data = [
-            {"company_id": "novo-nordisk", "name": "Novo Nordisk", "is_novo_nordisk": True},
-            {"company_id": "csl-behring", "name": "CSL Behring", "is_novo_nordisk": False},
-            {"company_id": "biomarin", "name": "BioMarin", "is_novo_nordisk": False},
-            {"company_id": "pfizer", "name": "Pfizer", "is_novo_nordisk": False},
-            {"company_id": "roche", "name": "Roche / Genentech", "is_novo_nordisk": False},
+            {"company_id": "enterprise-pharma", "name": "Enterprise Portfolio", "is_internal_asset": True},
+            {"company_id": "csl-behring", "name": "CSL Behring", "is_internal_asset": False},
+            {"company_id": "biomarin", "name": "BioMarin", "is_internal_asset": False},
+            {"company_id": "pfizer", "name": "Pfizer", "is_internal_asset": False},
+            {"company_id": "roche", "name": "Roche / Genentech", "is_internal_asset": False},
         ]
         for c in companies_data:
             existing = await session.get(Company, c["company_id"])
@@ -131,7 +131,7 @@ async def seed_data():
                 "asset_id": "alhemo",
                 "brand_name": "Alhemo",
                 "generic_name": "concizumab",
-                "company_id": "novo-nordisk",
+                "company_id": "enterprise-pharma",
                 "mechanism": "Anti-TFPI humanized monoclonal antibody",
                 "modality": "Monoclonal Antibody",
                 "indication": "Haemophilia A and B with inhibitors",
@@ -143,7 +143,7 @@ async def seed_data():
                 "asset_id": "mim8",
                 "brand_name": "Mim8",
                 "generic_name": "Mim8 bispecific antibody",
-                "company_id": "novo-nordisk",
+                "company_id": "enterprise-pharma",
                 "mechanism": "Next-generation Factor VIII-mimetic bispecific antibody (FIXa/FX)",
                 "modality": "Bispecific Antibody",
                 "indication": "Haemophilia A with and without inhibitors",
@@ -183,7 +183,7 @@ async def seed_data():
                 title="Subcutaneous Anti-TFPI Prophylaxis Landscape in Haemophilia B",
                 disease="haemophilia_b",
                 asset_id="alhemo",
-                company_id="novo-nordisk",
+                company_id="enterprise-pharma",
                 current_stage="Approved (Inhibitors) / Phase III Expansion",
             )
             session.add(dev2)
@@ -195,7 +195,7 @@ async def seed_data():
                 title="Next-Generation FVIII-Mimetic Subcutaneous Hemostasis",
                 disease="haemophilia_a",
                 asset_id="mim8",
-                company_id="novo-nordisk",
+                company_id="enterprise-pharma",
                 current_stage="Phase III FRONTIER Readouts",
             )
             session.add(dev3)
@@ -414,7 +414,7 @@ async def seed_data():
                 "source_authority_tier": "AUTHORITATIVE",
                 "validation_status": "VALIDATED",
                 "what_changed": "Pivotal Phase 3 FRONTIER-2 topline readout met all primary and secondary endpoints with superior zero-bleed rates across weekly/monthly dosing.",
-                "why_it_matters": "Novo Nordisk core next-generation FVIIIa-mimetic bispecific antibody demonstrates best-in-class efficacy profile against emicizumab.",
+                "why_it_matters": "Core next-generation FVIIIa-mimetic bispecific antibody demonstrates best-in-class efficacy profile against emicizumab.",
                 "relevant_function": "LEADERSHIP",
                 "route_destination": "LEADERSHIP",
                 "route_role": "LEADERSHIP",

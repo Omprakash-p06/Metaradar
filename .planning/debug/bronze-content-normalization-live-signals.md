@@ -25,10 +25,10 @@ updated: 2026-08-29
    - The only signals that ever passed `node_validate` were from `synthetic_signals.json` (which had hardcoded `"content"` keys).
 
 ## Key Changes & Fixes Applied
-1. **Payload Normalization in [backend/app/workflows/runner.py](file:///c:/Users/OM%20Prakash/Documents/novonordisk/backend/app/workflows/runner.py)**:
+1. **Payload Normalization in [backend/app/workflows/runner.py](../../backend/app/workflows/runner.py)**:
    - When querying `raw_signals_bronze`, extracts and sets `"content"` from `"abstract"`, `"description"`, `"evidence_text"`, `"study"`, or `"title"`.
    - Populates `"is_synthetic": False` and `"data_mode": "live"`.
-2. **Defensive Extraction in [backend/app/workflows/nodes/validate.py](file:///c:/Users/OM%20Prakash/Documents/novonordisk/backend/app/workflows/nodes/validate.py)**:
+2. **Defensive Extraction in [backend/app/workflows/nodes/validate.py](../../backend/app/workflows/nodes/validate.py)**:
    - Evaluates `content` fallback hierarchy across `content -> abstract -> description -> evidence_text -> study -> title`.
    - Preserves `is_synthetic` and `data_mode` on validated signal dictionaries.
 3. **Reset and Batch Promotion of Bronze Records**:

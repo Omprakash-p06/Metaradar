@@ -69,7 +69,7 @@ The platform has graduated from the **"build the missing architecture"** phase t
 - **Feed URL:** `https://www.biopharmadive.com/feeds/news/`
 - **Tier:** 3 (Discovery)
 - **Freshness Class:** `delayed`
-- **Keyword Filters:** Matches haemophilia, hemophilia, gene therapy, clotting factor, Novo Nordisk, Roche, Hemlibra, emicizumab, fitusiran, Roctavian, valoctocogene.
+- **Keyword Filters:** Matches haemophilia, hemophilia, gene therapy, clotting factor, Enterprise Biopharma, Roche, Hemlibra, emicizumab, fitusiran, Roctavian, valoctocogene.
 - **Canonical URL:** Exact `<link>` extracted from `<item>`, validated against `_looks_like_http_url()` and landing page blocklist.
 
 ### B. Adaptive NewsAPI Quota Governor

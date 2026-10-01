@@ -221,7 +221,7 @@ def build_graph() -> StateGraph:
 **Entity extraction — 5 dimensions (D-08):**
 
 1. **Assets/Synonyms** — regex/dictionary scan of signal `content` + `title` against all `AssetConfig.generic_name`, `brand_name`, and synonym lists from `haemophilia.yaml`. Returns `asset_id` (canonical) + `display_name` + confidence.
-2. **Companies/Sponsors** — regex scan for company names from all `AssetConfig.company` values + additional known Novo Nordisk, Roche, CSL, BioMarin, Sanofi keywords. Returns `company_name`.
+2. **Companies/Sponsors** — regex scan for company names from all `AssetConfig.company` values + additional known Enterprise Biopharma, Roche, CSL, BioMarin, Sanofi keywords. Returns `company_name`.
 3. **Disease/Inhibitor Status** — regex for "haemophilia A/B", "hemophilia A/B", "with inhibitors", "without inhibitors", "inhibitor patient". Returns `disease_id`, `inhibitor_status`.
 4. **Clinical Trial NCT IDs/Phases** — regex `NCT\d{8}` for NCT IDs; regex `[Pp]hase [I1-3IViv]{1,3}` for phase mentions. Returns `nct_id`, `trial_phase`.
 5. **Clinical Biomarkers** — regex for "ABR" (annualised bleeding rate), "Factor VIII", "Factor IX", "FVIII", "FIX", "IU/dL", expression percentage. Returns `biomarkers` list.
@@ -253,7 +253,7 @@ except (ImportError, OSError):
 **Logic:**
 1. Load `DomainConfig` via `get_domain_config()`.
 2. For each entity in `state['extracted_entities']`:
-   - **Asset match**: look up by `asset_id` in `domain_config.assets` → attach `mechanism`, `modality`, `indication`, `approval_status`, `is_novo_nordisk`.
+   - **Asset match**: look up by `asset_id` in `domain_config.assets` → attach `mechanism`, `modality`, `indication`, `approval_status`, `is_internal_asset`.
    - **Disease match**: look up by `disease_id` in `domain_config.diseases` → attach `icd10`, `deficiency`.
    - **Inhibitor classification**: map `inhibitor_status` to `domain_config.inhibitor_categories`.
    - **Signal type assignment**: if not already set, classify signal by keyword matching against `domain_config.signal_types`.
@@ -261,7 +261,7 @@ except (ImportError, OSError):
 4. Emit `ontology_entities` — full enriched entity dicts.
 
 **UAT:**
-- `asset_id == "emicizumab"` → enriched entity has `mechanism: "FVIIIa-mimetic bispecific antibody"`, `is_novo_nordisk: False`.
+- `asset_id == "emicizumab"` → enriched entity has `mechanism: "FVIIIa-mimetic bispecific antibody"`, `is_internal_asset: False`.
 - Unknown drug "drug-xyz-999" → added to `unmapped_entities` with `is_known_ontology: False`.
 - No crash when `domain_config.yaml` has no `cross_source` key (backward compatible).
 
@@ -407,7 +407,7 @@ announced → in_trial → interim_result → final_result → congress_publicat
    ```
    Generate a structured Four-Question intelligence brief for: {signal.title}
    Q1: What changed? (facts only, cite source)
-   Q2: Why does it matter to Novo Nordisk? (impact on portfolio vs competitors)
+   Q2: Why does it matter to Enterprise Biopharma? (impact on portfolio vs competitors)
    Q3: Which of these functions is impacted? [Medical Affairs, Regulatory, Safety, Market Access, Communications, Leadership]
    Q4: What action is recommended? (specific, role-tailored)
    Label each statement: [FACT], [INTERPRETATION], or [SPECULATION].

@@ -21,7 +21,7 @@ updated: 2026-08-28
    - `_load_llama_instance` lacked synchronization guards, risking race conditions if multiple async tasks initialized the model concurrently.
 
 ## Key Changes & Fixes Applied
-1. **Thread Pool Offloading in [gemma.py](file:///c:/Users/OM%20Prakash/Documents/novonordisk/backend/app/providers/gemma.py)**:
+1. **Thread Pool Offloading in [gemma.py](../../backend/app/providers/gemma.py)**:
    - Offloaded `_generate_with_local_gguf()` to a worker thread using `loop.run_in_executor(None, self._generate_with_local_gguf, gguf_model, prompt)`.
    - The main asyncio event loop now remains 100% free and responsive to concurrent health probes and HTTP requests while GGUF generation runs in the background.
 2. **Thread-Safe Model Loading**:

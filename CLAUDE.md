@@ -1,19 +1,19 @@
 <!-- GSD:project-start source:PROJECT.md -->
 ## Project
 
-**MetaRadar** is a near-real-time competitive intelligence radar that converts fragmented public signals into evidence-backed developments and role-specific actions, built for the **Novo Nordisk GBS Hackathon 2026** (Problem Statement #3: "From Inbox Noise to Strategic Signal | Pilot Area: Haemophilia within Rare Disease").
+**MetaRadar** is a near-real-time competitive intelligence radar that converts fragmented public signals into evidence-backed developments and role-specific actions across rare disease therapeutic areas (pilot area: Haemophilia A & B).
 
-> **Master Specification:** The sole canonical and authoritative specification for this repository is [METARADAR_MASTER_PLAN_v5.0.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/METARADAR_MASTER_PLAN_v5.0.md). All other documentation files are secondary historical references and must not override the Master Plan.
+> **Master Specification:** The sole canonical and authoritative specification for this repository is [METARADAR_MASTER_PLAN_v5.0.md](docs/METARADAR_MASTER_PLAN_v5.0.md). All other documentation files are secondary historical references and must not override the Master Plan.
 
-While conventional AI systems summarize documents, MetaRadar builds an evidence story around every key development in the haemophilia treatment landscape (from IV factor replacement to subcutaneous bispecific antibodies like emicizumab, concizumab, and mim8, and single-administration gene therapies like Hemgenix and Roctavian). It runs a **10-node LangGraph workflow** (`INGEST → VALIDATE → UNDERSTAND → ANALYZE (Confluence, Lifecycle, Red-Team, Missing-Signal) → SYNTHESIZE → CALIBRATE → BRIEF`) that feeds five intelligence mechanisms into a **Four-Question Framework**:
+While conventional AI systems summarize documents, MetaRadar builds an evidence story around every key development in the haemophilia treatment landscape (from IV factor replacement to subcutaneous bispecific antibodies like emicizumab, concizumab, and mim8, and single-administration gene therapies like Hemgenix and Roctavian). It runs an **11-node LangGraph workflow** (`INGEST → VALIDATE → UNDERSTAND → ANALYZE (Confluence, Lifecycle, Red-Team, Missing-Signal) → SYNTHESIZE → CALIBRATE → BRIEF`) that feeds five intelligence mechanisms into a **Four-Question Framework**:
 1. **What changed?** (Near-real-time signal feed, entity tags, multi-source confluence alerts)
 2. **Why does it matter?** (Relevance breakdown, lifecycle position, red-team contradiction analysis, competitive context)
-3. **Which Novo Nordisk function should review it?** (Calibrated role-routing badges with confidence scores for Medical Affairs)
+3. **Which enterprise function should review it?** (Calibrated role-routing badges with confidence scores for Medical Affairs)
 4. **What action may be required?** (AI-suggested actions based on evidence, lifecycle, and missing-signal context, prefaced "Suggested — requires human review")
 
-MetaRadar includes a **Stakeholder Calibration Prototype (HITL)** that uses feedback from simulated Novo Nordisk stakeholder personas (Medical Affairs, Regulatory, Market Access) to dynamically recalibrate function scoring weights.
+MetaRadar includes a **Stakeholder Calibration Prototype (HITL)** that uses feedback from simulated enterprise stakeholder personas (Medical Affairs, Regulatory, Market Access) to dynamically recalibrate function scoring weights.
 
-**Core Value:** A Novo Nordisk Medical Affairs analyst opens MetaRadar and sees an evidence-backed development story (*"Hemgenix 3-year gene therapy durability data just dropped at ASH — 3 converging signals across clinical + regulatory + patient channels, with real-world contradiction flags, lifecycle positioning, and missing submission warnings — here is why it matters and what action to take next"*) — with every claim traceable to public sources, zero hallucinations, and clear role-specific implications.
+**Core Value:** A Medical Affairs analyst opens MetaRadar and sees an evidence-backed development story (*"Hemgenix 3-year gene therapy durability data just dropped at ASH — 3 converging signals across clinical + regulatory + patient channels, with real-world contradiction flags, lifecycle positioning, and missing submission warnings — here is why it matters and what action to take next"*) — with every claim traceable to public sources, zero hallucinations, and clear role-specific implications.
 <!-- GSD:project-end -->
 
 <!-- GSD:stack-start source:research/STACK.md -->

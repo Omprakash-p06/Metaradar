@@ -1,7 +1,7 @@
 # Phase 07: Trustworthy Intelligence Reconciliation & Platform Hardening Specification
 
 > **Phase Reference:** Phase 07  
-> **Source Specification:** [11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md)  
+> **Source Specification:** [11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md](../../../docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md)  
 > **Execution Mode:** Single-Wave Continuous Execution (All 36 engineering dimensions in 1 wave)
 
 ---
@@ -59,4 +59,4 @@ The goal is to transition MetaRadar from an early prototype with potential place
 
 ## Detailed Guidelines & Decision Log
 
-See [docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md) for full architectural guidelines, mathematical formulations, schema definitions, and testing standards.
+See [docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md](../../../docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md) for full architectural guidelines, mathematical formulations, schema definitions, and testing standards.

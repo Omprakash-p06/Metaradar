@@ -123,9 +123,9 @@ Transform MetaRadar into a fully truthful, verified, and transparent competitive
 </objective>
 
 <reference_specification>
-Primary Reference: [docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md)  
-Research Document: [.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-RESEARCH.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-RESEARCH.md)  
-Peer Review: [.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-REVIEWS.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-REVIEWS.md)
+Primary Reference: [docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md](../../../docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md)  
+Research Document: [.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-RESEARCH.md](07-RESEARCH.md)  
+Peer Review: [.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-REVIEWS.md](07-REVIEWS.md)
 </reference_specification>
 
 <review_incorporation>

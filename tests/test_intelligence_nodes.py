@@ -132,7 +132,7 @@ async def test_node_nlp_extract_5_dimensions():
     validated_signals = [{
         "id": "s_nlp_1",
         "title": "Phase 3 Trial of mim8 in Haemophilia A with Inhibitors",
-        "content": "Novo Nordisk reported updated Phase 3 clinical data (NCT04869267) for mim8. "
+        "content": "Enterprise Portfolio reported updated Phase 3 clinical data (NCT04869267) for mim8. "
                    "The primary endpoint ABR demonstrated significant reduction, with sustained Factor VIII activity in patients with inhibitors.",
         "published_at": "2025-06-01T00:00:00Z"
     }]
@@ -143,7 +143,7 @@ async def test_node_nlp_extract_5_dimensions():
     assert result["node_statuses"]["node_nlp_extract"] == "SUCCESS"
     entities = result["extracted_entities"][0]
     assert any(a["asset_id"] == "mim8" for a in entities["assets"])
-    assert "Novo Nordisk" in entities["companies"]
+    assert "Enterprise Portfolio" in entities["companies"]
     assert "NCT04869267" in entities["nct_ids"]
     assert "ABR" in entities["biomarkers"]
     assert "Factor VIII" in entities["biomarkers"]
@@ -169,7 +169,7 @@ async def test_node_ontology_enrich_maps_haemophilia_yaml():
     enriched = result["ontology_entities"][0]
     assert enriched["primary_asset"]["brand_name"] == "Hemlibra"
     assert enriched["primary_asset"]["mechanism"] == "FVIIIa-mimetic bispecific antibody"
-    assert enriched["primary_asset"]["is_novo_nordisk"] is False
+    assert enriched["primary_asset"]["is_internal_asset"] is False
     assert enriched["is_known_ontology"] is True
 
 
@@ -397,11 +397,11 @@ async def test_node_synthesize_generates_four_questions_with_epistemic_tags():
     sufficient_signal = {
         "id": "sig_sufficient",
         "title": "Phase 3 Readout of mim8 Demonstrates Superior Bleed Control",
-        "content": "Novo Nordisk announced comprehensive Phase 3 trial results (NCT04869267) for mim8. "
+        "content": "Enterprise Portfolio announced comprehensive Phase 3 trial results (NCT04869267) for mim8. "
                    "Treatment resulted in zero treated bleeds in 86% of patients, presenting strong competitive differentiation vs emicizumab.",
         "signal_type": "CLINICAL_TRIAL",
         "asset_id": "mim8",
-        "company": "Novo Nordisk"
+        "company": "Enterprise Portfolio"
     }
     state = create_initial_state()
     state["scored_signals"] = [sufficient_signal]

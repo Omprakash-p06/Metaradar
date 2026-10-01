@@ -152,7 +152,7 @@ def formulate_suggested_action(
     if fn == StakeholderFunction.REGULATORY:
         if "approval" in title_lower or "approved" in title_lower:
             return (
-                "Review approved label and prescribing indications against Novo Nordisk asset dossier; assess filing timeline implications for competing submissions.",
+                "Review approved label and prescribing indications against enterprise asset dossier; assess filing timeline implications for competing submissions.",
                 "Regulatory approval alters competitive baseline standards and potential label differentiation.",
             )
         else:

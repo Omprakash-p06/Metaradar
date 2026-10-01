@@ -64,7 +64,7 @@
     "source_id": "fda",
     "external_id": "BLA761389",
     "regulatory_id": "BLA761389",
-    "title": "FDA Grants Priority Review for Novo Nordisk Mim8 Biologics License Application",
+    "title": "FDA Grants Priority Review for Mim8 Biologics License Application",
     "content": "The US FDA has accepted the Biologics License Application (BLA) for Mim8 with Priority Review designation for routine prophylaxis to prevent or reduce the frequency of bleeding episodes in adult and pediatric patients with Haemophilia A with and without FVIII inhibitors. PDUFA action date set for late 2026.",
     "published_at": "2026-08-28T07:09:33.906000+00:00",
     "signal_type": "REGULATORY",
@@ -156,13 +156,13 @@
   {
     "id": "syn-0014",
     "source_id": "fierce_pharma",
-    "external_id": "fp-novo-mim8-launch-2026",
-    "title": "Novo Nordisk Prepares Global Manufacturing Scale-Up Ahead of Mim8 Commercial Launch",
-    "content": "Novo Nordisk has invested  million in expanding its Kalundborg and Hillerod aseptic filling and pre-filled pen assembly lines to support the projected global commercial demand for Mim8 in Haemophilia A following anticipated 2026 regulatory approvals.",
+    "external_id": "fp-mim8-launch-2026",
+    "title": "Global Manufacturing Scale-Up Initiated Ahead of Mim8 Commercial Launch",
+    "content": "Capital investment has expanded aseptic filling and pre-filled pen assembly lines to support the projected global commercial demand for Mim8 in Haemophilia A following anticipated 2026 regulatory approvals.",
     "published_at": "2026-08-28T03:09:33.906000+00:00",
     "signal_type": "NEWS",
     "disease": "haemophilia_a",
-    "url": "https://www.fiercepharma.com/manufacturing/novo-nordisk-scales-up-mim8-manufacturing-facilities"
+    "url": "https://www.fiercepharma.com/manufacturing/scales-up-mim8-manufacturing-facilities"
   },
   {
     "id": "syn-0015",
@@ -223,12 +223,12 @@
     "id": "syn-0020",
     "source_id": "fierce_pharma",
     "external_id": "fp-patent-exclusivity-2026",
-    "title": "Novo Nordisk Secures Broad Formulation and Auto-Injector Patent Protection for Mim8 Through 2041",
-    "content": "The US Patent and Trademark Office and European Patent Office granted Novo Nordisk additional composition-of-matter and pre-filled dual-chamber injector pen patents for its Factor VIII-mimetic platform, fortifying its commercial exclusivity runway through 2041.",
+    "title": "Broad Formulation and Auto-Injector Patent Protection Secured for Mim8 Through 2041",
+    "content": "The US Patent and Trademark Office and European Patent Office granted additional composition-of-matter and pre-filled dual-chamber injector pen patents for the Factor VIII-mimetic platform, fortifying commercial exclusivity runway through 2041.",
     "published_at": "2026-08-19T06:09:33.906000+00:00",
     "signal_type": "COMMERCIAL_PATENT",
     "disease": "haemophilia_a",
-    "url": "https://www.fiercepharma.com/pharma/novo-nordisk-granted-key-formulation-patents-for-mim8"
+    "url": "https://www.fiercepharma.com/pharma/granted-key-formulation-patents-for-mim8"
   },
   {
     "id": "syn-0021",

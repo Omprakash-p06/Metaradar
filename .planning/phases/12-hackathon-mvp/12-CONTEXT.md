@@ -25,7 +25,7 @@ Build an **AI-powered Haemophilia Intelligence Radar** that:
 - Translates raw updates into source-linked, role-calibrated, and actionable insights.
 - Answers the **4 Practical Questions**:
   1. **Q1: What changed?** — Detect & summarize the most relevant Haemophilia updates.
-  2. **Q2: Why does it matter?** — Assess potential impact on patients, competitors (Roche/Chugai, Pfizer, Sanofi, Sobi), market, and Novo Nordisk.
+  2. **Q2: Why does it matter?** — Assess potential impact on patients, competitors (Roche/Chugai, Pfizer, Sanofi, Sobi), market, and Enterprise Biopharma.
   3. **Q3: Who should review it?** — Route each signal to the right NN function (`Medical Affairs`, `Regulatory`, `Safety/PV`, `Market Access`, `MedComms`, `Leadership`).
   4. **Q4: What action is needed?** — Suggest specific actions: `Review`, `Monitor`, `Escalate`, `Briefing Update`, or `FAQ Preparation` labeled with `[FACT]`, `[INTERPRETATION]`, `[SPECULATION]`.
 
@@ -33,11 +33,11 @@ Build an **AI-powered Haemophilia Intelligence Radar** that:
 - **In-Scope:**
   - Haemophilia A (Factor VIII deficiency) & Haemophilia B (Factor IX deficiency).
   - Modalities: Factor therapies, Non-factor therapies, Bispecifics (e.g. emicizumab, NXT007, Mim8), Gene therapies (Hemgenix, Roctavian), RNAi (fitusiran).
-  - Competitors: Roche/Chugai, Pfizer, Sanofi, Sobi, Novo Nordisk.
+  - Competitors: Roche/Chugai, Pfizer, Sanofi, Sobi, Enterprise Biopharma.
   - Signal Streams: Clinical trials (phases, readouts, delays), Regulatory (PDUFA, filings, approvals, EPAR), Congresses (ISTH, EAHAD, ASH), Publications, Patient voice/access, Safety/off-label narratives.
   - Scalability: Foundation designed to scale to other therapy areas (Oncology, Diabetes, Obesity).
 - **Out-of-Scope (Strictly Enforced):**
-  - Confidential Novo Nordisk strategy or internal data (Zero non-public info).
+  - Confidential Enterprise strategy or internal data (Zero non-public info).
   - Patient-identifiable data (PII/PHI scrubbed at ingestion).
   - External-facing promotional content or clinical causality determinations.
 
@@ -47,14 +47,14 @@ Build an **AI-powered Haemophilia Intelligence Radar** that:
 
 | # | Deliverable | MetaRadar Implementation & Location |
 |:---|:---|:---|
-| **1** | 1–2 page concept note & prototype timeline | [`README.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/README.md) & [`.planning/ROADMAP.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/ROADMAP.md) |
+| **1** | 1–2 page concept note & prototype timeline | [`README.md`](../../../README.md) & [`.planning/ROADMAP.md`](../../ROADMAP.md) |
 | **2** | Working or clickable prototype | FastAPI (`http://localhost:8000`) + Next.js 16 (`http://localhost:3000`) |
 | **3** | Sample data schema and source list | `contracts/openapi.json`, `types/api.ts`, and Sources workspace (`/sources`) |
 | **4** | Dashboard demo with signal cards | Signals workspace with 4-question decision cards & source hierarchy badges |
 | **5** | AI baseline vs stakeholder-calibrated example | Calibration workspace (`/calibration`) + 5-step learning model in `pitch/PITCH.md` |
-| **6** | Validation metrics & architecture diagram | [`docs/SYSTEM_ARCHITECTURE.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/SYSTEM_ARCHITECTURE.md) + 166+ passing test suites |
+| **6** | Validation metrics & architecture diagram | [`docs/SYSTEM_ARCHITECTURE.md`](../../../docs/SYSTEM_ARCHITECTURE.md) + 166+ passing test suites |
 | **7** | Risk & guardrail summary | PII/PHI scrubber, append-only `AuditLog`, FACT/INTERPRETATION labeling |
-| **8** | Final 5–7 slide presentation deck outline | [`pitch/PITCH.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/pitch/PITCH.md) (Private & untracked via `.gitignore`) |
+| **8** | Final 5–7 slide presentation deck outline | [`pitch/PITCH.md`](../../../pitch/PITCH.md) (Private & untracked via `.gitignore`) |
 
 ---
 

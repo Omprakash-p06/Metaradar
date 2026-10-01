@@ -5,8 +5,8 @@
 > **Topic:** Trustworthy Intelligence Reconciliation, Observability Upgrade, Modular Frontend Refactor & Platform Hardening  
 > **Status:** PASSED (Verified across Architecture, Data Truthfulness, Observability, Frontend Modularization, and Invariant Testing)  
 > **Reviewers:** Antigravity / Gemini / Claude Multi-Model Peer Review Matrix  
-> **Canonical Plan:** [`.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-PLAN.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-PLAN.md)  
-> **Canonical Specification:** [`docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md)
+> **Canonical Plan:** [`.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-PLAN.md`](07-PLAN.md)  
+> **Canonical Specification:** [`docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md`](../../../docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md)
 
 ---
 

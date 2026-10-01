@@ -13,7 +13,7 @@ info_count: 3
 
 ## Executive Summary
 
-Phase 07 plan (`07-PLAN.md`) was reviewed against the canonical specification ([`docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md)), the empirical research document ([`07-RESEARCH.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-RESEARCH.md)), and the multi-model peer review ([`07-REVIEWS.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/07-trustworthy-intelligence-reconciliation-and-platform-hardening/07-REVIEWS.md)).
+Phase 07 plan (`07-PLAN.md`) was reviewed against the canonical specification ([`docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md`](../../../docs/11_TRUSTWORTHY_INTELLIGENCE_RECONCILIATION_AND_PLATFORM_HARDENING.md)), the empirical research document ([`07-RESEARCH.md`](07-RESEARCH.md)), and the multi-model peer review ([`07-REVIEWS.md`](07-REVIEWS.md)).
 
 The plan structure consolidates all 36 audit, reconciliation, and hardening dimensions into an 11-task single-wave continuous execution plan with zero stopping between sub-stages, strictly adhering to user instructions.
 

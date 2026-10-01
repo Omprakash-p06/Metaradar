@@ -19,9 +19,9 @@ progress:
 > **Previous Phase:** Phase 12 — Hackathon MVP (COMPLETED & VERIFIED)
 > **Active Phase:** Phase 13 — REACH 2026 Poster & Codebase Concerns (COMPLETED & VERIFIED)
 > **Branch:** `feature/phase-13-reach-poster-and-concerns`
-> **Phase Directory:** [`.planning/phases/13-reach-poster-and-concerns-remediation/`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/13-reach-poster-and-concerns-remediation/)
-> **Context & Decisions:** [`.planning/phases/13-reach-poster-and-concerns-remediation/13-CONTEXT.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/13-reach-poster-and-concerns-remediation/13-CONTEXT.md)
-> **Summary & Verification:** [`.planning/phases/13-reach-poster-and-concerns-remediation/13-SUMMARY.md`](file:///c:/Users/OM%20Prakash/Documents/novonordisk/.planning/phases/13-reach-poster-and-concerns-remediation/13-SUMMARY.md)
+> **Phase Directory:** [`.planning/phases/13-reach-poster-and-concerns-remediation/`](phases/13-reach-poster-and-concerns-remediation)
+> **Context & Decisions:** [`.planning/phases/13-reach-poster-and-concerns-remediation/13-CONTEXT.md`](phases/13-reach-poster-and-concerns-remediation/13-CONTEXT.md)
+> **Summary & Verification:** [`.planning/phases/13-reach-poster-and-concerns-remediation/13-SUMMARY.md`](phases/13-reach-poster-and-concerns-remediation/13-SUMMARY.md)
 
 ---
 

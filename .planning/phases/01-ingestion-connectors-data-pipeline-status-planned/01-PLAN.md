@@ -93,8 +93,8 @@ connectors:
       - id: haemophilia_trials
         conditions: ["hemophilia A", "hemophilia B", "haemophilia"]
         interventions: ["emicizumab", "fitusiran", "marstacimab", "concizumab", "mim8", "fidanacogene", "etranacogene"]
-      - id: novo_pipeline
-        sponsor_keywords: ["Novo Nordisk"]
+      - id: internal_pipeline
+        sponsor_keywords: ["Enterprise Biopharma"]
         conditions: ["hemophilia A", "hemophilia B"]
 
   newsapi:
@@ -104,7 +104,7 @@ connectors:
     rolling_window_days: 7
     profiles:
       - id: haemophilia_market
-        query: "haemophilia OR hemophilia (Roche OR CSL OR Novo OR Sanofi OR BioMarin)"
+        query: "haemophilia OR hemophilia (Roche OR CSL OR Sanofi OR BioMarin OR Enterprise)"
         language: en
       - id: gene_therapy_news
         query: "gene therapy haemophilia hemophilia"

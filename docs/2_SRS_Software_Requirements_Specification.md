@@ -8,12 +8,12 @@
 > **v2.3 Change Note (architecture hardening, Master Plan v5.1 §14):** Gemma deployment target corrected to **local GPU — NVIDIA RTX 3050, 4 GB VRAM (Q4/int4)** with new env vars `LLM_DEVICE`, `LLM_DTYPE`, `MAX_CONTEXT_TOKENS`, `MAX_OUTPUT_TOKENS`; VRAM is not assumed to guarantee inference (never-crash provider fallback chain). New hardened contracts: FR-2.1.3 (deterministic dedup), FR-2.1.3A (source independence), FR-2.1.5 (canonical entity model), §2.9 FR-2.9.1–2.9.5 (scoring versioning, calibration versioning, health & observability, single scheduler, migrations & cache integrity). Health surface extended to `/health/ready|models|connectors`; schema extended with entity-layer tables (sources/companies/assets/trials/developments/events/evidence), versioned scoring, and baseline-vs-calibrated fields. Ten nodes, five mechanisms, six functions, provider abstraction, and the 10-node architecture are unchanged.
 > **v2.1 Change Note:** Integrated B.Pharm domain research (v4.0 master-plan rules): canonical haemophilia classification fields (FR-2.2.5A), nullable clinical-evidence fields (FR-2.2.5B), evidence maturity (FR-2.2.5C), access as a separate intelligence event with 8 access subtypes (FR-2.2.2), Red-Team evidence-check suite A–S (FR-2.3B.2A), and acceptance criteria AC-18..22. Architecture and six primary functions unchanged.
 **Organization:** MS Ramaiah Institute of Technology (MSRIT)  
-**Hackathon:** Novo Nordisk GBS Hackathon 2026  
+**Hackathon:** Enterprise Decision Intelligence Summit 2026  
 **Problem Statement:** #3 - From Inbox Noise to Strategic Signal | Pilot Area: Haemophilia within Rare Disease
 
 > [!IMPORTANT]
 > **HISTORICAL REFERENCE DOCUMENT**  
-> *Note: This document is a secondary/historical reference and must not override the Master Plan. The sole canonical and authoritative specification for MetaRadar is [METARADAR_MASTER_PLAN_v5.0.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/METARADAR_MASTER_PLAN_v5.0.md).*
+> *Note: This document is a secondary/historical reference and must not override the Master Plan. The sole canonical and authoritative specification for MetaRadar is [METARADAR_MASTER_PLAN_v5.0.md](METARADAR_MASTER_PLAN_v5.0.md).*
 
 ---
 
@@ -25,7 +25,7 @@ MetaRadar is an intelligence radar that converts fragmented public signals into 
 Unlike conventional AI systems that merely summarize documents, MetaRadar builds an evidence story around every key development, formatting intelligence into a **Four-Question Framework**:
 - **Q1 WHAT CHANGED?** — Signal detection and event understanding, supported by multi-source confluence
 - **Q2 WHY DOES IT MATTER?** — Clinical/commercial significance, lifecycle stage, competitive context, and contradiction analysis
-- **Q3 WHICH NOVO NORDISK FUNCTION SHOULD REVIEW IT?** — Function relevance and stakeholder-calibrated routing (Medical Affairs / Regulatory / Safety-PV / Market Access / Medical Communications / Leadership; extended: Commercial, R&D)
+- **Q3 WHICH ENTERPRISE FUNCTION SHOULD REVIEW IT?** — Function relevance and stakeholder-calibrated routing (Medical Affairs / Regulatory / Safety-PV / Market Access / Medical Communications / Leadership; extended: Commercial, R&D)
 - **Q4 WHAT INTERNAL ACTION MAY BE REQUIRED?** — AI-suggested actions based on evidence, lifecycle, and missing-signal context (human review required)
 
 ### 1.2 Scope
@@ -64,11 +64,11 @@ Unlike conventional AI systems that merely summarize documents, MetaRadar builds
 - **ASH:** American Society of Hematology (annual December congress)
 
 ### 1.4 References
-- Novo Nordisk GBS Hackathon 2026 Problem Statement #3 & Pilot Guidelines (Haemophilia within Rare Disease)
-- Confidentiality Agreement between MS Ramaiah and Novo Nordisk
+- Enterprise Decision Intelligence Summit 2026 Problem Statement #3 & Pilot Guidelines (Haemophilia within Rare Disease)
+- Confidentiality Agreement between MS Ramaiah and Enterprise Biopharma
 - Kickoff email scope update (August 12, 2026) — therapy area pivot to haemophilia, Four-Question Framework, Stakeholder Calibration Loop
 - Refined Architecture & GitHub Landscape Analysis (doc 5)
-- Novo Nordisk Company Analysis & Hackathon Intelligence (doc 6)
+- Enterprise Biopharma Company Analysis & Hackathon Intelligence (doc 6)
 
 ---
 
@@ -139,7 +139,7 @@ HAEMOPHILIA_QUERY_TERMS = {
 **FR-2.2.1: Named Entity Recognition (NER)**
 - System SHALL extract:
   - Drug names (e.g., "emicizumab", "mim8", "concizumab", "fitusiran", "Hemgenix", "Roctavian", "marstacimab")
-  - Company names (e.g., "Novo Nordisk", "Roche", "Sanofi", "Pfizer", "BioMarin", "CSL Behring", "Takeda")
+  - Company names (e.g., "Enterprise Biopharma", "Roche", "Sanofi", "Pfizer", "BioMarin", "CSL Behring", "Takeda")
   - Indications & Mechanisms (e.g., "Haemophilia A", "Haemophilia B", "bispecific antibody", "gene therapy", "inhibitor development", "anti-TFPI", "EHL factor")
   - Clinical phases (e.g., "Phase 3", "FDA approval", "NICE HTA")
 - Extraction SHALL use local spaCy model (`en_core_sci_md`)
@@ -189,7 +189,7 @@ HAEMOPHILIA_QUERY_TERMS = {
 
 **FR-2.2.3D: External LLM Privacy Gate (mandatory for hosted providers)**
 - Before any external (Grok) API call, the system SHALL run the privacy gate: PUBLIC/SYNTHETIC check → PII/PHI check → CONFIDENTIALITY check → allowed? YES → call Grok; NO → **BLOCK**
-- The system SHALL NEVER send: confidential Novo Nordisk strategy · internal forecasts · launch plans · patient-level information · PII/PHI · non-public information · confidential documents
+- The system SHALL NEVER send: confidential Enterprise strategy · internal forecasts · launch plans · patient-level information · PII/PHI · non-public information · confidential documents
 - If blocked: use local Gemma if available → otherwise BART degraded mode → otherwise source-only display
 - xAI API data handling does NOT override the hackathon's stricter public/synthetic-only rule (xAI does not use API inputs/outputs for training without explicit permission, but requests/responses are normally retained ~30 days for abuse auditing unless applicable stricter retention arrangements are used — https://docs.x.ai/developers/faq/security)
 
@@ -212,7 +212,7 @@ HAEMOPHILIA_QUERY_TERMS = {
 - System SHALL maintain a local pharma ontology (JSON) mapping: drug → brand names → mechanism → manufacturer → indications → competitor drugs (haemophilia ontology)
 - Ontology SHALL be authored and validated by the B.Pharm team
 - Every extracted entity SHALL be cross-referenced against the ontology (e.g., "Hemlibra" → emicizumab → bispecific antibody → Roche → Haemophilia A competitor)
-- When an extracted drug belongs to a competitor of Novo Nordisk, the signal SHALL be flagged as a competitive signal at zero extra API cost
+- When an extracted drug belongs to a competitor of Enterprise Biopharma, the signal SHALL be flagged as a competitive signal at zero extra API cost
 - Signals with extracted entities that fail ontology validation SHALL be flagged for B.Pharm QA review
 
 **Haemophilia Ontology (excerpt):**
@@ -231,7 +231,7 @@ HAEMOPHILIA_QUERY_TERMS = {
     "concizumab": {
       "brand_names": ["Alhemo"],
       "mechanism": "Anti-TFPI monoclonal antibody",
-      "manufacturer": "Novo Nordisk",
+      "manufacturer": "Enterprise Biopharma",
       "indications": ["Haemophilia A", "Haemophilia B", "with/without inhibitors"],
       "formulations": ["subcutaneous injection"],
       "competitors": ["emicizumab", "fitusiran", "marstacimab"],
@@ -240,11 +240,11 @@ HAEMOPHILIA_QUERY_TERMS = {
     "mim8": {
       "brand_names": ["Investigational"],
       "mechanism": "Next-generation bispecific antibody (Factor IXa/Factor X bridge)",
-      "manufacturer": "Novo Nordisk",
+      "manufacturer": "Enterprise Biopharma",
       "indications": ["Haemophilia A", "Haemophilia B"],
       "formulations": ["subcutaneous injection"],
       "competitors": ["emicizumab"],
-      "status": "Phase 3 (key Novo Nordisk pipeline asset)"
+      "status": "Phase 3 (key Enterprise pipeline asset)"
     },
     "fitusiran": {
       "brand_names": ["Qfitlia"],
@@ -284,7 +284,7 @@ HAEMOPHILIA_QUERY_TERMS = {
     }
   },
   "companies": {
-    "Novo Nordisk Rare Disease": {
+    "Enterprise Rare Disease": {
       "portfolio": ["concizumab", "mim8"],
       "pipeline_focus": ["Haemophilia A", "Haemophilia B", "rare bleeding disorders"],
       "key_competitors": ["Roche", "Sanofi", "Pfizer", "BioMarin", "CSL Behring", "Takeda"]
@@ -333,7 +333,7 @@ HAEMOPHILIA_QUERY_TERMS = {
 Every normalized signal SHALL carry all of the following dimensions (added to the `signals` schema — not merely documented):
 - `disease`: `haemophilia_a` | `haemophilia_b` | `both` | `unknown`
 - `patient_type`: `with_inhibitors` | `without_inhibitors` | `unknown`
-- `company`: ontology-normalized company name (e.g., Roche, CSL Behring, Novo Nordisk)
+- `company`: ontology-normalized company name (e.g., Roche, CSL Behring, Enterprise Biopharma)
 - `asset`: ontology-normalized asset/product name (e.g., emicizumab, mim8, Hemgenix)
 - `asset_type`: `bispecific_antibody` | `anti_tfpi` | `rnai` | `gene_therapy` | `factor_replacement` | `ehl_factor` | `other`
 - `signal_type`: one of the 11 canonical categories (FR-2.2.2) · `signal_subtype`: one of the 7 domain categories (plus congress/publication subtypes per FR-2.2.2)
@@ -434,7 +434,7 @@ HAEMOPHILIA_CONFLUENCE_PATTERNS = [
 
 **Haemophilia lifecycle example (mim8):**
 ```
-mim8 (Novo Nordisk · bispecific · Haemophilia A)
+mim8 (Enterprise Biopharma · bispecific · Haemophilia A)
 ├─ 2024-05 announced → Phase 3 initiation
 ├─ 2026-01 results_in → Phase 3 primary endpoint met
 ├─ 2026-03 under_review → FDA/EMA submission expected
@@ -521,7 +521,7 @@ Score: 0.81 · [View evidence A] [View evidence B] · Requires human review
 ### 2.5 Role-Based Routing (Q3)
 
 **FR-2.5.1: Automatic Role Routing (relevance-based — "Not every signal goes to everyone")**
-- System SHALL score each signal against the 6 primary Novo Nordisk functions (plus 2 extended roles) using a weighted scoring matrix
+- System SHALL score each signal against the 6 primary Enterprise functions (plus 2 extended roles) using a weighted scoring matrix
 - Each signal SHALL identify a **primary function** and **secondary functions[]**, each with: `function_relevance_score`, role-specific explanation, role-specific impact, and role-specific suggested action — all sharing the same underlying evidence chain
 - Each signal SHALL store: `primary_function` · `secondary_functions[]` · `function_relevance_score` · **`routing_reason`** (why this function, why now) · `suggested_action`
 - **The routing decision SHALL be explainable.** Example: Signal = Competitor Phase III clinical result → Medical Affairs 91% · Medical Communications 82% · Regulatory 64%, reason: *"Clinical efficacy/safety data with potential implications for scientific understanding and future regulatory review."*
@@ -769,8 +769,8 @@ BART is NEVER listed as a reasoning model.
 7. Q4 action: *"Suggested — Medical Affairs to brief Haemophilia team on gene therapy durability data vs concizumab/mim8 prophylaxis positioning"*
 
 ### 5.2 Scenario: mim8 Phase 3 Readout
-1. NewsAPI: "Novo Nordisk mim8 Phase 3 in haemophilia A meets primary endpoint"
-2. NER extracts: `mim8`, `Novo Nordisk`, `Haemophilia A`, `Phase 3`
+1. NewsAPI: "Enterprise Biopharma mim8 Phase 3 in haemophilia A meets primary endpoint"
+2. NER extracts: `mim8`, `Enterprise Biopharma`, `Haemophilia A`, `Phase 3`
 3. Classified: `competitive_pipeline_move`
 4. Lifecycle: `results_in` state advanced; expected next = regulatory submission
 5. Role routing: Commercial 85%, R&D 88%, Medical Affairs 80%
@@ -792,7 +792,7 @@ BART is NEVER listed as a reasoning model.
 5. Q4 action: *"Suggested — Regulatory to check for silent label/safety developments on Roctavian"*
 
 ### 5.5 Scenario: Congress Abstract for an Existing Trial (NEW EVIDENCE, not new card)
-1. FRONTIER4 (denecimig, Novo Nordisk) interim data signal exists on ClinicalTrials.gov (development_id = dev-fr4)
+1. FRONTIER4 (denecimig, Enterprise Biopharma) interim data signal exists on ClinicalTrials.gov (development_id = dev-fr4)
 2. ISTH 2026 congress abstract for FRONTIER4 is ingested (congress / congress_abstract)
 3. Confluence matches `development_id` → abstract links into dev-fr4 evidence chain; lifecycle appends event (event_type=congress_abstract, event_date, source_id) — NO new unrelated card
 4. Q3 routing: Medical Affairs 91% · Medical Communications 82% · Regulatory 64% with routing reason
@@ -860,8 +860,8 @@ BART is NEVER listed as a reasoning model.
 ## **7. APPENDICES**
 
 ### 7.1 Glossary Additions (Haemophilia)
-- **Concizumab (Alhemo):** Novo Nordisk anti-TFPI antibody for Haemophilia A/B with/without inhibitors
-- **Mim8:** Novo Nordisk next-gen bispecific; Phase 3; aims to improve on emicizumab
+- **Concizumab (Alhemo):** Enterprise Biopharma anti-TFPI antibody for Haemophilia A/B with/without inhibitors
+- **Mim8:** Enterprise Biopharma next-gen bispecific; Phase 3; aims to improve on emicizumab
 - **Emicizumab (Hemlibra):** Roche bispecific; standard non-factor care in Haemophilia A
 - **Fitusiran (Qfitlia):** Sanofi RNAi antithrombin knockdown; FDA approved March 2025 for routine prophylaxis 12+ haemophilia A/B with or without inhibitors (ontology quality gate, Master Plan §14.5)
 - **Hemgenix:** CSL Behring/UniQure gene therapy for Haemophilia B; approved 2022

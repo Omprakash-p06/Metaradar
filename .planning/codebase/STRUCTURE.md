@@ -5,7 +5,7 @@
 ## Directory Layout
 
 ```
-novonordisk/
+metaradar/
 ├── start.py                # Unified launcher (Docker + migrate + backend + frontend)
 ├── docker-compose.yml      # Postgres/pgvector, Redis, backend, frontend, Ollama services
 ├── contracts/              # Canonical API contract (openapi.json)

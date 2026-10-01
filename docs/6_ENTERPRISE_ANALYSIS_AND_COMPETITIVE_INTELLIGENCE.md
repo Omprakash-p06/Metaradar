@@ -1,14 +1,14 @@
-# Novo Nordisk: Company Analysis, Hackathon Intelligence & Strategic Implications for MetaRadar
+# Enterprise Biopharma: Company Analysis, Hackathon Intelligence & Strategic Implications for MetaRadar
 
 ---
 
-> **v2.0 (Aug 12, 2026 kickoff):** Added haemophilia-specific context (concizumab/Alhemo, mim8 Phase 3, gene-therapy disruption), the **Stakeholder Calibration / "Stakeholder Learning Plan"** judging angle, and haemophilia-themed presentation lines. The metabolic-disease examples remain below as historical context on Novo Nordisk, but MetaRadar's target domain for this hackathon is **Haemophilia within Rare Disease**.
+> **v2.0 (Aug 12, 2026 kickoff):** Added haemophilia-specific context (concizumab/Alhemo, mim8 Phase 3, gene-therapy disruption), the **Stakeholder Calibration / "Stakeholder Learning Plan"** judging angle, and haemophilia-themed presentation lines. The metabolic-disease examples remain below as historical context on Enterprise Biopharma, but MetaRadar's target domain for this hackathon is **Haemophilia within Rare Disease**.
 
 > **v2.1 (Aug 12, 2026):** Extended the pitch to the **Five Advanced Analyses** (Confluence Detection, Signal Lifecycle Tracking, Red-Team Contradiction Analysis, Missing-Signal Detection, Stakeholder Learning Loop) — the "learning system" differentiator now includes lifecycle timelines, contradiction flags, and missing-signal early-warning. Judge Q&A expanded accordingly.
 
 > [!IMPORTANT]
 > **HISTORICAL REFERENCE DOCUMENT**  
-> *Note: This document is a secondary/historical reference and must not override the Master Plan. The sole canonical and authoritative specification for MetaRadar is [METARADAR_MASTER_PLAN_v5.0.md](file:///c:/Users/OM%20Prakash/Documents/novonordisk/docs/METARADAR_MASTER_PLAN_v5.0.md).*
+> *Note: This document is a secondary/historical reference and must not override the Master Plan. The sole canonical and authoritative specification for MetaRadar is [METARADAR_MASTER_PLAN_v5.0.md](METARADAR_MASTER_PLAN_v5.0.md).*
 
 ---
 
@@ -16,7 +16,7 @@
 
 ### 1.1 Who They Are
 
-Novo Nordisk is a Danish multinational pharmaceutical company founded in 1923, headquartered in Bagsværd, Denmark. They are the world's dominant player in GLP-1 therapies for obesity and diabetes, makers of:
+Enterprise Biopharma is a Danish multinational pharmaceutical company founded in 1923, headquartered in Bagsværd, Denmark. They are the world's dominant player in GLP-1 therapies for obesity and diabetes, makers of:
 
 - **Ozempic** (semaglutide, injectable, diabetes)
 - **Wegovy** (semaglutide, injectable, obesity)
@@ -40,25 +40,25 @@ Novo Nordisk is a Danish multinational pharmaceutical company founded in 1923, h
 
 ### 1.2 What's Happening Right NOW (Critical Context for Your Presentation)
 
-Understanding Novo Nordisk's current challenges makes MetaRadar's value proposition 10x stronger to judges.
+Understanding Enterprise's current challenges makes MetaRadar's value proposition 10x stronger to judges.
 
 **Challenge 1: Semaglutide Patent Expiry**
 
-The semaglutide patent expired in India on **March 20, 2026**—literally a month before this hackathon. Indian generics from Sun Pharma, Torrent, Dr. Reddy's, and Zydus flooded the market immediately. Some generics are priced as low as ₹1,290/month vs Wegovy's premium price. Despite this, Novo Nordisk's India market share held at 25% while Eli Lilly dropped from 61% → 56%. But the threat is real and accelerating.
+The semaglutide patent expired in India on **March 20, 2026**—literally a month before this hackathon. Indian generics from Sun Pharma, Torrent, Dr. Reddy's, and Zydus flooded the market immediately. Some generics are priced as low as ₹1,290/month vs Wegovy's premium price. Despite this, Enterprise's India market share held at 25% while Eli Lilly dropped from 61% → 56%. But the threat is real and accelerating.
 
 **Why this matters for MetaRadar:**
-> MetaRadar would have detected the patent expiry timeline, tracked Indian generic company filings, monitored pricing signals on pharma forums, and given Novo Nordisk's Commercial and Market Access teams a 6-month head start on competitive response. This is a *real, current business pain*—not hypothetical.
+> MetaRadar would have detected the patent expiry timeline, tracked Indian generic company filings, monitored pricing signals on pharma forums, and given Enterprise's Commercial and Market Access teams a 6-month head start on competitive response. This is a *real, current business pain*—not hypothetical.
 
 **Challenge 2: Eli Lilly Gaining Ground**
 
-Tirzepatide (Eli Lilly's Mounjaro/Zepbound) is clinically proven to be superior to semaglutide in a head-to-head trial in 2024. Lilly comprehensively beat earnings in Q1 2026, driven by tirzepatide volume growth. Lilly's drug is patent-protected into the "back half of the 2030s" while Novo faces erosion. Lilly is also developing orforglipron (oral pill, expected FDA approval 2027), competing directly with Novo's oral semaglutide.
+Tirzepatide (Eli Lilly's Mounjaro/Zepbound) is clinically proven to be superior to semaglutide in a head-to-head trial in 2024. Lilly comprehensively beat earnings in Q1 2026, driven by tirzepatide volume growth. Lilly's drug is patent-protected into the "back half of the 2030s" while the enterprise faces erosion. Lilly is also developing orforglipron (oral pill, expected FDA approval 2027), competing directly with the enterprise's oral semaglutide.
 
 **Why this matters for MetaRadar:**
 > MetaRadar's Confluence Engine would track: Lilly investor calls + FDA trial registrations + HCP forum discussions + prescription trend signals—all converging to flag Lilly's oral strategy months before press announcements. Exactly what Medical Affairs and Commercial need.
 
 **Challenge 3: AI Is Now Core Strategy, Not Bonus**
 
-Novo Nordisk GBS Bangalore is directly targeting **two-thirds reduction in drug launch timelines** using AI. The Bangalore center now handles clinical data analysis, regulatory submissions, and commercial planning for global launches. "There's probably not a medicine launched anywhere in the world that hasn't had a thumbprint of Bangalore on it." — John Dawber, CVP & MD of GBS.
+Enterprise Biopharma GBS Bangalore is directly targeting **two-thirds reduction in drug launch timelines** using AI. The Bangalore center now handles clinical data analysis, regulatory submissions, and commercial planning for global launches. "There's probably not a medicine launched anywhere in the world that hasn't had a thumbprint of Bangalore on it." — John Dawber, CVP & MD of GBS.
 
 They are hiring specifically for **AI-led operations**, not general headcount. The GBS center had ~4,500 employees across 17 global functions. They partner with BITS Pilani, IIIT-Bangalore, and MAHE for research collaboration and **long-term talent pipelines**.
 
@@ -73,17 +73,17 @@ The problem statements reveal 25 distinct operational pain points across functio
 
 The haemophilia treatment landscape is in its most significant transition in decades — from IV factor replacement to subcutaneous non-factor therapies and single-administration gene therapy:
 
-- **Roche emicizumab (Hemlibra)** dominates non-factor Haemophilia A; Novo Nordisk's mim8 is designed to compete directly with it (Phase 3 readouts ongoing)
+- **Roche emicizumab (Hemlibra)** dominates non-factor Haemophilia A; Enterprise's mim8 is designed to compete directly with it (Phase 3 readouts ongoing)
 - **Fitusiran/Qfitlia (Sanofi, RNAi, FDA approved March 2025)** and **marstacimab/Hympavzi (Pfizer, anti-TFPI, FDA approved 2024)** expand the non-factor competitive set
 - **Gene therapy** (Hemgenix for Haemophilia B, Roctavian for Haemophilia A) is moving from "new modality" to "durability data" — sustained 3-year Factor IX expression stories directly pressure lifelong-prophylaxis economics that concizumab/mim8 rely on
 - Signals about these shifts are scattered across ASH/ISTH/WFH/EHA congress abstracts, PubMed, FDA/EMA filings, HTA appraisals (NICE/G-BA), and patient forums (r/Hemophilia)
 
 **Why this matters for MetaRadar:**
-> MetaRadar's Five Advanced Analyses would track a "gene therapy milestone parade" — ASH abstract + CSL Behring press release + r/Hemophilia discussion converging in 48h (Confluence) — link them into one Hemgenix timeline with the expected next event (Lifecycle Tracking), flag the ASH "sustained durability" vs real-world "waning expression" contradiction (Red-Team), and warn when a promised durability follow-up silently doesn't arrive (Missing-Signal) — so Novo Nordisk's Medical Affairs/Commercial/R&D teams can re-brief on mim8/concizumab positioning before analysts make the case publicly.
+> MetaRadar's Five Advanced Analyses would track a "gene therapy milestone parade" — ASH abstract + CSL Behring press release + r/Hemophilia discussion converging in 48h (Confluence) — link them into one Hemgenix timeline with the expected next event (Lifecycle Tracking), flag the ASH "sustained durability" vs real-world "waning expression" contradiction (Red-Team), and warn when a promised durability follow-up silently doesn't arrive (Missing-Signal) — so Enterprise's Medical Affairs/Commercial/R&D teams can re-brief on mim8/concizumab positioning before analysts make the case publicly.
 
 ---
 
-### 1.3 Novo Nordisk GBS Bangalore — The Entity You're Presenting To
+### 1.3 Enterprise Biopharma GBS Bangalore — The Entity You're Presenting To
 
 **What GBS Bangalore Does:**
 - Clinical data management
@@ -107,17 +107,17 @@ This means they value **working prototypes** over polished slide decks. They wan
 
 ---
 
-## **PART 2: WHAT NOVO NORDISK EXPECTS FROM HACKATHONS**
+## **PART 2: WHAT ENTERPRISE LEADERSHIP EXPECTS FROM DECISION PLATFORMS**
 
 ### 2.1 The Real Agenda Behind the Hackathon
 
-Reading between the lines of the invitation document and company context, Novo Nordisk is running this hackathon for three interlocked reasons:
+Reading between the lines of the invitation document and company context, Enterprise Biopharma is running this hackathon for three interlocked reasons:
 
 **Reason 1: Talent Pipeline (Most Important)**
 
 The invitation email explicitly states: *"The event is a key talent identification avenue for us, and we will maintain a pool of high-potential students for future talent engagement opportunities."*
 
-They are not running this hackathon for charity. They are building a recruiting funnel of pre-evaluated students. Winning = entering their talent pool for potential internships, student assistant roles, and full-time positions. Novo Nordisk is hiring specifically for AI roles in Bangalore. Your CS + Pharmacy team composition is exactly what they need.
+They are not running this hackathon for charity. They are building a recruiting funnel of pre-evaluated students. Winning = entering their talent pool for potential internships, student assistant roles, and full-time positions. Enterprise Biopharma is hiring specifically for AI roles in Bangalore. Your CS + Pharmacy team composition is exactly what they need.
 
 **Reason 2: Proof-of-Concept for Internal Problems**
 
@@ -137,7 +137,7 @@ From the hackathon rules email, the judging criteria and weights are:
 |---|---|---|
 | **Innovation (25%)** | Highest weight | Not just doing what already exists. Something new in approach, not just technology. |
 | **Technical Implementation (25%)** | Highest weight | "Robustness, scalability, and quality of code/prototype." Working code, not wireframes. |
-| **Business Impact (20%)** | High | "Potential value and relevance to healthcare/life sciences industry." Tied to Novo Nordisk's actual pain. |
+| **Business Impact (20%)** | High | "Potential value and relevance to healthcare/life sciences industry." Tied to Enterprise's actual pain. |
 | **Feasibility (15%)** | Medium | "Practicality of implementation and potential for future development." Can GBS actually use this? |
 | **Presentation Quality (15%)** | Medium | "Clarity, persuasiveness, effectiveness of presentation and report." |
 
@@ -149,11 +149,11 @@ From the hackathon rules email, the judging criteria and weights are:
 
 **Multi-disciplinary teams:** The email specifically asks faculty to *"shortlist the students and form teams relevant to the problems."* They know a CS-only team will miss domain context. A Pharmacy-only team can't build it. Your 2 CSE + 3 B.Pharm mix is optimal for Problem Statement 3.
 
-**Industry-connected solutions:** Novo Nordisk uses Snowflake, Databricks, AWS, Veeva, iEnvision, Office 365, Power BI across their problem statements. Solutions that reference real industry tools are taken more seriously than solutions that use hypothetical infrastructure.
+**Industry-connected solutions:** Enterprise Biopharma uses Snowflake, Databricks, AWS, Veeva, iEnvision, Office 365, Power BI across their problem statements. Solutions that reference real industry tools are taken more seriously than solutions that use hypothetical infrastructure.
 
 **Working demos over slides:** The deliverables explicitly require "a functional prototype or proof-of-concept." Not a mockup. Not Figma designs. Something that runs.
 
-**Adherence to confidentiality:** The CDA (which you have) is a legal requirement, not a formality. Judges will notice if your presentation casually discloses anything that looks like Novo Nordisk internal data. Keep signal sources to public APIs only.
+**Adherence to confidentiality:** The CDA (which you have) is a legal requirement, not a formality. Judges will notice if your presentation casually discloses anything that looks like Enterprise Biopharma internal data. Keep signal sources to public APIs only.
 
 **Scalability framing:** "Potential for future development" is scored. Your answer should always include: "This works for 1 role and 2 sources today. Here's how it scales to 10 roles and 20 sources."
 
@@ -163,7 +163,7 @@ From the hackathon rules email, the judging criteria and weights are:
 
 ### 3.1 The Judging Panel
 
-From Novo Nordisk's "Innovation in Action" case competition pattern (their global hackathon model):
+From Enterprise's "Innovation in Action" case competition pattern (their global hackathon model):
 - Senior managers from relevant business functions (in your case: Medical Affairs, Commercial, IT/Digital Innovation)
 - Domain specialists (likely from the GBS teams that submitted the problem statements)
 - Possibly one external academic or industry expert
@@ -207,27 +207,27 @@ Low score:
 **Business Impact (20%) — What Judges Actually Look For:**
 
 High score:
-- Ties solution directly to Novo Nordisk's actual strategic pain (patent expiry, Eli Lilly competition, India market)
+- Ties solution directly to Enterprise's actual strategic pain (patent expiry, Eli Lilly competition, India market)
 - Quantifies impact: "Reduces time from signal to insight from 3 days to 3 minutes"
-- Shows which Novo Nordisk functions benefit and how
+- Shows which Enterprise functions benefit and how
 
 Low score:
 - Generic healthcare benefit statements ("helps save lives")
-- Impact that applies to any pharma company with no Novo Nordisk specificity
+- Impact that applies to any pharma company with no Enterprise Biopharma specificity
 
-**For MetaRadar:** Connect to actual Novo Nordisk pain: semaglutide patent expiry (March 2026), Eli Lilly gaining market share, GBS AI mandate, Bangalore's role in global launches. These are in the news right now.
+**For MetaRadar:** Connect to actual Enterprise Biopharma pain: semaglutide patent expiry (March 2026), Eli Lilly gaining market share, GBS AI mandate, Bangalore's role in global launches. These are in the news right now.
 
 **Feasibility (15%) — What Judges Actually Look For:**
 
 High score:
-- Uses existing tools Novo Nordisk already has (Docker, cloud services, REST APIs)
+- Uses existing tools Enterprise Biopharma already has (Docker, cloud services, REST APIs)
 - No hardware dependencies
 - Data sources are legitimate and accessible (not "we'd scrape LinkedIn")
 - Extension path is clear and credible
 
 Low score:
 - "We'd need a GPU cluster to run this" (they don't have one at GBS)
-- Depends on APIs that Novo Nordisk can't legally access
+- Depends on APIs that Enterprise Biopharma can't legally access
 - Assumes IT integration that would take 2 years
 
 **For MetaRadar:** Emphasize free APIs, Docker, local ML models (no GPU needed), and the path from MVP (six functions, one engine) to full deployment (all functions).
@@ -274,9 +274,9 @@ Demo the loop live: submit a wrong routing rating → hit `POST /api/v1/calibrat
 
 ## **PART 4: PREVIOUS HACKATHON PROJECT ANALYSIS**
 
-### 4.1 Novo Nordisk GBS Hackathon 2025 — The Winning Project (Found on GitHub)
+### 4.1 Enterprise Decision Intelligence Initiative 2025 — The Winning Project (Found on GitHub)
 
-**GitHub:** github.com/Novo-Nordisk-GBS-Hackathon-2025/Novo-Nordisk-Hackathon2025  
+**GitHub:** github.com/Enterprise-Pharma-Summit-2025/Decision-Intelligence-2025  
 **Team:** Manish M Kumar (Lead), Abhishek Ramesh Shettigar, Beven Nelson, Elna Sara Sanu, Neela KS  
 **Problem:** Commercial strategy for Wegovy in India
 
@@ -345,7 +345,7 @@ The 2025 winning project was:
 - A well-structured Streamlit dashboard
 - Using publicly available health data
 - With clear visualizations and business recommendations
-- Focused on a specific Novo Nordisk product in India
+- Focused on a specific Enterprise Biopharma product in India
 
 **This means the bar you need to clear is higher than one Streamlit app.** But it also tells you what the judges respond to: clear structure, quantified impact, working demo, India-specific context.
 
@@ -369,17 +369,17 @@ The 2025 winning project was:
 
 ## **PART 5: STRATEGIC INTELLIGENCE FOR YOUR PRESENTATION**
 
-### 5.1 Lines That Will Land With Novo Nordisk Judges
+### 5.1 Lines That Will Land With Enterprise Biopharma Judges
 
 These are statements directly tied to their current business reality that will show you've done your homework:
 
 **Opening statement (Innovation criterion):**
-> "Haemophilia is undergoing its most significant paradigm shift in decades—from IV factor replacement to subcutaneous bispecific antibodies and single-administration gene therapies like Hemgenix and Roctavian. Critical signals about this shift are scattered across congress abstracts, PubMed publications, FDA/EMA filings, patient forums, and competitor announcements. MetaRadar runs **five advanced analyses** on that noise — confluence detection, lifecycle tracking, red-team contradiction checks, missing-signal early-warning, and a stakeholder learning loop — so Novo Nordisk's response is instant, coordinated, and learning from its users."
+> "Haemophilia is undergoing its most significant paradigm shift in decades—from IV factor replacement to subcutaneous bispecific antibodies and single-administration gene therapies like Hemgenix and Roctavian. Critical signals about this shift are scattered across congress abstracts, PubMed publications, FDA/EMA filings, patient forums, and competitor announcements. MetaRadar runs **five advanced analyses** on that noise — confluence detection, lifecycle tracking, red-team contradiction checks, missing-signal early-warning, and a stakeholder learning loop — so Enterprise's response is instant, coordinated, and learning from its users."
 
 > "Every MetaRadar output is labeled **Fact, Interpretation, or Speculation** — speculation is never presented as fact — and every high-priority claim is source-linked with its evidence chain."
 
 **On business impact (NEW v2.0 — mim8 vs emicizumab + gene therapy):**
-> "Roche's Hemlibra (emicizumab) established non-factor prophylaxis in Haemophilia A, and gene-therapy durability data (Hemgenix 3-year, Roctavian) is now challenging the lifelong-prophylaxis model itself. MetaRadar flags when clinical data, HTA decisions, and patient sentiment converge — giving Novo Nordisk's Medical Affairs and Commercial teams early clarity on how to position mim8 and concizumab against both, before analysts make the case publicly."
+> "Roche's Hemlibra (emicizumab) established non-factor prophylaxis in Haemophilia A, and gene-therapy durability data (Hemgenix 3-year, Roctavian) is now challenging the lifelong-prophylaxis model itself. MetaRadar flags when clinical data, HTA decisions, and patient sentiment converge — giving Enterprise's Medical Affairs and Commercial teams early clarity on how to position mim8 and concizumab against both, before analysts make the case publicly."
 
 **On the Five Advanced Analyses (NEW v2.1):**
 > "Four things make MetaRadar an intelligence layer, not a feed. First, it *confluences* — three independent signal types in 48h become one strategic alert. Second, it *tracks lifecycles* — an analyst always knows mim8 is 'results_in, submission expected next.' Third, it *red-teams the evidence* — when a real-world cohort contradicts an ASH abstract, both claims are shown with their sources and flagged for human review. Fourth, it *listens for silence* — a readout that was promised but never appeared becomes an early-warning, because in competitive intelligence, absence is a signal."
@@ -388,13 +388,13 @@ These are statements directly tied to their current business reality that will s
 > "MetaRadar doesn't just route intelligence to the right function — it learns whether the routing was right. Stakeholders rate each signal 1-5; the calibration service recalibrates scoring weights; Q3 role-routing confidence visibly improves. Our demo shows a Regulatory persona teaching the system, live."
 
 **On feasibility:**
-> "Novo Nordisk GBS already handles clinical data analysis, regulatory submissions, and commercial planning for global launches. MetaRadar integrates directly into that workflow—same cloud infrastructure, same role-based access structure, zero additional hardware."
+> "Enterprise Biopharma GBS already handles clinical data analysis, regulatory submissions, and commercial planning for global launches. MetaRadar integrates directly into that workflow—same cloud infrastructure, same role-based access structure, zero additional hardware."
 
 **On the team composition:**
-> "Competitive intelligence in pharma is not a technology problem—it's a domain + technology problem. Our B.Pharm team built the haemophilia ontology that makes MetaRadar understand 'Hemlibra' = 'emicizumab' = 'Roche Haemophilia A competitor' and 'mim8' = 'concizumab' = Novo Nordisk assets. Our CSE team built the system that makes it real-time and self-calibrating. Neither team alone could have built this."
+> "Competitive intelligence in pharma is not a technology problem—it's a domain + technology problem. Our B.Pharm team built the haemophilia ontology that makes MetaRadar understand 'Hemlibra' = 'emicizumab' = 'Roche Haemophilia A competitor' and 'mim8' = 'concizumab' = Enterprise assets. Our CSE team built the system that makes it real-time and self-calibrating. Neither team alone could have built this."
 
 **Closing (talent pipeline):**
-> "Novo Nordisk GBS is targeting a two-thirds reduction in drug launch timelines using AI. MetaRadar is a proof-of-concept for what that intelligence infrastructure looks like—built by a team that wants to build it at scale."
+> "Enterprise Biopharma GBS is targeting a two-thirds reduction in drug launch timelines using AI. MetaRadar is a proof-of-concept for what that intelligence infrastructure looks like—built by a team that wants to build it at scale."
 
 ---
 
@@ -455,7 +455,7 @@ These are statements directly tied to their current business reality that will s
     - *Technical:* Standard RAG is passive (User Query $\rightarrow$ Embed $\rightarrow$ Retrieve $\rightarrow$ Generate). MetaRadar is an autonomous 10-agent graph pipeline executing continuous multi-source monitoring, lifecycle state tracking, confluence detection, and silence alerting.
 
 14. **Why is this different from a news dashboard?**
-    - *Non-Technical:* A news dashboard shows a list of individual headlines; MetaRadar turns scattered headlines into an evidence story with clear next steps for Novo Nordisk.
+    - *Non-Technical:* A news dashboard shows a list of individual headlines; MetaRadar turns scattered headlines into an evidence story with clear next steps for Enterprise Biopharma.
     - *Technical:* News dashboards display flat, unlinked feeds. MetaRadar applies NER + ontology mapping, 48h confluence clustering, FSM lifecycle tracking, NLI contradiction detection, and HITL weight calibration.
 
 15. **Why is this different from ChatGPT/Claude simply summarizing articles?**
@@ -468,7 +468,7 @@ These are statements directly tied to their current business reality that will s
 
 ---
 
-### 5.3 What Novo Nordisk Will Do with Your Project if You Win
+### 5.3 What Enterprise Biopharma Will Do with Your Project if You Win
 
 Based on their stated approach to student collaboration:
 - Add you to their talent pool database (explicitly stated in invitation)
@@ -518,7 +518,7 @@ Other college teams (especially from pharmacy backgrounds) tackling Problem Stat
 ## **SUMMARY: YOUR COMPETITIVE POSITION**
 
 ```
-WHAT NOVO NORDISK IS LOOKING FOR:
+WHAT ENTERPRISE LEADERSHIP IS LOOKING FOR:
 ✓ Working prototype (not wireframe) — MetaRadar has this
 ✓ Genuine innovation, not incremental improvement — The Five Advanced Analyses (Confluence + Lifecycle + Red-Team + Missing-Signal + Stakeholder Learning) + Pharma Ontology
 ✓ Business impact tied to their actual problems — Haemophilia paradigm shift, mim8 vs emicizumab, gene-therapy disruption, silent readouts/stalled submissions, AI mandate
@@ -549,5 +549,5 @@ That's not a technical feature—it's a moat.
 ---
 
 *Document revised: August 12, 2026 (kickoff scope update)*  
-*Context: Novo Nordisk GBS Hackathon 2026, Problem Statement #3 — From Inbox Noise to Strategic Signal | Pilot Area: Haemophilia within Rare Disease*  
+*Context: Enterprise Strategic Signal Intelligence | Pilot Area: Haemophilia within Rare Disease*  
 *Team: MSRIT (2 CSE + 3 B.Pharm)*

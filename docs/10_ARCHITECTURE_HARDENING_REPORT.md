@@ -26,7 +26,7 @@
 | `docs/1_GAP_ANALYSIS_AND_OPTIMIZATIONS.md` | NewsAPI 500→**100/day** (2 places incl. rate-limiter config); compose celery service removed + `/models` volume; memory estimates reframed to GPU VRAM; feasibility "no GPU" corrected; `LLM_DEVICE`-driven loader |
 | `docs/5_REFINED_ARCHITECTURE_AND_GITHUB_ANALYSIS.md` | `google/gemma-2b` → `google/gemma-3-4b-it` (GPU); Celery references → APScheduler; 5→4 Docker services |
 | `docs/7_PITCH_AND_PRESENTATION_NARRATIVE.md` | Celery references → single APScheduler; "CPU-executable models" → GPU/CPU split (Q16); scaling answer updated |
-| `docs/6_NOVO_NORDISK_ANALYSIS_AND_HACKATHON_INTELLIGENCE.md` | Celery references → APScheduler; CPU → GPU (Q16); fitusiran approved-2023 → Qfitlia March 2025 |
+| `docs/6_ENTERPRISE_ANALYSIS_AND_COMPETITIVE_INTELLIGENCE.md` | Celery references → APScheduler; CPU → GPU (Q16); fitusiran approved-2023 → Qfitlia March 2025 |
 | `docs/8_CORRECTED_UNIFIED_PLAN.md` | **v1.5** change note; team lead; remaining Celery references removed; NewsAPI tier text corrected; footer bumped |
 | `docs/9_RISK_AND_GUARDRAILS.md` | **v1.3** — R6 updated (small-GPU); new **R30** (Gemma cannot fit/initialize on 4 GB VRAM → never-crash fallback); team lead footer |
 | `docs/4_UI_DESIGN_DOCUMENT.md` | **v3.4** — canonical component contract + mapping table; source-freshness badges; health footer behavior; `ProviderBadge` → "Gemma · local GPU" |
