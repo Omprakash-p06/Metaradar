@@ -69,3 +69,32 @@ def test_print_recent_logs(tmp_path):
     start.print_recent_logs(log_file, "TestService", max_lines=2)
     start.print_recent_logs(tmp_path / "nonexistent.log", "TestService")
 
+
+def test_start_frontend_cmd_construction(monkeypatch):
+    import start
+    captured = {}
+
+    def mock_popen(cmd, cwd=None, env=None, stdout=None, stderr=None):
+        captured["cmd"] = cmd
+        captured["env"] = env
+        captured["cwd"] = cwd
+        class MockProc:
+            pass
+        return MockProc()
+
+    monkeypatch.setattr(start.subprocess, "Popen", mock_popen)
+
+    # 1. When pnpm is detected
+    monkeypatch.setattr(start.shutil, "which", lambda binary: "/bin/pnpm" if binary == "pnpm" else None)
+    start.start_frontend(port=3000, backend_port=8000)
+    assert captured["cmd"] == ["/bin/pnpm", "run", "dev", "-p", "3000"]
+    assert "--" not in captured["cmd"]
+    assert captured["env"]["PORT"] == "3000"
+
+    # 2. When only npm is detected
+    monkeypatch.setattr(start.shutil, "which", lambda binary: None if binary == "pnpm" else "/bin/npm")
+    start.start_frontend(port=3000, backend_port=8000)
+    assert captured["cmd"] == ["/bin/npm", "run", "dev", "--", "-p", "3000"]
+    assert captured["env"]["PORT"] == "3000"
+
+

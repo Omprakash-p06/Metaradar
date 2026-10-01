@@ -281,10 +281,17 @@ def start_frontend(port: int, backend_port: int = 8000) -> subprocess.Popen:
 
     env = os.environ.copy()
     env["NEXT_PUBLIC_API_URL"] = f"http://localhost:{backend_port}/api/v1"
+    env["PORT"] = str(port)
 
     log_out = open(log_file, "a", encoding="utf-8")
 
-    cmd = [runner_cmd, "run", "dev", "--", "-p", str(port)]
+    # In pnpm, flags after 'run dev' are forwarded directly to next dev.
+    # Passing '--' causes Next.js to treat '-p' as a positional directory argument ('frontend\-p').
+    # In npm, '--' is required by npm to forward subsequent flags.
+    if runner_name == "pnpm":
+        cmd = [runner_cmd, "run", "dev", "-p", str(port)]
+    else:
+        cmd = [runner_cmd, "run", "dev", "--", "-p", str(port)]
 
     proc = subprocess.Popen(
         cmd,
