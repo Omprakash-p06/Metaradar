@@ -92,7 +92,7 @@ Render (FastAPI + Uvicorn Backend)
    - `SECRET_KEY`: A cryptographically secure random 256-bit string (`python -c "import secrets; print(secrets.token_urlsafe(32))"`).
    - `SESSION_COOKIE_SAMESITE`: `none`
    - `SESSION_COOKIE_SECURE`: `true`
-5. Deploy. The `preDeployCommand` (`alembic upgrade head`) will run automatically, and the health check will monitor `/api/v1/health`.
+5. Deploy. The `startCommand` will run database migrations (`alembic upgrade head`) automatically before launching `uvicorn`, and the health check will monitor `/api/v1/health`.
 6. Once deployed, note your public Render URL (e.g. `https://metaradar-api.onrender.com`).
 
 ---
