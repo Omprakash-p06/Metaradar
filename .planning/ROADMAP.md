@@ -189,7 +189,8 @@ Future milestone initiatives (v6.0+) can be planned and tracked here using `/gsd
   split origins; deploy docs + env templates.
 - **Priority:** P0 (backend live + Supabase migrations) → P1 (frontend live + CORS/auth) → P2 (Gemini adapter + docs)
 - **Requirements:** REQ-P15-01 … REQ-P15-12
-- **Status:** Planned
+- **Status:** COMPLETED & VERIFIED (2026-10-02)
 - **Context:** [`15-CONTEXT.md`](phases/15-free-tier-cloud-deployment/15-CONTEXT.md)
+- **Summary:** [`15-SUMMARY.md`](phases/15-free-tier-cloud-deployment/15-SUMMARY.md)
 
 
