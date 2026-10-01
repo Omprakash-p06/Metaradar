@@ -4,6 +4,7 @@ services:
     name: metaradar-api
     runtime: python
     rootDir: backend
+    branch: main
     plan: free
     region: oregon
     buildCommand: "pip install --upgrade pip && pip install -r requirements.txt"
@@ -12,7 +13,7 @@ services:
     healthCheckPath: /api/v1/health
     envVars:
       - key: PYTHON_VERSION
-        value: 3.11.9
+        value: 3.13.5
       - key: APP_ENV
         value: production
       - key: DEMO_MODE
