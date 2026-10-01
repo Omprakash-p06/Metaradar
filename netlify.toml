@@ -8,6 +8,9 @@
   NODE_VERSION = "20"
   PNPM_FLAGS = "--frozen-lockfile=false"
 
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
 [[headers]]
   for = "/*"
   [headers.values]
