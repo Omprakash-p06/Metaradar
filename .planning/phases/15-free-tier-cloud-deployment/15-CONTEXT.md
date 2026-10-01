@@ -22,9 +22,8 @@ from a clean checkout without committing secrets.
 - **Backend → Render free tier** (user locked Render; researcher ranks alternatives only as
   documented fallback, plan targets Render). Account for free-tier constraints: sleep/spin-down,
   ephemeral filesystem, RAM limits, request timeouts.
-- **PostgreSQL + pgvector → managed free tier with pgvector support.** Researcher picks between
-  Supabase / Neon (both support pgvector); plan implements the winner. Alembic migrations must
-  run cleanly against the hosted DB (`alembic upgrade head`).
+- **PostgreSQL + pgvector → Supabase free tier (LOCKED by user).**
+  PostgreSQL 16 with pgvector extension pre-installed. Session pooler (port 5432) or direct connection. Alembic migrations must run cleanly against the hosted Supabase DB (`alembic upgrade head`).
 - **Redis → free managed (e.g. Upstash) OR prove optional.** Backend must boot and serve core
   flows even if Redis is unavailable (verify current boot path: `backend/app/main.py` lifespan).
 
@@ -34,14 +33,18 @@ from a clean checkout without committing secrets.
 - **Do NOT deploy Ollama/Gemma on the free backend tier** (~2.5 GB GGUF + RAM do not fit).
 - **Local Qwen / llama.rn remains the primary offline/mobile AI.** Cloud AI is an **optional
   fallback/upgrade, never a hard dependency.**
-- Backend exposes a **provider-agnostic AI provider interface** so Gemini can later be replaced
+- **Strict PII/PHI Redaction Gate Before External LLM (LOCKED by user):** Never send PHI/PII or
+  confidential trial data to a free external LLM. Retain and enforce the MetaRadar PII/PHI
+  redaction layer and data classification gate (`validate_privacy_gate`) immediately before
+  any external Gemini call.
+- **Backend exposes a provider-agnostic AI provider interface** so Gemini can later be replaced
   by another provider without changing application/business logic
   (extends existing `backend/app/providers/factory.py` chain, which is currently
   Local Gemma → Grok → degraded).
-- **Gemini API is the initial cloud provider**, using the Gemini free tier where available.
+- **Gemini API is the initial cloud provider**, using the Gemini free tier (Option 1).
 - **Gemini API key is server-side only** (`GEMINI_API_KEY` env var); never shipped in any client.
-- If `GEMINI_API_KEY` is unavailable or the cloud provider fails, the backend returns a
-  **controlled AI-unavailable/degraded response** — core app functionality must not break.
+- If `GEMINI_API_KEY` is unavailable or the cloud provider fails (e.g. 429 rate limit), the backend
+  returns a **controlled AI-unavailable/degraded response** (BART degraded factual summary) — core app functionality must not break.
 - All rules, behavior policies, command validation, permissions, and execution stay
   **deterministic in the application/rule engine**. The cloud model handles **only semantic
   interpretation / planning / explanation** — it must NOT execute arbitrary actions.

@@ -177,17 +177,17 @@ Future milestone initiatives (v6.0+) can be planned and tracked here using `/gsd
 ### Milestone v6.0 — Free-Tier Cloud Deployment (PLANNED)
 
 > **Core Objective:** Deploy MetaRadar on free hosting — frontend on Netlify, backend on Render
-> free tier, managed pgvector Postgres + Redis, and a provider-agnostic cloud AI adapter with
+> free tier, Supabase managed pgvector PostgreSQL 16 + optional Redis, and a provider-agnostic cloud AI adapter with
 > Gemini free tier as the initial provider. All deployment configs live in-repo; zero secrets
 > committed; local `setup.py`/`start.py` flows unchanged.
 
-### Phase 15: Free-Tier Cloud Deployment (Netlify + Render + Gemini AI Adapter)
+### Phase 15: Free-Tier Cloud Deployment (Netlify + Render + Supabase + Gemini AI Adapter)
 - **Goal:** `netlify.toml` + Render blueprint serving production Next.js 16 frontend and FastAPI
-  backend on free tiers; hosted pgvector DB with clean Alembic migrations; working Redis or
+  backend on free tiers; hosted Supabase pgvector DB with clean Alembic migrations; working Redis or
   proven-optional path; Gemini-backed provider-agnostic cloud AI adapter (`AI_PROVIDER=gemini`,
-  server-side key only, controlled degraded fallback); CORS/cookies/CSRF correct across
+  server-side key only, strict PII/PHI redaction gate, controlled degraded fallback); CORS/cookies/CSRF correct across
   split origins; deploy docs + env templates.
-- **Priority:** P0 (backend live + DB migrations) → P1 (frontend live + CORS/auth) → P2 (Gemini adapter + docs)
+- **Priority:** P0 (backend live + Supabase migrations) → P1 (frontend live + CORS/auth) → P2 (Gemini adapter + docs)
 - **Requirements:** REQ-P15-01 … REQ-P15-12
 - **Status:** Planned
 - **Context:** [`15-CONTEXT.md`](phases/15-free-tier-cloud-deployment/15-CONTEXT.md)

@@ -204,12 +204,12 @@
 
 - [ ] **REQ-P15-01**: Netlify frontend deploy config (`netlify.toml`) — production `next build` of Next.js 16.3 succeeds, `NEXT_PUBLIC_API_URL` points at Render backend.
 - [ ] **REQ-P15-02**: Render backend deploy config (Blueprint `render.yaml` + build/start commands) — FastAPI/Uvicorn boots on Render free tier, health-check endpoint passes.
-- [ ] **REQ-P15-03**: Hosted pgvector Postgres (Supabase or Neon free tier, researcher pick) — `alembic upgrade head` clean, 384-dim HNSW vector search verified live.
+- [ ] **REQ-P15-03**: Hosted pgvector Postgres (Supabase free tier, PostgreSQL 16 + pgvector — user-locked ₹0 choice) — `alembic upgrade head` clean, 384-dim HNSW vector search verified live.
 - [ ] **REQ-P15-04**: Redis story resolved — free managed (e.g. Upstash) wired OR Redis proven optional with core flows passing while Redis is down.
 - [ ] **REQ-P15-05**: Production boot guard passes on Render — non-default `SECRET_KEY`, `DEMO_MODE=false`, `APP_ENV=production` (per `backend/app/core/config.py:140-149`).
 - [ ] **REQ-P15-06**: Split-origin auth correct — CORS allow-list for Netlify origin (no `*`), `SameSite`/`Secure` session cookies, CSRF + rate limiting active in production.
 - [ ] **REQ-P15-07**: Provider-agnostic cloud AI interface in backend (`AI_PROVIDER` config, e.g. `AI_PROVIDER=gemini`) — Gemini replaceable without touching business logic.
-- [ ] **REQ-P15-08**: Gemini free-tier provider — server-side `GEMINI_API_KEY` only, request timeout, rate-limit/429 handling, structured-output validation, logging.
+- [ ] **REQ-P15-08**: Gemini free-tier provider — server-side `GEMINI_API_KEY` only, strict PII/PHI redaction gate before transmission (zero PHI/PII or confidential trial data sent externally), request timeout, rate-limit/429 handling, structured-output validation, logging.
 - [ ] **REQ-P15-09**: Controlled degraded AI response — missing key or provider failure returns AI-unavailable/degraded payload; core flows never break; cloud model never executes actions (semantic interpretation only), API stays compatible with existing AI command/intent schema.
 - [ ] **REQ-P15-10**: Env-var hygiene — canonical `NEXT_PUBLIC_API_URL` resolved (see STACK.md ambiguity), `.env.example` documents every cloud var, zero secrets committed.
 - [ ] **REQ-P15-11**: Deploy docs — step-by-step Netlify + Render + DB + Gemini setup from clean checkout, free-tier limits/quotas documented, local `setup.py`/`start.py` flows unchanged.
