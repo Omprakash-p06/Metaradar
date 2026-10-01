@@ -35,12 +35,23 @@ class Settings(BaseSettings):
     @classmethod
     def normalize_database_url(cls, v: Any) -> Any:
         if isinstance(v, str):
+            import urllib.parse
             v_stripped = v.strip()
-            # If user pasted postgresql://, postgres://, or postgresql+psycopg:// from Supabase/cloud console,
-            # auto-convert to postgresql+asyncpg:// to guarantee asyncpg is used.
-            for prefix in ("postgres://", "postgresql://", "postgresql+psycopg://", "postgresql+psycopg2://"):
-                if v_stripped.startswith(prefix):
-                    return "postgresql+asyncpg://" + v_stripped[len(prefix):]
+            prefix = ""
+            for p in ("postgres://", "postgresql://", "postgresql+psycopg://", "postgresql+psycopg2://", "postgresql+asyncpg://"):
+                if v_stripped.startswith(p):
+                    prefix = p
+                    break
+
+            if prefix:
+                rest = v_stripped[len(prefix):]
+                if "@" in rest:
+                    creds, _, host_part = rest.rpartition("@")
+                    if ":" in creds:
+                        user, _, password = creds.partition(":")
+                        encoded_pass = urllib.parse.quote(urllib.parse.unquote(password), safe="")
+                        return f"postgresql+asyncpg://{user}:{encoded_pass}@{host_part}"
+                return "postgresql+asyncpg://" + rest
         return v
 
     # Security & CORS
