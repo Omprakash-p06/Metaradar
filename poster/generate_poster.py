@@ -65,6 +65,7 @@ def generate_svg() -> str:
     arch_path = ROOT_DIR / "pitch" / "pngs" / "architecture.png"
     dataflow_path = ROOT_DIR / "pitch" / "pngs" / "dataflow.png"
     resp_path = ROOT_DIR / "pitch" / "pngs" / "responsibility_flow.png"
+    qr_path = SCRIPT_DIR / "qr_code.png"
 
     # Enforce required diagram assets presence
     required_assets = {
@@ -83,6 +84,7 @@ def generate_svg() -> str:
     arch_b64 = get_base64_img(str(arch_path))
     dataflow_b64 = get_base64_img(str(dataflow_path))
     resp_b64 = get_base64_img(str(resp_path))
+    qr_b64 = get_base64_img(str(qr_path))
 
     svg = f"""<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {width} {height}" width="{width}" height="{height}">
   <defs>
@@ -518,7 +520,8 @@ def generate_svg() -> str:
       <text x="50" y="310" fill="#34D399" font-size="18" font-weight="800">CORRESPONDENCE &amp; DEMO ACCESS</text>
       <text x="50" y="345" fill="#CBD5E1" font-size="16">Principal Inquiries: MetaRadar Engineering Team &amp; Academic Collaborators</text>
       <text x="50" y="375" fill="#CBD5E1" font-size="16">Academic Lead: Dr. B V Basavaraj (M. S. Ramaiah University of Applied Sciences, Bengaluru)</text>
-      <text x="50" y="405" fill="#38BDF8" font-size="16" class="mono">Live Demo: http://localhost:3000 | API Gateway: http://localhost:8000</text>
+      <text x="50" y="405" fill="#38BDF8" font-size="16" class="mono">Live Demo: https://mtradar-app.netlify.app/dashboard</text>
+      <image x="855" y="280" width="140" height="140" href="{qr_b64}" />
     </g>
   </g>
 
