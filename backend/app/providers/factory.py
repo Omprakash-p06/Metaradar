@@ -3,6 +3,7 @@ import os
 from typing import Any, Dict, List, Optional
 from app.providers.base import LLMProvider, ProviderCapability, DataClassification
 from app.providers.gemma import GemmaProvider
+from app.providers.gemini import GeminiProvider, GeminiUnavailableError
 from app.providers.grok import GrokProvider
 from app.providers.degraded import DegradedProvider
 from app.core.config import settings
@@ -13,6 +14,7 @@ logger = logging.getLogger(__name__)
 class ProviderFactory:
     def __init__(self):
         self.gemma = GemmaProvider()
+        self.gemini = GeminiProvider()
         self.grok = GrokProvider()
         self.degraded = DegradedProvider()
 
@@ -25,16 +27,37 @@ class ProviderFactory:
     ) -> Dict[str, Any]:
         """
         Executes an intelligence task using the configured fallback chain:
-        Local Gemma -> Grok (if enabled & permitted) -> BART Degraded Mode (summarize ONLY).
+        Local Gemma -> Cloud Gemini (if configured & permitted) -> Grok (if enabled & permitted) -> BART Degraded Mode (summarize ONLY).
         """
         # 1. Try Local Gemma
-        if settings.LLM_PROVIDER in ["local", "auto"] and self.gemma.supports(required_capability):
+        if (
+            settings.AI_PROVIDER in ["local", "auto"]
+            and settings.LLM_PROVIDER in ["local", "auto"]
+            and self.gemma.supports(required_capability)
+        ):
             try:
                 return await self.gemma.generate_intelligence(evidence, task, classification)
             except Exception as e:
                 logger.warning(f"Gemma execution failed: {e}. Falling back...")
 
-        # 2. Try Grok Hosted Fallback (if key is present / xai selected / fallback enabled)
+        # 2. Try Cloud Gemini (free tier cloud provider)
+        has_gemini_key = bool(
+            settings.GEMINI_API_KEY
+            or os.environ.get("GEMINI_API_KEY")
+            or self.gemini.api_key
+        )
+        if (
+            has_gemini_key
+            and settings.AI_PROVIDER in ["gemini", "auto"]
+            and self.gemini.supports(required_capability)
+        ):
+            try:
+                if self.gemini.validate_privacy_gate(classification):
+                    return await self.gemini.generate_intelligence(evidence, task, classification)
+            except Exception as e:
+                logger.warning(f"Gemini cloud execution failed: {e}. Falling back...")
+
+        # 3. Try Grok Hosted Fallback (if key is present / xai selected / fallback enabled)
         has_grok_key = bool(
             settings.effective_xai_api_key
             or os.environ.get("XAI_API_KEY")
@@ -48,12 +71,14 @@ class ProviderFactory:
             except Exception as e:
                 logger.warning(f"Grok fallback failed: {e}. Falling back to degraded BART...")
 
-        # 3. Fallback to Degraded BART Mode (Summarize ONLY)
+        # 4. Fallback to Degraded BART Mode (Summarize ONLY)
         logger.info("Delegating task to BART Degraded Factual Summary provider...")
         return await self.degraded.generate_intelligence(evidence, task, classification)
 
     async def aclose(self) -> None:
         """Closes all provider clients."""
+        if hasattr(self.gemini, "aclose"):
+            await self.gemini.aclose()
         if hasattr(self.grok, "aclose"):
             await self.grok.aclose()
         if hasattr(self.gemma, "aclose"):

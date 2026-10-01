@@ -86,6 +86,13 @@ class Settings(BaseSettings):
     MAX_CONTEXT_TOKENS: int = 2048
     MAX_OUTPUT_TOKENS: int = 512
 
+    # Cloud AI Provider Settings (Gemini free tier)
+    AI_PROVIDER: str = "auto"  # auto | local | gemini | off
+    GEMINI_API_KEY: Optional[str] = None
+    GEMINI_MODEL: str = "gemini-2.5-flash"
+    GEMINI_TIMEOUT_S: float = 60.0
+    GEMINI_MAX_RETRIES: int = 3
+
     # Hosted Fallback Settings (Grok / xAI)
     ENABLE_GROK_FALLBACK: bool = False
     XAI_API_KEY: Optional[str] = None
