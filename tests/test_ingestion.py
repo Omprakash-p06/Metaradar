@@ -316,7 +316,7 @@ async def test_newsapi_connector(monkeypatch):
     state_params = state_insert_params(session)
     cursor = json.loads(state_params[0]["cursor"])
     assert cursor["quota_remaining"] == 95
-    assert cursor["quota_window_date"] == date.today().isoformat()
+    assert cursor["quota_window_date"] == datetime.now(timezone.utc).date().isoformat()
 
 
 @pytest.mark.asyncio
@@ -328,7 +328,7 @@ async def test_newsapi_quota_exhaustion(monkeypatch):
         source_id="newsapi",
         profile_id="haemophilia_market",
         cursor=json.dumps(
-            {"quota_remaining": 0, "quota_window_date": date.today().isoformat()}
+            {"quota_remaining": 0, "quota_window_date": datetime.now(timezone.utc).date().isoformat()}
         ),
         first_run_completed=True,
     )

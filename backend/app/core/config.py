@@ -28,7 +28,7 @@ class Settings(BaseSettings):
     # Database & Redis
     # Local-dev defaults only. Override via .env for any shared or deployed environment.
     DATABASE_URL: str = "postgresql+asyncpg://metaradar:metaradar_pass@localhost:5432/metaradar"
-    REDIS_URL: str = "redis://localhost:6379/0"
+    REDIS_URL: Optional[str] = "redis://localhost:6379/0"
 
     # Security & CORS
     APP_ENV: str = "development"

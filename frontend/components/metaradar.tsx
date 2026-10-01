@@ -1035,7 +1035,7 @@ export function CacheClearModal({
 }: {
   isOpen: boolean
   onClose: () => void
-  onSuccess: () => void
+  onSuccess: (status?: string) => void
 }) {
   const [clearing, setClearing] = useState(false)
 
@@ -1044,8 +1044,8 @@ export function CacheClearModal({
   const handleConfirm = async () => {
     setClearing(true)
     try {
-      await clearCache()
-      onSuccess()
+      const res = await clearCache()
+      onSuccess(res?.status)
       onClose()
     } catch (err) {
       console.error('Failed to clear cache:', err)
@@ -2018,8 +2018,12 @@ export function SettingsPage() {
     setMounted(true)
   }, [])
 
-  const handleCacheSuccess = () => {
-    setToast('Server cache cleared successfully.')
+  const handleCacheSuccess = (status?: string) => {
+    if (status === 'cache_unavailable') {
+      setToast('Redis cache is not active; in-memory cache clear simulated.')
+    } else {
+      setToast('Server cache cleared successfully.')
+    }
     setTimeout(() => setToast(null), 4000)
   }
 

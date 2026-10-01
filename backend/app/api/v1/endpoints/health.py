@@ -54,15 +54,20 @@ async def get_health_ready(db: AsyncSession = Depends(get_db)):
     except Exception as e:
         db_ok = False
 
-    # Check Redis (non-blocking)
-    try:
-        redis_client = Redis.from_url(settings.REDIS_URL, socket_timeout=2.0)
-        await redis_client.ping()
-        await redis_client.aclose()
-        redis_ok = True
-    except Exception as e:
+    # Check Redis (non-blocking, optional addon)
+    redis_url = (settings.REDIS_URL or "").strip()
+    if not redis_url or redis_url.lower() in ("none", "disabled", "off"):
         redis_ok = False
-        redis_warning = f"Redis cache unavailable: {str(e)}"
+        redis_warning = "Redis cache disabled/unset (optional)"
+    else:
+        try:
+            redis_client = Redis.from_url(redis_url, socket_timeout=2.0)
+            await redis_client.ping()
+            await redis_client.aclose()
+            redis_ok = True
+        except Exception as e:
+            redis_ok = False
+            redis_warning = f"Redis cache unavailable: {str(e)}"
 
     overall_status = "ready" if db_ok else "degraded"
     return HealthReadyResponse(
