@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
-from typing import List, Optional
+from typing import Any, List, Optional
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 _BACKEND_DIR = Path(__file__).resolve().parent.parent.parent
@@ -29,6 +30,18 @@ class Settings(BaseSettings):
     # Local-dev defaults only. Override via .env for any shared or deployed environment.
     DATABASE_URL: str = "postgresql+asyncpg://metaradar:metaradar_pass@localhost:5432/metaradar"
     REDIS_URL: Optional[str] = "redis://localhost:6379/0"
+
+    @field_validator("DATABASE_URL", mode="before")
+    @classmethod
+    def normalize_database_url(cls, v: Any) -> Any:
+        if isinstance(v, str):
+            v_stripped = v.strip()
+            # If user pasted postgresql://, postgres://, or postgresql+psycopg:// from Supabase/cloud console,
+            # auto-convert to postgresql+asyncpg:// to guarantee asyncpg is used.
+            for prefix in ("postgres://", "postgresql://", "postgresql+psycopg://", "postgresql+psycopg2://"):
+                if v_stripped.startswith(prefix):
+                    return "postgresql+asyncpg://" + v_stripped[len(prefix):]
+        return v
 
     # Security & CORS
     APP_ENV: str = "development"

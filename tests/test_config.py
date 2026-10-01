@@ -21,3 +21,19 @@ def test_app_settings_defaults():
     assert settings.PROJECT_NAME == "MetaRadar"
     assert settings.VERSION == "1.0.0"
     assert settings.EMBEDDING_DIMENSION == 384
+
+
+def test_database_url_normalization():
+    from app.core.config import Settings
+    s1 = Settings(DATABASE_URL="postgresql://user:pass@host:5432/db")
+    assert s1.DATABASE_URL == "postgresql+asyncpg://user:pass@host:5432/db"
+
+    s2 = Settings(DATABASE_URL="postgres://user:pass@host:5432/db")
+    assert s2.DATABASE_URL == "postgresql+asyncpg://user:pass@host:5432/db"
+
+    s3 = Settings(DATABASE_URL="postgresql+psycopg://user:pass@host:5432/db")
+    assert s3.DATABASE_URL == "postgresql+asyncpg://user:pass@host:5432/db"
+
+    s4 = Settings(DATABASE_URL="postgresql+asyncpg://user:pass@host:5432/db")
+    assert s4.DATABASE_URL == "postgresql+asyncpg://user:pass@host:5432/db"
+
