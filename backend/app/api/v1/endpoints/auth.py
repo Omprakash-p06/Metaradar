@@ -50,7 +50,7 @@ def _set_auth_cookies(response: Response, session_token: str, csrf_token: str) -
         max_age=settings.SESSION_LIFETIME_SECONDS,
         httponly=True,
         secure=settings.effective_session_cookie_secure,
-        samesite="lax",
+        samesite=settings.effective_session_cookie_samesite,
         path="/",
     )
     response.set_cookie(
@@ -59,15 +59,27 @@ def _set_auth_cookies(response: Response, session_token: str, csrf_token: str) -
         max_age=settings.SESSION_LIFETIME_SECONDS,
         httponly=False,  # Accessible to JavaScript for X-CSRF-Token header attachment
         secure=settings.effective_session_cookie_secure,
-        samesite="lax",
+        samesite=settings.effective_session_cookie_samesite,
         path="/",
     )
 
 
 def _clear_auth_cookies(response: Response) -> None:
     """Helper to clear session and CSRF cookies on logout."""
-    response.delete_cookie(key=SESSION_COOKIE_NAME, path="/", httponly=True, samesite="lax")
-    response.delete_cookie(key=CSRF_COOKIE_NAME, path="/", httponly=False, samesite="lax")
+    response.delete_cookie(
+        key=SESSION_COOKIE_NAME,
+        path="/",
+        httponly=True,
+        secure=settings.effective_session_cookie_secure,
+        samesite=settings.effective_session_cookie_samesite,
+    )
+    response.delete_cookie(
+        key=CSRF_COOKIE_NAME,
+        path="/",
+        httponly=False,
+        secure=settings.effective_session_cookie_secure,
+        samesite=settings.effective_session_cookie_samesite,
+    )
 
 
 @router.post("/login", response_model=UserMe, dependencies=[Depends(auth_rate_limit), Depends(require_preauth_origin)])
@@ -271,7 +283,7 @@ async def get_csrf_token(
                 max_age=settings.SESSION_LIFETIME_SECONDS,
                 httponly=False,
                 secure=settings.effective_session_cookie_secure,
-                samesite="lax",
+                samesite=settings.effective_session_cookie_samesite,
                 path="/",
             )
             return CsrfResponse(csrf_token=csrf_token)
@@ -284,7 +296,7 @@ async def get_csrf_token(
         max_age=3600,
         httponly=False,
         secure=settings.effective_session_cookie_secure,
-        samesite="lax",
+        samesite=settings.effective_session_cookie_samesite,
         path="/",
     )
     return CsrfResponse(csrf_token=anon_csrf)

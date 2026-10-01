@@ -36,6 +36,7 @@ class Settings(BaseSettings):
     SESSION_LIFETIME_SECONDS: int = 28800      # 8 hours absolute
     SESSION_IDLE_TIMEOUT_SECONDS: int = 3600   # 1 hour idle
     SESSION_COOKIE_SECURE: bool = False       # True in HTTPS production
+    SESSION_COOKIE_SAMESITE: Optional[str] = None  # None | "lax" | "strict" | "none" (defaults to "none" in prod, "lax" in dev)
     DEMO_MODE: bool = True                    # Enables /auth/demo-login
     DEMO_AUTO_SEED_USERS: bool = True
     DEMO_USER_PASSWORD: Optional[str] = None
@@ -57,8 +58,18 @@ class Settings(BaseSettings):
         return self.APP_ENV.lower() in ("production", "prod")
 
     @property
+    def effective_session_cookie_samesite(self) -> str:
+        if self.SESSION_COOKIE_SAMESITE:
+            val = self.SESSION_COOKIE_SAMESITE.lower().strip()
+            if val in ("lax", "strict", "none"):
+                return val
+        return "none" if self.is_production else "lax"
+
+    @property
     def effective_session_cookie_secure(self) -> bool:
         if self.SESSION_COOKIE_SECURE:
+            return True
+        if self.effective_session_cookie_samesite == "none":
             return True
         return self.is_production
 
@@ -147,6 +158,8 @@ def validate_production_settings() -> None:
             raise RuntimeError("FATAL: Cannot run in production with default SECRET_KEY.")
         if settings.DEMO_MODE:
             raise RuntimeError("FATAL: DEMO_MODE must be False in production.")
+        if any("*" in origin for origin in settings.cors_origins_list):
+            raise RuntimeError("FATAL: Wildcard CORS origin is forbidden in production.")
 
 
 def configuration_error_for(source_id: str) -> Optional[str]:

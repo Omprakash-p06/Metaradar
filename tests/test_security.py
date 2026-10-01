@@ -282,3 +282,67 @@ async def test_session_token_stored_as_sha256_hash():
     assert len(token_hash) == 64
     assert verify_session_token_hash(raw_token, token_hash) is True
     assert verify_session_token_hash("wrong-raw-token", token_hash) is False
+
+
+def test_cookie_samesite_and_secure_flags_configuration(monkeypatch):
+    """Verify effective_session_cookie_samesite and effective_session_cookie_secure."""
+    # Local development defaults: lax and unsecure
+    monkeypatch.setattr(settings, "APP_ENV", "development")
+    monkeypatch.setattr(settings, "SESSION_COOKIE_SAMESITE", None)
+    monkeypatch.setattr(settings, "SESSION_COOKIE_SECURE", False)
+    assert settings.effective_session_cookie_samesite == "lax"
+    assert settings.effective_session_cookie_secure is False
+
+    # Production defaults: none and secure
+    monkeypatch.setattr(settings, "APP_ENV", "production")
+    monkeypatch.setattr(settings, "SESSION_COOKIE_SAMESITE", None)
+    monkeypatch.setattr(settings, "SESSION_COOKIE_SECURE", False)
+    assert settings.effective_session_cookie_samesite == "none"
+    assert settings.effective_session_cookie_secure is True
+
+    # SameSite=None forces Secure=True even in non-production
+    monkeypatch.setattr(settings, "APP_ENV", "development")
+    monkeypatch.setattr(settings, "SESSION_COOKIE_SAMESITE", "none")
+    assert settings.effective_session_cookie_samesite == "none"
+    assert settings.effective_session_cookie_secure is True
+
+    # Explicit lax in production still enforces Secure=True
+    monkeypatch.setattr(settings, "APP_ENV", "production")
+    monkeypatch.setattr(settings, "SESSION_COOKIE_SAMESITE", "lax")
+    assert settings.effective_session_cookie_samesite == "lax"
+    assert settings.effective_session_cookie_secure is True
+
+
+@pytest.mark.asyncio
+async def test_split_origin_login_cookies_carry_samesite_none_and_secure(monkeypatch):
+    """Verify cross-origin login from Netlify origin issues SameSite=None; Secure cookies."""
+    netlify_origin = "https://metaradar-reach.netlify.app"
+    monkeypatch.setattr(settings, "CORS_ORIGINS", f"http://localhost:3000,{netlify_origin}")
+    monkeypatch.setattr(settings, "SESSION_COOKIE_SAMESITE", "none")
+
+    async with AsyncClient(
+        transport=ASGITransport(app=app),
+        base_url="http://localhost:8000",
+        headers={"Origin": netlify_origin}
+    ) as ac:
+        res = await ac.post("/api/v1/auth/demo-login", json={"role": "REGULATORY"})
+        assert res.status_code == 200
+
+        # Check raw Set-Cookie headers
+        raw_cookies = res.headers.get_list("set-cookie")
+        assert len(raw_cookies) >= 2
+
+        session_cookie_header = next((c for c in raw_cookies if "metaradar_session=" in c), None)
+        csrf_cookie_header = next((c for c in raw_cookies if "metaradar_csrf=" in c), None)
+
+        assert session_cookie_header is not None
+        assert csrf_cookie_header is not None
+
+        # Both cookies must have samesite=none and secure
+        assert "samesite=none" in session_cookie_header.lower()
+        assert "secure" in session_cookie_header.lower()
+        assert "httponly" in session_cookie_header.lower()
+
+        assert "samesite=none" in csrf_cookie_header.lower()
+        assert "secure" in csrf_cookie_header.lower()
+

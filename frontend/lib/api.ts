@@ -189,72 +189,205 @@ export async function fetchCsrfToken(signal?: AbortSignal): Promise<string> {
 }
 
 
+export interface BackendColdStartState {
+  isRetrying: boolean
+  attempt: number
+  maxAttempts: number
+  endpoint?: string
+  message?: string
+}
+
+type ColdStartListener = (state: BackendColdStartState) => void
+const coldStartListeners = new Set<ColdStartListener>()
+
+export function onBackendColdStart(listener: ColdStartListener): () => void {
+  coldStartListeners.add(listener)
+  return () => {
+    coldStartListeners.delete(listener)
+  }
+}
+
+function notifyColdStart(state: BackendColdStartState): void {
+  coldStartListeners.forEach((fn) => {
+    try {
+      fn(state)
+    } catch {}
+  })
+}
+
+function sleep(ms: number, signal?: AbortSignal): Promise<void> {
+  return new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      return reject(new DOMException('Aborted', 'AbortError'))
+    }
+    const timer = setTimeout(() => {
+      signal?.removeEventListener('abort', onAbort)
+      resolve()
+    }, ms)
+    const onAbort = () => {
+      clearTimeout(timer)
+      reject(new DOMException('Aborted', 'AbortError'))
+    }
+    signal?.addEventListener('abort', onAbort, { once: true })
+  })
+}
+
+function isColdStartStatus(status: number): boolean {
+  // Render free tier sleeping returns 502 Bad Gateway, 503 Service Unavailable, or 504 Gateway Timeout while waking
+  return status === 502 || status === 503 || status === 504
+}
+
+interface ApiFetchOptions extends RequestInit {
+  maxRetries?: number
+  retryDelayMs?: number
+  retryOnColdStart?: boolean
+}
+
 async function apiFetch<T>(
   endpoint: string,
-  options?: RequestInit,
+  options?: ApiFetchOptions,
   signal?: AbortSignal
 ): Promise<T> {
   const url = `${API_BASE}${endpoint}`
-  try {
-    const method = (options?.method || 'GET').toUpperCase()
-    const headers: Record<string, string> = {
-      'Content-Type': 'application/json',
-      ...(options?.headers as Record<string, string>),
-    }
+  const method = (options?.method || 'GET').toUpperCase()
+  const isIdempotent = ['GET', 'HEAD', 'OPTIONS'].includes(method)
+  const shouldRetryColdStart = options?.retryOnColdStart ?? isIdempotent
+  const maxRetries = options?.maxRetries ?? (shouldRetryColdStart ? 3 : 0)
+  const baseDelayMs = options?.retryDelayMs ?? 2000
 
-    // Attach CSRF token on mutating requests
-    if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
-      let csrf = getCsrfCookie() || cachedCsrfToken
-      if (!csrf && typeof window !== 'undefined') {
-        csrf = await fetchCsrfToken(signal)
+  let attempt = 0
+
+  while (true) {
+    try {
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        ...(options?.headers as Record<string, string>),
       }
-      if (csrf) {
-        headers['X-CSRF-Token'] = csrf
+
+      // Attach CSRF token on mutating requests
+      if (['POST', 'PUT', 'DELETE', 'PATCH'].includes(method)) {
+        let csrf = getCsrfCookie() || cachedCsrfToken
+        if (!csrf && typeof window !== 'undefined') {
+          csrf = await fetchCsrfToken(signal)
+        }
+        if (csrf) {
+          headers['X-CSRF-Token'] = csrf
+        }
       }
-    }
 
-    const fetchOptions: RequestInit = {
-      ...options,
-      credentials: 'include',
-      headers,
-    }
-    // Only attach signal when it is a valid AbortSignal instance
-    if (typeof AbortSignal !== 'undefined' && signal instanceof AbortSignal) {
-      fetchOptions.signal = signal
-    }
-    const res = await fetch(url, fetchOptions)
+      const fetchOptions: RequestInit = {
+        ...options,
+        credentials: 'include',
+        headers,
+      }
+      // Only attach signal when it is a valid AbortSignal instance
+      if (typeof AbortSignal !== 'undefined' && signal instanceof AbortSignal) {
+        fetchOptions.signal = signal
+      }
+      const res = await fetch(url, fetchOptions)
 
-    const requestId = res.headers.get('x-request-id') || undefined
+      const requestId = res.headers.get('x-request-id') || undefined
 
-    if (!res.ok) {
-      const errorText = await res.text().catch(() => '')
+      if (!res.ok) {
+        const errorText = await res.text().catch(() => '')
+
+        // Cold start retry check for 502, 503, 504 on free-tier sleep
+        if (shouldRetryColdStart && isColdStartStatus(res.status) && attempt < maxRetries && !signal?.aborted) {
+          attempt++
+          notifyColdStart({
+            isRetrying: true,
+            attempt,
+            maxAttempts: maxRetries,
+            endpoint,
+            message: `Backend is waking up from sleep (HTTP ${res.status}). Retrying (${attempt}/${maxRetries})...`,
+          })
+          await sleep(baseDelayMs * attempt, signal)
+          continue
+        }
+
+        throw new ApiError(
+          res.status,
+          res.statusText,
+          `Request to ${endpoint} failed (${res.status}): ${errorText || res.statusText}`,
+          res.status >= 500 || res.status === 429,
+          requestId,
+          endpoint
+        )
+      }
+
+      if (attempt > 0) {
+        notifyColdStart({ isRetrying: false, attempt: 0, maxAttempts: maxRetries, endpoint })
+      }
+
+      return (await res.json()) as T
+    } catch (err) {
+      if (err instanceof ApiError) {
+        if (attempt > 0) {
+          notifyColdStart({ isRetrying: false, attempt: 0, maxAttempts: maxRetries, endpoint })
+        }
+        throw err
+      }
+      if (err instanceof Error && err.name === 'AbortError') {
+        if (attempt > 0) {
+          notifyColdStart({ isRetrying: false, attempt: 0, maxAttempts: maxRetries, endpoint })
+        }
+        throw err
+      }
+
+      // Check for network timeout or connection refused while backend is waking
+      if (shouldRetryColdStart && attempt < maxRetries && !signal?.aborted) {
+        attempt++
+        notifyColdStart({
+          isRetrying: true,
+          attempt,
+          maxAttempts: maxRetries,
+          endpoint,
+          message: `Connecting to backend... Retrying (${attempt}/${maxRetries})...`,
+        })
+        try {
+          await sleep(baseDelayMs * attempt, signal)
+          continue
+        } catch (sleepErr) {
+          if (attempt > 0) {
+            notifyColdStart({ isRetrying: false, attempt: 0, maxAttempts: maxRetries, endpoint })
+          }
+          if (sleepErr instanceof Error && sleepErr.name === 'AbortError') {
+            throw sleepErr
+          }
+          throw new ApiError(
+            0,
+            'NetworkError',
+            sleepErr instanceof Error ? sleepErr.message : 'Network request aborted',
+            true,
+            undefined,
+            endpoint
+          )
+        }
+      }
+
+      if (attempt > 0) {
+        notifyColdStart({ isRetrying: false, attempt: 0, maxAttempts: maxRetries, endpoint })
+      }
+
       throw new ApiError(
-        res.status,
-        res.statusText,
-        `Request to ${endpoint} failed (${res.status}): ${errorText || res.statusText}`,
-        res.status >= 500 || res.status === 429,
-        requestId,
+        0,
+        'NetworkError',
+        err instanceof Error ? err.message : 'Network request failed',
+        true,
+        undefined,
         endpoint
       )
     }
-
-    return (await res.json()) as T
-  } catch (err) {
-    if (err instanceof ApiError) {
-      throw err
-    }
-    if (err instanceof Error && err.name === 'AbortError') {
-      throw err
-    }
-    throw new ApiError(
-      0,
-      'NetworkError',
-      err instanceof Error ? err.message : 'Network request failed',
-      true,
-      undefined,
-      endpoint
-    )
   }
+
+  throw new ApiError(
+    0,
+    'NetworkError',
+    'Network request failed',
+    true,
+    undefined,
+    endpoint
+  )
 }
 
 // ---------------------------------------------------------------------------
@@ -342,25 +475,53 @@ export async function fetchSignal(
   return mapSignal(data)
 }
 
-export async function askAthena(prompt: string, signal?: AbortSignal): Promise<AthenaResponse> {
-  const res = await apiFetch<any>(
-    '/athena',
-    {
-      method: 'POST',
-      body: JSON.stringify({ prompt }),
-    },
-    signal
-  )
+export async function askAthena(
+  prompt: string,
+  signal?: AbortSignal,
+  timeoutMs = 60000
+): Promise<AthenaResponse> {
+  const controller = new AbortController()
+  const timer = setTimeout(() => controller.abort(), timeoutMs)
 
-  return {
-    answer: res.answer,
-    confidence: res.confidence,
-    confidence_type: res.confidence_type,
-    evidence_count: res.evidence_count,
-    mode: res.mode,
-    model_metadata: res.model_metadata,
-    evidence: res.evidence || [],
-    response_type: res.response_type,
+  const onCallerAbort = () => {
+    clearTimeout(timer)
+    controller.abort()
+  }
+  if (signal) {
+    if (signal.aborted) {
+      clearTimeout(timer)
+      controller.abort()
+    } else {
+      signal.addEventListener('abort', onCallerAbort, { once: true })
+    }
+  }
+
+  try {
+    const res = await apiFetch<any>(
+      '/athena',
+      {
+        method: 'POST',
+        body: JSON.stringify({ prompt }),
+        retryOnColdStart: true,
+        maxRetries: 2,
+        retryDelayMs: 2500,
+      },
+      controller.signal
+    )
+
+    return {
+      answer: res.answer,
+      confidence: res.confidence,
+      confidence_type: res.confidence_type,
+      evidence_count: res.evidence_count,
+      mode: res.mode,
+      model_metadata: res.model_metadata,
+      evidence: res.evidence || [],
+      response_type: res.response_type,
+    }
+  } finally {
+    clearTimeout(timer)
+    signal?.removeEventListener('abort', onCallerAbort)
   }
 }
 
@@ -396,29 +557,99 @@ export async function streamAthena(
   if (csrf) {
     headers['X-CSRF-Token'] = csrf
   }
-  const res = await fetch(url, {
-    method: 'POST',
-    headers,
-    credentials: 'include',
-    body: JSON.stringify({ prompt }),
-    signal,
-  }).catch((err: unknown) => {
 
+  let res: Response | null = null
+  let attempt = 0
+  const maxRetries = 2
+  const baseDelayMs = 2500
 
-    if (err instanceof Error && err.name === 'AbortError') throw err
-    throw new ApiError(0, 'NetworkError', err instanceof Error ? err.message : 'Network request failed', true, undefined, '/athena/stream')
-  })
+  while (attempt <= maxRetries) {
+    try {
+      res = await fetch(url, {
+        method: 'POST',
+        headers,
+        credentials: 'include',
+        body: JSON.stringify({ prompt }),
+        signal,
+      })
 
-  if (!res.ok || !res.body) {
-    const errorText = await res.text().catch(() => '')
-    throw new ApiError(
-      res.status,
-      res.statusText,
-      `Request to /athena/stream failed (${res.status}): ${errorText || res.statusText}`,
-      res.status >= 500 || res.status === 429,
-      res.headers.get('x-request-id') || undefined,
-      '/athena/stream'
-    )
+      if (res.ok && res.body) {
+        if (attempt > 0) {
+          notifyColdStart({ isRetrying: false, attempt: 0, maxAttempts: maxRetries, endpoint: '/athena/stream' })
+        }
+        break
+      }
+
+      if (isColdStartStatus(res.status) && attempt < maxRetries && !signal?.aborted) {
+        attempt++
+        notifyColdStart({
+          isRetrying: true,
+          attempt,
+          maxAttempts: maxRetries,
+          endpoint: '/athena/stream',
+          message: `Backend is waking up for Athena stream (HTTP ${res.status}). Retrying (${attempt}/${maxRetries})...`,
+        })
+        await sleep(baseDelayMs * attempt, signal)
+        continue
+      }
+
+      const errorText = await res.text().catch(() => '')
+      throw new ApiError(
+        res.status,
+        res.statusText,
+        `Request to /athena/stream failed (${res.status}): ${errorText || res.statusText}`,
+        res.status >= 500 || res.status === 429,
+        res.headers.get('x-request-id') || undefined,
+        '/athena/stream'
+      )
+    } catch (err) {
+      if (err instanceof ApiError) {
+        if (attempt > 0) {
+          notifyColdStart({ isRetrying: false, attempt: 0, maxAttempts: maxRetries, endpoint: '/athena/stream' })
+        }
+        throw err
+      }
+      if (err instanceof Error && err.name === 'AbortError') {
+        if (attempt > 0) {
+          notifyColdStart({ isRetrying: false, attempt: 0, maxAttempts: maxRetries, endpoint: '/athena/stream' })
+        }
+        throw err
+      }
+
+      if (attempt < maxRetries && !signal?.aborted) {
+        attempt++
+        notifyColdStart({
+          isRetrying: true,
+          attempt,
+          maxAttempts: maxRetries,
+          endpoint: '/athena/stream',
+          message: `Connecting to Athena stream... Retrying (${attempt}/${maxRetries})...`,
+        })
+        try {
+          await sleep(baseDelayMs * attempt, signal)
+          continue
+        } catch {
+          break
+        }
+      }
+
+      if (attempt > 0) {
+        notifyColdStart({ isRetrying: false, attempt: 0, maxAttempts: maxRetries, endpoint: '/athena/stream' })
+      }
+
+      throw new ApiError(
+        0,
+        'NetworkError',
+        err instanceof Error ? err.message : 'Network request failed',
+        true,
+        undefined,
+        '/athena/stream'
+      )
+    }
+  }
+
+  if (!res || !res.ok || !res.body) {
+    throw new ApiError(0, 'NetworkError', 'Failed to establish stream connection', true, undefined, '/athena/stream')
   }
 
   const reader = res.body.getReader()

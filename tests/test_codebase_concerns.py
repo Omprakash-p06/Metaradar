@@ -109,6 +109,11 @@ def test_production_boot_guard(monkeypatch):
     monkeypatch.setattr(settings, "DEMO_MODE", False)
     validate_production_settings()  # No exception
 
+    # Production mode with wildcard CORS origin: raises RuntimeError
+    monkeypatch.setattr(settings, "CORS_ORIGINS", "https://example.netlify.app,*")
+    with pytest.raises(RuntimeError, match="FATAL: Wildcard CORS origin is forbidden in production"):
+        validate_production_settings()
+
 
 @pytest.mark.asyncio
 async def test_lifespan_wires_production_boot_guard(monkeypatch):
