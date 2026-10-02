@@ -28,6 +28,7 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
 LOGS_DIR = BASE_DIR / "logs"
+LOGS_DIR.mkdir(parents=True, exist_ok=True)
 
 # Global list of active child processes for cleanup
 active_processes: list[subprocess.Popen] = []
@@ -246,6 +247,7 @@ def start_backend(port: int) -> subprocess.Popen:
     env = os.environ.copy()
     env["PYTHONPATH"] = str(backend_dir)
 
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
     log_out = open(log_file, "a", encoding="utf-8")
     
     cmd = [
@@ -283,6 +285,7 @@ def start_frontend(port: int, backend_port: int = 8000) -> subprocess.Popen:
     env["NEXT_PUBLIC_API_URL"] = f"http://localhost:{backend_port}/api/v1"
     env["PORT"] = str(port)
 
+    LOGS_DIR.mkdir(parents=True, exist_ok=True)
     log_out = open(log_file, "a", encoding="utf-8")
 
     # In pnpm, flags after 'run dev' are forwarded directly to next dev.

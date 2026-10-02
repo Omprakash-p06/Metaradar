@@ -13,6 +13,7 @@ from app.models import (
     WatchItem,
     Development,
     Asset,
+    Company,
     Evidence,
     Signal,
     AuditLog,
