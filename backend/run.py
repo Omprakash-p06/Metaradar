@@ -21,6 +21,7 @@ def run_database_migrations():
         )
         if res.returncode == 0:
             print("[METARADAR DEPLOY] Database migrations successfully applied.")
+            run_database_seed()
         else:
             print(
                 f"[METARADAR DEPLOY WARNING] Alembic migrations returned non-zero exit code ({res.returncode}).\n"
@@ -30,6 +31,24 @@ def run_database_migrations():
             )
     except Exception as exc:
         print(f"[METARADAR DEPLOY WARNING] Failed to execute alembic migrations: {exc}", file=sys.stderr)
+
+
+def run_database_seed():
+    print("[METARADAR DEPLOY] Running idempotent database seed...")
+    try:
+        res = subprocess.run(
+            [sys.executable, "-m", "app.db.seed"],
+            check=False,
+        )
+        if res.returncode == 0:
+            print("[METARADAR DEPLOY] Database seed completed successfully.")
+        else:
+            print(
+                f"[METARADAR DEPLOY WARNING] Database seed returned non-zero exit code ({res.returncode}).",
+                file=sys.stderr,
+            )
+    except Exception as exc:
+        print(f"[METARADAR DEPLOY WARNING] Failed to execute database seed: {exc}", file=sys.stderr)
 
 
 def main():
