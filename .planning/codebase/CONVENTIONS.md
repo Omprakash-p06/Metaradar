@@ -1,122 +1,164 @@
 # Coding Conventions
 
-**Analysis Date:** 2026-10-01
+**Analysis Date:** 2026-10-02
 
 ## Naming Patterns
 
 **Files:**
-- Backend Python: `snake_case.py` — e.g. `backend/app/services/deduplication.py`, `backend/app/services/pii.py`, `backend/app/providers/factory.py`
-- Backend tests: `test_*.py` (enforced by `pytest.ini:python_files = test_*.py`) — e.g. `tests/test_foundation.py`, `tests/test_contract_drift.py`, `tests/test_rbac.py`
-- Test classes/functions: `Test*` / `test_*` (enforced by `pytest.ini:python_classes`, `python_functions`)
-- Frontend components: `kebab-case` dirs + `PascalCase.tsx` files — e.g. `frontend/components/signals/`, `frontend/components/confluence/`, `frontend/components/auth/`
-- Frontend routes (App Router): lowercase dirs under `frontend/app/` — `frontend/app/`, `frontend/app/login/`
-- Canonical contract: `frontend/types/api.ts` (generated template) + `contracts/openapi.json`
-- Scripts: `snake_case.py` for Python (`scripts/export_openapi.py`, `scripts/test_e2e_vertical_slice.py`), `kebab-case.mjs` for Node (`scripts/check-banned-classes.mjs`)
+- Backend Python: `snake_case.py` — `backend/app/services/deduplication.py`, `backend/app/services/provenance_urls.py`, `backend/app/core/domain_config.py`
+- Backend tests: `test_*.py` (enforced by `pytest.ini:python_files = test_*.py`) — `tests/test_foundation.py`, `tests/test_contract_drift.py`, `tests/test_rbac.py`
+- Alembic migrations: `NNN_snake_case_description.py` — `backend/alembic/versions/013_auth_user_role_session.py`, `.../015_approval_requests.py`
+- Frontend component dirs: `kebab-case/` — `frontend/components/missing-signals/`, `frontend/components/star-portal/`
+- Frontend components: `PascalCase.tsx` — `frontend/components/signals/SignalDetailWorkspace.tsx`
+- Frontend modules: `camelCase.ts` — `frontend/lib/api.ts`, `frontend/lib/mappers.ts`, `frontend/lib/errors.ts`
+- Scripts: `snake_case.py` for Python (`scripts/export_openapi.py`), `kebab-case.mjs` for Node (`scripts/check-banned-classes.mjs`)
 
-**Functions:**
-- Python: `snake_case` verbs — `generate_fingerprint()`, `chunk_text_for_embedding()` (`backend/app/services/deduplication.py`), `PIIPHIScrubber.scrub()`, `PIIPHIScrubber.classify_payload()` (`backend/app/services/pii.py`), `export_contracts()` (`scripts/export_openapi.py`)
-- TypeScript/React: `camelCase` for functions/handlers, `PascalCase` for components/interfaces — `Signal`, `ModelMetadata`, `ConfluenceAlertItem` in `frontend/types/api.ts`
+**Functions / methods:**
+- Python: `snake_case` — `resolve_canonical_provenance()`, `check_and_persist_bronze()`, `validate_production_settings()`
+- Private helpers: leading underscore — `SourceConnector._persist_bronze()`, `PipelineRunner._persist_state_to_db()`, `deps.py:_rate_buckets`
+- Async coroutines: no suffix; `async def` is the signal — `async def run_profile(...)`
+- React components: `PascalCase` — `SignalDetailWorkspace`, `EvidenceDrawer`, `ApprovalRequestModal`
+- React hooks: `use` prefix, defined in `frontend/lib/hooks.ts` or component scope — `useTheme`, `useAuth`
+- Frontend API functions: `camelCase` verb-first — `fetchSignals`, `fetchSignal`, `fetchConfluenceAlerts`, `getHealthReady`
+- Test functions: `test_snake_case` (enforced by `pytest.ini:python_functions = test_*`) — `test_gemini_capabilities_exclude_actions`
 
 **Variables:**
-- Python: `snake_case` locals; `UPPER_SNAKE` for module constants — `PATTERNS`, `COMPILED_PATTERNS`, `PUBLIC_SOURCES` in `backend/app/services/pii.py`
-- TypeScript interfaces: `PascalCase` types, `camelCase` fields + `snake_case` passthrough for backend parity (e.g. `signal_id`, `canonical_url` alongside `detectedAt`) in `frontend/types/api.ts`
-- Env vars: `UPPER_SNAKE` — `DATABASE_URL`, `REDIS_URL`, `LLM_PROVIDER`, `METARADAR_API_URL`, `METARADAR_ORIGIN`
+- Python: `snake_case`; DB/schema constants and enum-like values are `SCREAMING_SNAKE_CASE` or plain uppercase strings — `DataClassification.PUBLIC`, `"CONFIGURATION_ERROR"`, `"PENDING"`
+- Frontend: `camelCase`; module-level constants `SCREAMING_SNAKE_CASE` — `GEMINI_API_BASE` (Python), `BANNED_PATTERNS` (JS)
+- Booleans read as assertions: `has_gemini_key`, `is_production`, `is_synthetic`, `has_pii`, `new_records_discovered`, `failed_signal_ids`
 
 **Types:**
-- Backend: Pydantic v2 models in `backend/app/schemas/`; SQLAlchemy 2.0 models in `backend/app/models/`; enums `DataClassification`, `ProviderCapability` in `backend/app/providers/base.py`
-- Frontend: hand-maintained `export interface` / `export type` in `frontend/types/api.ts` (NOT codegen — see TESTING.md contract-sync caveat)
+- Python: `PascalCase` for classes/Pydantic models — `RawSignalPayload`, `ProfileRunResult`, `ConnectorStatus`, `MetaRadarState`
+- `TypedDict` for graph state; `BaseModel` for I/O contracts
+- Enums subclass `str, Enum` so values serialize as plain strings — `ProviderCapability(str, Enum)`, `DataClassification(str, Enum)`
+- TypeScript: `PascalCase` interfaces/types — `Signal`, `ScoreBreakdown`, `ModelMetadata`, `ApprovalRequest`
+- Union string literals for closed vocabularies — `export type DataMode = "live" | "recorded_demo" | ...`
 
 ## Code Style
 
 **Formatting:**
-- No Prettier/Black/Ruff config detected — style is enforced via ESLint (frontend) + review, not auto-formatter
-- Python: 4-space indent, double quotes, type hints on public functions (`-> Tuple[str, bool, Dict[str, int]]`), docstrings on service methods — follow `backend/app/services/pii.py` as exemplar
-- TypeScript: 2-space indent, single quotes in config (`frontend/eslint.config.mjs`), semicolons omitted in `frontend/next.config.mjs` style; path alias `@/*` maps to `frontend/*` (`frontend/tsconfig.json:paths`)
+- **Python:** no formatter is configured — no `black`, `ruff`, `isort`, or `pre-commit`. Style is maintained by hand-consistency.
+- **TypeScript/JS:** no Prettier or Biome config detected. Formatting is Next.js/ESLint-driven only.
+- Observed Python style: 4-space indent, double quotes for strings, docstrings on every module and public class, `f"..."` for interpolation, no trailing whitespace, no enforced line limit (some lines exceed 120 chars, e.g. in `backend/app/workflows/runner.py`).
 
 **Linting:**
-- Frontend: ESLint flat config with `@next/eslint-plugin-next` `recommended` + `core-web-vitals` rules — see `frontend/eslint.config.mjs`
-- Ignores: `.next/`, `node_modules/`, `out/`, `build/`, `src/` (note: legacy `src/` ignore; active tree is `frontend/app/`, `frontend/components/`, `frontend/types/`)
-- Backend: no flake8/ruff/mypy config detected — lint = import hygiene + pytest green
+- **Frontend:** `frontend/eslint.config.mjs` (flat config) using only `@next/eslint-plugin-next` with `recommended` + `core-web-vitals` rules. Ignores `.next/`, `node_modules/`, `out/`, `build/`, `src/`.
+- **Backend:** no linter (no `flake8`, `pylint`, `ruff`, `mypy`).
+- **Custom style gate:** `scripts/check-banned-classes.mjs`, invoked as `pnpm run check:banned-classes` and enforced in CI. It rejects, across `frontend/components/**/*.tsx`:
+  - `bg-slate-\d+`, `text-slate-\d+`, `border-slate-\d+` and their `dark:` variants
+  - Arbitrary hex colors: `bg-[#...]`, `text-[#...]`, `border-[#...]` and their `dark:` variants
+  - Comment lines are skipped; **`metaradar.tsx` is explicitly exempted** by filename check.
+  - **Use design tokens instead** — the intent is that all color comes from CSS variables/token utilities.
 
-**TypeScript Strictness (`frontend/tsconfig.json`):**
-- `strict: true`, `noEmit: true`, `target: ES6`, `moduleResolution: bundler`, `isolatedModules: true`, `jsx: react-jsx`, `skipLibCheck: true`
-- `include`: `**/*.ts`, `**/*.tsx`, `next-env.d.ts` — gate command is `pnpm exec tsc --noEmit` (0 errors required)
-- Do NOT weaken: no `strict: false`, no `skipLibCheck` abuse beyond existing setting
+**Type checking:**
+- `frontend/tsconfig.json`: `strict: true`, `noEmit: true`, `isolatedModules: true`, `moduleResolution: "bundler"`, `target: ES6`, `jsx: "react-jsx"`, path alias `@/* → ./*`
+- CI runs `pnpm exec tsc --noEmit` as a hard gate
+- Backend has no static type checker; Pydantic v2 validates at runtime
 
 ## Import Organization
 
-**Order (observed, enforce in new code):**
-1. Stdlib (`json`, `os`, `sys`, `re`, `pathlib`, `datetime`)
-2. Third-party (`fastapi`, `httpx`, `sqlalchemy`, `pytest`, `next/*`, `react`)
-3. First-party `app.*` / `@/*` — backend inserts `sys.path` for `backend` dir explicitly at top of every test/script:
-   ```python
-   base_dir = Path(__file__).resolve().parents[1]
-   sys.path.insert(0, str(base_dir / "backend"))
-   ```
-   Seen in `tests/conftest.py`, `tests/test_foundation.py`, `tests/test_contract_drift.py`, `scripts/export_openapi.py`, `scripts/test_e2e_vertical_slice.py`
+**Python order:**
+1. Standard library — `asyncio`, `json`, `logging`, `uuid`, `datetime`, `pathlib`, `typing`
+2. Third-party — `httpx`, `sqlalchemy`, `pydantic`, `pytest`, `structlog`, `bcrypt`, `langgraph`
+3. First-party `app.*` — `from app.core.config import settings`, `from app.models import Signal`
 
-**Path Aliases:**
-- Frontend: `@/*` → `frontend/*` (`frontend/tsconfig.json`)
-- Backend: absolute `app.*` imports from `backend/` root (requires `PYTHONPATH=backend:.` — see CI `ci.yml` env)
+Separated by blank lines. First-party imports are always absolute (`app.services.…`), never relative. `sys.path` bootstrapping in tests uses `base_dir = Path(__file__).resolve().parents[1]; sys.path.insert(0, str(base_dir / "backend"))` before `app.*` imports (mirrors `pytest.ini:pythonpath = backend .`).
 
-## Branching & Commits (mandatory per `AGENTS.md` + `docs/rules/DEVELOPMENT_WORKFLOW.md`)
+**TypeScript order:**
+1. `import type { ... } from '@/types/api'` — types first
+2. Relative module imports — `./errors`, `./mappers`
+3. Package imports as needed
 
-**Branches — never push to `main`:**
-- `feature/*` — new functional feature (e.g. `feature/phase-13-reach-poster-and-concerns`)
-- `fix/*` — bug resolution (e.g. `fix/concerns-md-audit-fixes`)
-- `refactor/*` — optimization without structural change
-- `security/*` — security patches / scrubber rules
-- `docs/*` — architectural documentation updates
-- Lifecycle: `PLAN → BRANCH → IMPLEMENT → TEST → VERIFY → DOCUMENT → COMMIT → PR → CI → MERGE`
+**Path aliases:**
+- `@/*` maps to the `frontend/` root (`frontend/tsconfig.json`)
+- Always used for cross-directory imports — `@/components/ui/SpecularButton`, `@/context/AuthContext`, `@/types/api`
+- Relative imports (`./`, `../`) reserved for siblings in the same directory
 
-**Commit message style (enforced by history — follow it):**
-- Conventional prefix: `feat(phase-N): …`, `fix(scope): …`, `docs(scope): …` — e.g. `4280ba9 fix(phase-13): remediate all 14 code review findings…`, `37b8f4f feat(phase-13): REACH 2026 scientific poster suite…`
-- Atomic commits, one concern per commit; PR required with `.github/pull_request_template.md` checklist
-
-## Banned Patterns (CI-blocking or AGENTS.md-forbidden)
-
-**Frontend CSS gate — `scripts/check-banned-classes.mjs` (runs as `pnpm run check:banned-classes`):**
-- Banned in `frontend/components/**/*.tsx` (except `metaradar.tsx` which is exempt): `bg-slate-*`, `text-slate-*`, `border-slate-*` and `dark:` variants; arbitrary hex `bg-[#…]`, `text-[#…]`, `border-[#…]` and `dark:` variants
-- Use design-system tokens instead; gate prints `BANNED-CLASS-GATE` violations with `file:line` and exits 1
-
-**Global suppressions — NEVER use (per `AGENTS.md` Core Rules 4–5):**
-- `// @ts-ignore`, `ignoreBuildErrors` in `next.config.mjs`, silent `try...except: pass` to hide failures
-- Never fabricate test output, health status, or mock/synthetic data without explicit `is_synthetic` / `DataMode="synthetic"` labeling (`frontend/types/api.ts:DataMode`)
-- Never commit secrets: `.env`, `*_credentials.json`, `*.pem/*.key`, tokens — existence only, never content (see `SECURITY_STANDARDS.md`)
-
-**Backend hygiene:**
-- No bare `except:` swallowing domain errors; the only tolerated `except Exception: pass` is test-cleanup isolation in `tests/conftest.py:cleanup_db_connections`
-- UTC everywhere: `datetime.now(timezone.utc)` — see `tests/test_foundation.py:31`, `scripts/test_e2e_vertical_slice.py:43`
-- PII boundary: scrub via `PIIPHIScrubber.scrub()` before persistence/external transmission; gate classification via `validate_privacy_gate` (`docs/rules/SECURITY_STANDARDS.md`)
+**Note:** `'use client'` is the first line of every interactive component (e.g. `frontend/components/metaradar.tsx`).
 
 ## Error Handling
 
-- Backend: raise HTTP exceptions with explicit status codes; terminal FSM states return `409` on illegal re-mutation (verified in `scripts/test_e2e_vertical_slice.py:296-298`)
-- Frontend: `async/await` with typed responses from `frontend/types/api.ts`; surface `provenance_status` / `confidence_type` honestly in UI
-- Fallback chain only: Local Gemma → Grok (privacy-gated) → Degraded BART factual mode — never crash hard (`tests/test_foundation.py:test_provider_execution_and_degraded_bart_fallback`)
+**Patterns:**
+- **Typed domain exceptions** at layer boundaries:
+  - `ConnectorFetchError` (`backend/app/connectors/base.py`) — raised only after bounded retries are exhausted
+  - `GeminiUnavailableError` (`backend/app/providers/gemini.py`) — signals "fall through the chain"
+  - `OllamaUnavailableError` (`backend/app/providers/gemma.py`), aliased as `LocalLLMUnavailableError`
+  - `EmbeddingError` (`backend/app/services/embeddings.py`) — explicitly never returns a silent zero-vector
+- **Provider chain contract:** providers raise typed errors; `ProviderFactory.execute_task()` catches `Exception`, logs `logger.warning(...)`, and tries the next provider (`backend/app/providers/factory.py`)
+- **`PermissionError` is the privacy violation signal** — raised by `validate_privacy_gate()` failures and by the audit-immutability ORM events
+- **HTTP errors via `HTTPException`** with explicit codes: 401 unauth/expired session, 403 RBAC/CSRF/origin, 429 rate limit (`backend/app/api/deps.py`)
+- **Never-crash scheduler:** `_connector_worker_loop` catches `asyncio.CancelledError` (re-raises to break) and generic `Exception` (logs, increments `consecutive_failures`, backs off) so one bad source cannot kill the loop
+- **Startup guard:** `validate_production_settings()` raises `RuntimeError` for insecure production config — this is the one place failing hard is intentional
+- **`try/except Exception` with a logged warning** is common in DB-persistence paths (see CONCERNS.md for the risk this carries)
+- **Frontend:** `ApiError` class in `frontend/lib/errors.ts`; components render `frontend/components/common/ErrorState.tsx` on failure and `EmptyState.tsx` on no data
 
 ## Logging
 
-**Framework:** `structlog` (backend, see `backend/requirements.txt`) + `asgi-correlation-id` for request IDs
-**Patterns:** structured events with `pipeline_run_id`, `request_id`, `duration_ms` — see `frontend/types/api.ts:ActivityLogItem`
+**Framework:**
+- Backend: `structlog` (JSON rendering configured once in `backend/app/core/logging.py:configure_structlog(json_logs=True)`)
+- Module loggers: `logger = structlog.get_logger("metaradar.main")` for the app, `logger = logging.getLogger(__name__)` in most modules, and `get_logger("gemini_provider")` from `app.core.logging` in newer providers
+- Frontend: `console` only; no logging library
 
-## Comments & Docs
+**Patterns:**
+- **Structured key-value over interpolation:** `logger.info("domain_config_loaded", disease_area=..., version=...)` — pass fields as kwargs, not f-strings, so JSON output stays queryable
+- **Event-name-first messages** in newer code: `"service_startup"`, `"service_shutdown"`, `"domain_config_load_failed"`
+- **`exc_info=True`** on genuine failures: `logger.error(..., exc_info=True)` in `backend/app/services/scheduler.py`
+- **Bracketed console-style tags in deploy/runtime paths:** `[METARADAR DEPLOY]`, `[PIPELINE]` (`backend/run.py`, `backend/app/workflows/runner.py`)
+- **Beyond-debug detail uses `logger.debug`** — e.g. `logger.debug("Startup auto-seed skipped/failed: %s", e)` in `backend/app/main.py`
+- **Never log secrets:** use `redact_text()` / `redact_mapping()` from `backend/app/core/redact.py` before persisting or emitting error detail (see `SourceConnector._fetch_with_retry`)
 
-- Python: docstrings on services/providers; honesty notes where behavior is surprising — exemplar is the contract caveat docstring in `scripts/export_openapi.py:14-23`
-- TypeScript: file-header comment on canonical contract explaining manual-sync process (`frontend/types/api.ts` header emitted by `scripts/export_openapi.py:39-43`)
-- Skip comment lines starting `//`, `/*`, `*` are ignored by the banned-class scanner — keep them meaningful, not decorative
+## Comments
 
-## Function & Module Design
+**When to comment:**
+- Module docstrings are mandatory on backend modules and state the contract — e.g. `backend/app/providers/degraded.py`, `backend/app/services/embeddings.py`
+- Non-obvious *why* decisions carry a short rationale, often with a spec/decision ID in parentheses: `(D-22)`, `(D-26)`, `(REQ-P15-07)`, `(OWASP Login CSRF defense)`, `(IN-02, WR-03)`
+- Reducer semantics are documented inline — `backend/app/workflows/state.py:replace_list` explains at length why `operator.add` would duplicate signals
+- Inline "NOTE:" for deliberate omissions — `backend/app/providers/gemini.py` marks the `GENERATE_ACTIONS` exclusion
 
-**Size:** single-responsibility services — one file per domain (`auth_service.py`, `calibration.py`, `confluence.py`, `deduplication.py`, `pii.py`, `redteam.py`, `routing.py`, `scheduler.py`, `scoring.py` in `backend/app/services/`)
-**Parameters:** keyword-friendly defaults (`batch_size`, `calibration_weights` in `PipelineRunRequest`); Pydantic validation at API boundary
-**Return values:** tuples `(redacted, has_pii, counts)` for scrub; dicts with `model_metadata` for providers; typed Pydantic responses at endpoints
-**Exports:** explicit `export interface` / `export type` in TS; plain module-level functions/classes in Python — no barrel-file re-export pattern detected, import from owning module directly
+**TSDoc/JSDoc:**
+- Not used. Frontend files rely on TypeScript types and descriptive names; comments appear as short `//` notes.
+- `frontend/types/api.ts` opens with a multi-line contract note explaining that the file is a hand-maintained template re-emitted by `scripts/export_openapi.py`.
 
-## Definition of Done Reference
+## Function Design
 
-Every change must satisfy `docs/rules/DEFINITION_OF_DONE.md` before DONE: requirements aligned, implementation clean, `tsc` 0 errors, `eslint` 0 errors, `next build` clean, pytest clean, contract sync done, PII/privacy verified, `docker compose config` clean, CI green, docs updated, feature branch + atomic commit + PR. If any gate cannot be verified → status is **BLOCKED**.
+**Size:**
+- Service/domain functions are short and single-purpose (`backend/app/services/scoring.py`, `routing.py`)
+- Endpoint handlers run long where logic is inherently sequential — `backend/app/api/v1/endpoints/signals.py` at 1,826 lines and `.../intelligence.py` at 674 lines are the outliers
+- `PipelineRunner._persist_state_to_db()` is a single large method handling all persistence phases
+
+**Parameters:**
+- Keyword arguments with defaults for optional behaviour — `async def run(self, batch_size: int = 50, pipeline_run_id: Optional[str] = None, ...)`
+- Optional params typed `Optional[T] = None`, never bare `= None` without a type
+- Settings-like objects are read from the module-level `settings`, not threaded through signatures
+
+**Return Values:**
+- Pydantic models for I/O boundaries (`RawSignalPayload`, `ConnectorStatus`, `ProfileRunResult`)
+- Plain `Dict[str, Any]` for internal pipeline payloads
+- `List[Dict[str, Any]]` for graph state channels
+- Tuple returns for multi-value results, documented in the docstring — `PIIPHIScrubber.scrub()` returns `(redacted_text, is_scrubbed, match_counts)`
+- `run_profile()` returns a `ProfileRunResult` and never raises for expected upstream failure — status is data
+
+## Module Design
+
+**Exports:**
+- Backend: no `__all__` except in registries — `backend/app/connectors/__init__.py` defines `__all__` alongside `ALL_CONNECTORS`
+- Python modules export plain top-level functions and classes; simple "pure function" modules like `backend/app/services/scoring.py` expose a module-level singleton (`priority_scorer`) alongside the class
+- Frontend: barrel files are **not** used. Components are imported by full path — `@/components/signals/SignalCard`
+
+**Singletons:**
+- Module-level instance created and exported at import time: `settings = Settings()`, `provider_factory = ProviderFactory()`, `embedding_service = EmbeddingService()` (backend), `app = FastAPI(...)`
+- Class-level singletons where construction is expensive: `SourceScheduler.get_instance()` (`backend/app/services/scheduler.py`)
+
+**Barrel Files:**
+- Not used anywhere in the frontend.
+- Backend package `__init__.py` files exist but re-export sparingly — `backend/app/connectors/__init__.py` (registry) and `backend/app/workflows/nodes/__init__.py` (node callables) are the meaningful ones.
+
+**Registry pattern:**
+- Connectors: `ALL_CONNECTORS` list in `backend/app/connectors/__init__.py`
+- Red-team rules: `REDTEAM_RULES` dict in `backend/app/services/redteam.py`
+- Routers: explicit `app.include_router(...)` calls in `backend/app/main.py`
+- Domain rules/tables: data-driven via `config/haemophilia.yaml` — **prefer extending the YAML over adding Python branches**
 
 ---
 
-*Convention analysis: 2026-10-01*
+*Convention analysis: 2026-10-02*

@@ -1,209 +1,265 @@
 # Codebase Structure
 
-**Analysis Date:** 2026-10-01
+**Analysis Date:** 2026-10-02
 
 ## Directory Layout
 
-```
-metaradar/
-├── start.py                # Unified launcher (Docker + migrate + backend + frontend)
-├── docker-compose.yml      # Postgres/pgvector, Redis, backend, frontend, Ollama services
-├── contracts/              # Canonical API contract (openapi.json)
-├── config/                 # Domain config (haemophilia.yaml)
-├── data/                   # Sample/fixture signals (synthetic_signals.json)
-├── models/                 # Local GGUF reasoning model + README
-├── scripts/                # Export, parity, E2E, pitch/deck utilities
-├── tests/                  # Root pytest suite (API, contract, security, workspaces)
-├── backend/                # FastAPI modular monolith
-│   ├── app/main.py         # ASGI entry point + router mounts
-│   ├── app/api/            # Routers + shared auth deps
-│   ├── app/services/       # Business logic (scoring, routing, ingestion…)
-│   ├── app/workflows/      # LangGraph pipeline (graph/state/runner/nodes)
-│   ├── app/connectors/     # Per-source ingest adapters
-│   ├── app/providers/      # LLM backends + fallback factory
-│   ├── app/models/         # SQLAlchemy ORM tables
-│   ├── app/schemas/        # Pydantic request/response contracts
-│   ├── app/core/           # Settings, security, middleware, logging
-│   ├── app/db/             # Async session + seed
-│   └── alembic/            # Versioned DB migrations (001–015)
-├── frontend/               # Next.js 16 App Router SPA
-│   ├── app/                # Routes ([section], signals/[signalId], login)
-│   ├── components/         # Workspace + Shell + UI components
-│   ├── lib/                # api.ts client, mappers, hooks, errors
-│   ├── context/            # AuthContext session state
-│   └── types/              # Hand-maintained TS API contract
-├── docs/rules/             # Authoritative engineering standards (incl. ARCHITECTURE_RULES.md)
-└── .planning/codebase/     # Generated codebase maps (this file)
+```text
+MetaRadar/
+├── backend/
+│   ├── app/
+│   │   ├── api/         # deps.py + v1/endpoints/ (11 modules, 47 handlers)
+│   │   ├── connectors/  # SourceConnector base + 8 source adapters
+│   │   ├── core/        # config, security, logging, middleware, redact, domain_config
+│   │   ├── db/          # async session factory, advisory locks, seeders
+│   │   ├── models/      # SQLAlchemy ORM (22 tables) + auth models
+│   │   ├── providers/   # base, gemma, gemini, grok, degraded, factory
+│   │   ├── schemas/     # Pydantic v2 request/response contracts
+│   │   ├── services/    # 19 domain-logic modules
+│   │   └── workflows/   # LangGraph graph, state, runner, nodes/ (11)
+│   ├── alembic/         # alembic.ini + versions/ (15 migrations)
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   └── run.py           # production entrypoint (migrate then serve)
+├── frontend/
+│   ├── app/             # App Router: layout, login/, [section]/, signals/[signalId]/
+│   ├── components/      # 13 workspace + shared UI components
+│   ├── context/         # AuthContext.tsx
+│   ├── lib/             # api.ts, errors.ts, hooks.ts, mappers.ts, utils.ts
+│   ├── public/          # icon.svg, icon-light.svg, silhouette-avatar.svg
+│   ├── types/           # api.ts (canonical hand-maintained contract)
+│   ├── package.json     # pnpm 9.15.5, Next 16.3.0, React 19
+│   └── pnpm-lock.yaml
+├── config/              # haemophilia.yaml — domain ontology (339 lines)
+├── contracts/           # openapi.json (generated, ~183 KB)
+├── data/                # synthetic_signals.json fixtures
+├── docs/                # 11 numbered design docs + rules/ + DEPLOYMENT.md
+├── models/              # local GGUF weights (gitignored except .gitkeep/README)
+├── pitch/               # PITCH.md, SVG/PNG diagrams, slide decks
+├── poster/              # generate_poster.py + poster assets
+├── scripts/             # launchers, OpenAPI export, eval scripts, style gate
+├── tests/               # 36 pytest modules (~186 tests)
+├── .agents/rules/       # mirrored engineering standards (tracked)
+├── .github/workflows/   # ci.yml
+├── .planning/           # GSD project memory (STATE, ROADMAP, phases, codebase/)
+├── docker-compose.yml   # postgres, redis, backend, backend-gpu, frontend, ollama
+├── netlify.toml         # frontend deploy config
+├── render.yaml          # backend deploy blueprint
+├── pytest.ini           # asyncio_mode=auto, testpaths=tests
+├── setup.py             # interactive env bootstrap wizard
+└── start.py             # unified local launcher
 ```
 
 ## Directory Purposes
 
-**`backend/`:**
-- Purpose: Async FastAPI backend — API, domain logic, pipeline, persistence.
-- Contains: `app/` source tree, `alembic/` migrations, `tests/`, `Dockerfile`, `requirements.txt`.
-- Key files: `backend/app/main.py`, `backend/app/api/v1/endpoints/*.py`, `backend/app/workflows/graph.py`, `backend/app/db/session.py`
-
 **`backend/app/api/`:**
-- Purpose: HTTP boundary. Versioned routers plus shared dependencies.
-- Contains: `v1/endpoints/*.py` (11 routers), `deps.py` (auth/RBAC/CSRF/rate-limit).
-- Key files: `backend/app/api/v1/endpoints/signals.py`, `backend/app/api/v1/endpoints/pipeline.py`, `backend/app/api/v1/endpoints/search.py`, `backend/app/api/v1/endpoints/intelligence.py`, `backend/app/api/v1/endpoints/ingestion.py`, `backend/app/api/v1/endpoints/health.py`, `backend/app/api/deps.py`
+- Purpose: HTTP boundary
+- Contains: `deps.py` (auth, RBAC, CSRF, origin validation, rate limiting) and `v1/endpoints/`
+- Key files: `backend/app/api/deps.py`, `backend/app/api/v1/endpoints/signals.py` (1,826 lines — the largest module), `backend/app/api/v1/endpoints/intelligence.py`, `backend/app/api/v1/endpoints/auth.py`
 
 **`backend/app/services/`:**
-- Purpose: Business logic — where domain rules live. Called by routers, runner, and nodes.
-- Contains: 17 service modules (no subdirectories).
-- Key files: `backend/app/services/scoring.py`, `backend/app/services/routing.py`, `backend/app/services/relevance.py`, `backend/app/services/calibration.py`, `backend/app/services/ingestion.py`, `backend/app/services/scheduler.py`, `backend/app/services/vector_query.py`, `backend/app/services/embeddings.py`, `backend/app/services/deduplication.py`, `backend/app/services/auth_service.py`
+- Purpose: framework-agnostic domain logic; the only place business rules should live
+- Contains: 19 modules
+- Key files: `backend/app/services/scoring.py`, `backend/app/services/pii.py`, `backend/app/services/deduplication.py`, `backend/app/services/embeddings.py`, `backend/app/services/confluence.py`, `backend/app/services/redteam.py`, `backend/app/services/routing.py`, `backend/app/services/calibration.py`, `backend/app/services/scheduler.py`
 
 **`backend/app/workflows/`:**
-- Purpose: LangGraph intelligence pipeline definition + execution.
-- Contains: `graph.py`, `state.py`, `runner.py`, `nodes/*.py` (11 stage modules).
-- Key files: `backend/app/workflows/graph.py`, `backend/app/workflows/state.py`, `backend/app/workflows/runner.py`
-
-**`backend/app/connectors/`:**
-- Purpose: Source adapters that fetch + normalize external data into bronze rows.
-- Contains: `base.py` + one module per source + `__init__.py` registry.
-- Key files: `backend/app/connectors/base.py`, `backend/app/connectors/__init__.py` (`ALL_CONNECTORS`), `backend/app/connectors/pubmed.py`, `backend/app/connectors/clinical_trials.py`, `backend/app/connectors/fda.py`, `backend/app/connectors/ema.py`, `backend/app/connectors/newsapi.py`
+- Purpose: the LangGraph intelligence engine
+- Contains: `graph.py`, `state.py`, `runner.py`, `nodes/` (11 node modules)
+- Key files: `backend/app/workflows/graph.py`, `backend/app/workflows/state.py`, `backend/app/workflows/runner.py`, `backend/app/workflows/nodes/synthesize.py`
 
 **`backend/app/providers/`:**
-- Purpose: LLM backends behind a privacy-gated fallback chain.
-- Contains: `base.py`, `gemma.py`, `grok.py`, `degraded.py`, `factory.py`.
-- Key files: `backend/app/providers/factory.py`, `backend/app/providers/base.py`
+- Purpose: LLM abstraction with capability negotiation and privacy gating
+- Contains: abstract base, 3 real providers, 1 degraded provider, 1 factory
+- Key files: `backend/app/providers/base.py`, `backend/app/providers/factory.py`, `backend/app/providers/gemini.py`, `backend/app/providers/grok.py`
 
-**`backend/app/models/`:**
-- Purpose: SQLAlchemy ORM — single-module domain tables plus auth submodule.
-- Contains: `__init__.py` (all tables), `auth.py` (`User`, `Session`).
-- Key files: `backend/app/models/__init__.py`, `backend/app/models/auth.py`
-
-**`backend/app/schemas/`:**
-- Purpose: Pydantic wire contracts mirroring `contracts/openapi.json`.
-- Contains: `__init__.py`, `auth.py`, `intelligence.py`, `registry.py`.
-- Key files: `backend/app/schemas/__init__.py`, `backend/app/schemas/intelligence.py`
+**`backend/app/connectors/`:**
+- Purpose: one adapter per monitored external source
+- Contains: `base.py` + 8 adapters + registry
+- Key files: `backend/app/connectors/base.py`, `backend/app/connectors/__init__.py` (`ALL_CONNECTORS`)
 
 **`backend/app/core/`:**
-- Purpose: Cross-cutting backend infrastructure.
-- Contains: Settings, security, middleware, logging, redaction, domain config.
-- Key files: `backend/app/core/config.py`, `backend/app/core/security.py`, `backend/app/core/middleware.py`, `backend/app/core/logging.py`, `backend/app/core/domain_config.py`
+- Purpose: cross-cutting infrastructure
+- Contains: `config.py`, `domain_config.py`, `security.py`, `logging.py`, `middleware.py`, `redact.py`
+- Key files: `backend/app/core/config.py` (single `settings` object; production guard)
 
-**`backend/app/db/`:**
-- Purpose: Async DB access + startup seed data.
-- Contains: `session.py` (engine, `AsyncSessionLocal`, `get_db`), `seed.py`.
-- Key files: `backend/app/db/session.py`, `backend/app/db/seed.py`
-
-**`backend/alembic/`:**
-- Purpose: Versioned Postgres schema migrations (15 revisions, `001_initial_v51_schema.py` → `015_approval_requests.py`).
-- Contains: `alembic.ini`, `env.py`, `versions/*.py`.
-- Key files: `backend/alembic.ini`, `backend/alembic/env.py`, `backend/alembic/versions/`
-
-**`frontend/app/`:**
-- Purpose: Next.js App Router routes. Canonical layout per `docs/rules/ARCHITECTURE_RULES.md`.
-- Contains: `page.tsx` (root → `/login` redirect), `layout.tsx` (providers), `[section]/page.tsx` (workspace switch), `signals/[signalId]/page.tsx` (detail), `login/`.
-- Key files: `frontend/app/page.tsx`, `frontend/app/layout.tsx`, `frontend/app/[section]/page.tsx`, `frontend/app/signals/[signalId]/page.tsx`, `frontend/app/login/page.tsx`
+**`backend/app/models/`:**
+- Purpose: ORM schema — the system of record for shape
+- Contains: `__init__.py` (22 tables) and `auth.py` (`User`, `Session`)
+- Key files: `backend/app/models/__init__.py`
 
 **`frontend/components/`:**
-- Purpose: All UI — Shell chrome, per-domain workspaces, shared primitives.
-- Contains: 16 subdirectories + `metaradar.tsx` barrel-adjacent Shell module.
-- Key files: `frontend/components/metaradar.tsx` (Shell + pages), `frontend/components/signals/SignalList.tsx`, `frontend/components/signals/SignalDetailWorkspace.tsx`, `frontend/components/intelligence/AthenaWorkspace.tsx`, `frontend/components/confluence/ConfluenceWorkspace.tsx`, `frontend/components/contradictions/ContradictionWorkspace.tsx`
+- Purpose: all UI, grouped by workspace domain
+- Contains: `common/`, `auth/`, `signals/`, `confluence/`, `contradictions/`, `developments/`, `missing-signals/`, `functions/`, `intelligence/`, `calibration/`, `observability/`, `sources/`, `settings/`, `effects/`, `theme/`, `ui/`, plus `metaradar.tsx`
+- Key files: `frontend/components/metaradar.tsx` (shell, 2,612 lines), `frontend/components/signals/SignalDetailWorkspace.tsx`, `frontend/components/common/EvidenceDrawer.tsx`
 
 **`frontend/lib/`:**
-- Purpose: Frontend service layer — API client + normalization + hooks.
-- Contains: `api.ts` (908-line typed client), `mappers.ts`, `errors.ts`, `hooks.ts`, `utils.ts`.
-- Key files: `frontend/lib/api.ts`, `frontend/lib/mappers.ts`, `frontend/lib/errors.ts`
+- Purpose: data access and normalization between the API and components
+- Contains: `api.ts`, `errors.ts`, `hooks.ts`, `mappers.ts`, `utils.ts`
+- Key files: `frontend/lib/api.ts` (1,139 lines — all fetches + SSE), `frontend/lib/mappers.ts`
 
-**`frontend/context/` + `frontend/types/`:**
-- Purpose: Session state (`AuthContext.tsx`) and hand-maintained API types (`api.ts`).
-- Key files: `frontend/context/AuthContext.tsx`, `frontend/types/api.ts`
+**`frontend/types/`:**
+- Purpose: the canonical TypeScript API contract
+- Contains: one file
+- Key files: `frontend/types/api.ts` — a template duplicated verbatim inside `scripts/export_openapi.py`
 
-**`contracts/`:**
-- Purpose: Canonical OpenAPI snapshot consumed by parity/contract tests.
-- Contains: `contracts/openapi.json` (emitted by `scripts/export_openapi.py`).
-- Key files: `contracts/openapi.json`
+**`config/`:**
+- Purpose: domain knowledge as data, not code
+- Contains: `haemophilia.yaml` (diseases, assets, signal types, lifecycle stages, confluence rules, functions, routing matrix, source tiers, connectors, lag thresholds)
+- Key files: `config/haemophilia.yaml`
 
-**`config/` + `data/` + `models/`:**
-- Purpose: Domain config, fixture data, local model weights.
-- Key files: `config/haemophilia.yaml`, `data/synthetic_signals.json`, `backend/app/data/synthetic_signals.json`, `models/gemma-3-4b-it-Q4_K_M.gguf`, `models/README.md`
+**`tests/`:**
+- Purpose: pytest suite
+- Contains: 36 `test_*.py` modules + `conftest.py`
+- Key files: `tests/conftest.py` (`cleanup_db_connections` autouse fixture), `tests/test_privacy_boundary.py`, `tests/test_contract_drift.py`
 
-**`tests/` + `backend/tests/` + `scripts/`:**
-- Purpose: Root pytest suite (30+ files), backend login test, operational scripts (export, parity, E2E, deck).
-- Key files: `tests/conftest.py`, `tests/test_api_endpoints.py`, `tests/test_contract_drift.py`, `scripts/export_openapi.py`, `pytest.ini`
+**`scripts/`:**
+- Purpose: operators' and CI's toolbox — nothing here is imported by the app
+- Contains: launchers, OpenAPI export, model download, SVG→PNG, parity matrix, E2E scripts, style gate
+- Key files: `scripts/export_openapi.py`, `scripts/check-banned-classes.mjs`, `scripts/test_e2e_vertical_slice.py`, `scripts/run`-style E2E scripts
 
-**`docs/rules/`:**
-- Purpose: Authoritative process + architecture standards (AGENTS.md-mandated).
-- Key files: `docs/rules/ARCHITECTURE_RULES.md`, `docs/rules/ENGINEERING_STANDARDS.md`, `docs/rules/TESTING_STRATEGY.md`, `docs/rules/SECURITY_STANDARDS.md`
+**`docs/`:**
+- Purpose: numbered design/requirements set plus the mandatory rule set
+- Contains: `1_`–`11_` numbered docs, `DEPLOYMENT.md`, `DEMO_SCRIPT.md`, `SYSTEM_ARCHITECTURE.md`, `FEATURE_PARITY_MATRIX.md`, and `rules/`
+- Key files: `docs/rules/ENGINEERING_STANDARDS.md`, `docs/rules/DEFINITION_OF_DONE.md`, `docs/rules/TESTING_STRATEGY.md`
+
+**`.agents/rules/` and `docs/rules/`:**
+- Purpose: mirrored copies of the mandatory engineering standards
+- Note: `.gitignore` tracks only `.agents/rules/` inside `.agents/` (`.agents/*` + `!.agents/rules/**`), so the two copies are expected to stay in sync — **they are duplicated content, not a single source of truth**
 
 ## Key File Locations
 
 **Entry Points:**
-- `start.py`: Unified launcher — Docker backing services + `alembic upgrade head` + uvicorn backend + Next.js frontend. Run `python start.py --help`.
-- `backend/app/main.py`: FastAPI ASGI app (`app`), lifespan, middleware, 11 router mounts. Served via `uvicorn app.main:app` with `cwd=backend`.
-- `frontend/app/page.tsx`: Root route, redirects to `/login`.
-- `frontend/app/layout.tsx`: Root layout — font, `ThemeProvider`, `AuthProvider`, `ScrollReveal`.
-- `frontend/app/[section]/page.tsx`: Workspace router — maps `dashboard|signals|confluence|lifecycles|red-team|missing-signals|developments|intelligence|functions|calibrate|sources|observability|settings` to workspace components inside `<Shell>`.
-- `frontend/app/signals/[signalId]/page.tsx`: Signal detail client page — `fetchSignal` + confluence/contradiction fetchers → `SignalDetailWorkspace`.
-- `frontend/app/login/page.tsx` (+ `layout.tsx`): Login entry.
+- `backend/app/main.py`: FastAPI app, middleware, router mounting, lifespan (seed + scheduler)
+- `backend/run.py`: production entrypoint — Alembic then Uvicorn on `$PORT`
+- `start.py`: local unified launcher
+- `frontend/app/layout.tsx`: Next.js root layout
+- `frontend/app/page.tsx`: redirects to `/login`
+- `frontend/app/[section]/page.tsx`: dynamic section router into `metaradar.tsx`
+- `backend/app/services/scheduler.py`: `SourceScheduler.get_instance()` — autonomous worker loops
 
 **Configuration:**
-- `backend/app/core/config.py`: `Settings` (pydantic-settings, loads root `.env`); `PROJECT_NAME`, `API_V1_STR=/api/v1`, `DATABASE_URL`, LLM/provider flags. Existence of `.env` / `.env.example` noted — never read secret values.
-- `frontend/next.config.mjs`: Minimal Next config (`images.unoptimized`).
-- `frontend/package.json`: `dev`/`build`/`start` scripts; `frontend/tsconfig.json`, `frontend/eslint.config.mjs`, `frontend/postcss.config.mjs`, `frontend/components.json`.
-- `backend/alembic.ini` + `backend/app/core/domain_config.py` + `config/haemophilia.yaml`: Migration config + disease-area config.
-- `docker-compose.yml`: `postgres` (pgvector:pg16), `redis`, `backend`, `backend-gpu`, `frontend`, `ollama` services.
-- `pytest.ini`: Root test config.
+- `pytest.ini`: pytest behavior (`asyncio_mode = auto`, `testpaths = tests`, `pythonpath = backend .`)
+- `backend/app/core/config.py`: all runtime settings + production guard
+- `config/haemophilia.yaml`: domain ontology
+- `docker-compose.yml`: local service topology
+- `netlify.toml` / `render.yaml`: deployment blueprints
+- `.github/workflows/ci.yml`: the CI gate definition
+- `frontend/next.config.mjs`, `frontend/tsconfig.json`
 
 **Core Logic:**
-- Pipeline wiring/state/execution: `backend/app/workflows/graph.py`, `backend/app/workflows/state.py`, `backend/app/workflows/runner.py`
-- Stage logic: `backend/app/workflows/nodes/ingest.py`, `validate.py`, `embed.py`, `nlp_extract.py`, `ontology.py`, `confluence.py`, `lifecycle.py`, `redteam.py`, `missing_signal.py`, `synthesize.py`, `calibrate.py`
-- Domain rules: `backend/app/services/scoring.py`, `routing.py`, `relevance.py`, `calibration.py`, `confluence.py`, `redteam.py`, `vector_query.py`, `embeddings.py`, `deduplication.py`
-- Ingestion edge: `backend/app/connectors/base.py`, `backend/app/connectors/__init__.py`, `backend/app/services/ingestion.py`, `backend/app/services/scheduler.py`
-- AuthN/Z: `backend/app/api/deps.py`, `backend/app/core/security.py`, `backend/app/services/auth_service.py`, `backend/app/models/auth.py`
+- `backend/app/workflows/graph.py`: the pipeline DAG
+- `backend/app/workflows/runner.py`: persistence and run lifecycle
+- `backend/app/services/scoring.py`: deterministic 4-factor priority model
+- `backend/app/services/pii.py`: PII/PHI scrubber + payload classification
+- `backend/app/services/deduplication.py`: SHA-256 bronze dedup + text chunking
+- `backend/app/services/scheduler.py`: autonomous ingestion orchestration
+- `backend/app/api/deps.py`: auth/RBAC/CSRF/rate-limit dependencies
+- `frontend/components/metaradar.tsx`: application shell
 
 **Testing:**
-- `tests/`: Root suite — `conftest.py`, `test_api_endpoints.py`, `test_signals_endpoints.py`, `test_contract_drift.py`, `test_parity_matrix.py`, `test_security.py`, `test_rbac.py`, `test_privacy_boundary.py`, `test_intelligence_nodes.py`, `test_ingestion.py`, `test_retrieval.py`, and 20+ more.
-- `backend/tests/test_login_credentials.py`: Backend-local login test.
+- `tests/conftest.py`: global autouse DB cleanup + auth bucket reset
+- `tests/test_privacy_boundary.py`: privacy gate invariants
+- `tests/test_contract_drift.py`: OpenAPI ↔ TS contract synchronization
+- `tests/test_e2e_calibration_scenario.py`, `tests/test_e2e_vertical_slice` (via `scripts/`)
+- `tests/test_providers_live.py`, `tests/test_ingestion.py`: marked `live`, require external services
 
 ## Naming Conventions
 
-**Files:**
-- Backend: `snake_case` modules grouped by layer — `endpoints/signals.py`, `services/scoring.py`, `workflows/nodes/nlp_extract.py`, `connectors/clinical_trials.py`, `providers/factory.py`, `alembic/versions/015_approval_requests.py`.
-- Frontend routes: App Router lowercase segments — `frontend/app/[section]/page.tsx`, `frontend/app/signals/[signalId]/page.tsx`, `frontend/app/login/page.tsx`.
-- Frontend components: `PascalCase` workspaces — `SignalList.tsx`, `AthenaWorkspace.tsx`, `ConfluenceWorkspace.tsx`, `CalibrationWorkspace.tsx`, `SourcesOperationsWorkspace.tsx`.
+**Backend Python files:**
+- `snake_case.py` — one module per concern, no abbreviations (`deduplication.py` not `dedup.py`; `provenance_urls.py` not `prov.py`)
+- Tests: `test_*.py` (enforced by `pytest.ini:python_files`)
+
+**Frontend files:**
+- Component directories: `kebab-case/` — `frontend/components/missing-signals/`, `frontend/components/star-portal/`
+- Component files: `PascalCase.tsx` — `SignalDetailWorkspace.tsx`, `EvidenceDrawer.tsx`
+- Non-component modules: `camelCase.ts` — `frontend/lib/api.ts`, `frontend/lib/mappers.ts`
+- App Router routes: lowercase directories — `frontend/app/login/`, `frontend/app/[section]/`
 
 **Directories:**
-- Backend layers are plural nouns: `api/`, `services/`, `workflows/`, `connectors/`, `providers/`, `models/`, `schemas/`, `core/`, `db/`.
-- Frontend follows App Router + feature folders: `app/`, `components/<domain>/`, `lib/`, `context/`, `types/`, `public/`.
+- Backend: singular concern nouns under `app/` (`services/`, `models/`, `providers/`); plural only for `nodes/`
+- Migration files: `NNN_description.py` — zero-padded three digits (`015_approval_requests.py`)
+- Phase artifacts: `NN-slug/` under `.planning/phases/`
 
 ## Where to Add New Code
 
-**New Feature:**
-- Primary code: Backend rule → `backend/app/services/<domain>.py`; pipeline stage → `backend/app/workflows/nodes/<stage>.py` + wire in `backend/app/workflows/graph.py`; UI → `frontend/components/<domain>/<Name>Workspace.tsx` + case in `frontend/app/[section]/page.tsx`.
-- Tests: `tests/test_<domain>.py` (mirror existing names like `tests/test_confluence_semantics.py`); contract change → update template in `scripts/export_openapi.py`, regenerate `contracts/openapi.json` + `frontend/types/api.ts`.
+**New monitored data source (connector):**
+- Implementation: `backend/app/connectors/<source_id>.py`, subclassing `SourceConnector` from `backend/app/connectors/base.py`; set `source_id`, `source_type`, `freshness_class`; implement `fetch_latest()` and `run_profile()`
+- Register: add the instance to `ALL_CONNECTORS` in `backend/app/connectors/__init__.py`
+- Config: add its query profiles under `connectors:` in `config/haemophilia.yaml`
+- Scheduling: add `SCHEDULER_<SOURCE>_INTERVAL_MINUTES` to `backend/app/core/config.py` and wire it into `SourceScheduler._init_job_states()`
+- Credentials: add an `Optional[str]` setting + a `configuration_error_for()` branch in `backend/app/core/config.py`
+- Tests: `tests/test_ingestion.py`, `tests/test_connector_health.py`
 
-**New Component/Module:**
-- Implementation: Backend router → `backend/app/api/v1/endpoints/<name>.py` + `app.include_router(...)` in `backend/app/main.py`; connector → `backend/app/connectors/<source>.py` + register in `backend/app/connectors/__init__.py`; provider → `backend/app/providers/<name>.py` + wire into `backend/app/providers/factory.py`.
+**New AI provider:**
+- Implementation: `backend/app/providers/<name>.py`, subclass `LLMProvider` from `backend/app/providers/base.py`; declare `name` and `capabilities`; implement `generate_summary()` and `generate_intelligence()`; implement `validate_privacy_gate()` before any outbound call
+- Registration: instantiate in `ProviderFactory.__init__` and insert the step in `execute_task()` at `backend/app/providers/factory.py`
+- Tests: `tests/test_provider_matrix.py`, `tests/test_privacy_boundary.py`
+- **Do not** grant `ProviderCapability.GENERATE_ACTIONS` to a cloud provider — that exclusion is load-bearing (see `gemini.py`)
+
+**New pipeline node:**
+- Implementation: `backend/app/workflows/nodes/<name>.py` exporting a `node_<name>()` callable
+- Wiring: add the node and its linear edges in `backend/app/workflows/graph.py`
+- State: add any new channel to `MetaRadarState` in `backend/app/workflows/state.py` **with an explicit reducer** — use `operator.add` only for genuinely accumulating channels; use `replace_list` for full-list re-emission
+- Tests: `tests/test_intelligence_nodes.py`
+
+**New API endpoint:**
+- Handler: the appropriate module in `backend/app/api/v1/endpoints/` (`signals.py` for signal-centric, `intelligence.py` for derived views)
+- Registration: routers are mounted in `backend/app/main.py`; add to an existing router rather than creating a new one unless it is a distinct domain
+- Auth: use `Depends(get_current_user)` + `Depends(require_role(...))`; add `Depends(require_csrf)` for mutations
+- Schemas: `backend/app/schemas/__init__.py` (or `schemas/auth.py`)
+- Contract: **edit the template inside `scripts/export_openapi.py`**, then run `python scripts/export_openapi.py` to regenerate `frontend/types/api.ts`
+- Tests: `tests/test_api_endpoints.py`, `tests/test_signals_endpoints.py`
+
+**New frontend workspace view:**
+- Component: `frontend/components/<domain>/<Name>Workspace.tsx` (use `kebab-case/` + `PascalCase.tsx`)
+- Wiring: register the section in `frontend/components/metaradar.tsx` (nav + switch)
+- Data: add a typed function to `frontend/lib/api.ts`; types come from `frontend/types/api.ts`
+- Normalization: add a mapper in `frontend/lib/mappers.ts`
+- **Styling:** use design tokens only — never `slate-*` or arbitrary hex (`scripts/check-banned-classes.mjs` will fail CI)
+
+**New shared UI primitive:**
+- Location: `frontend/components/ui/`
+- Convention: `PascalCase.tsx` plus an optional co-located `.css` (see `Counter.tsx`/`Counter.css`)
+
+**New domain knowledge:**
+- Edit `config/haemophilia.yaml`; never hardcode asset names, modalities, or routing rules in Python
+- Loader/model: `backend/app/core/domain_config.py`
 
 **Utilities:**
-- Shared helpers: Backend → `backend/app/core/` (config/security/middleware/logging); frontend → `frontend/lib/` (`api.ts`, `mappers.ts`, `hooks.ts`, `utils.ts`, `errors.ts`).
+- Backend shared helpers: `backend/app/core/` (`redact.py`, `security.py`)
+- Frontend shared helpers: `frontend/lib/utils.ts`, `frontend/lib/hooks.ts`
 
 ## Special Directories
 
 **`models/`:**
-- Purpose: Local GGUF weights for the Gemma reasoning backend (`gemma-3-4b-it-Q4_K_M.gguf`).
-- Generated: No (downloaded via `scripts/download_model.py`).
-- Committed: Weights file present in working tree; confirm Git LFS/ignore policy before committing large binaries.
+- Purpose: local GGUF weights for `GemmaProvider`
+- Generated: No (downloaded by `scripts/download_model.py` / `python setup.py --download-model`)
+- Committed: No — `.gitignore` ignores `/models/*` but keeps `.gitkeep` and `README.md`. The pattern is root-anchored specifically so it does **not** match `backend/app/models/`
 
-**`data/` + `backend/app/data/`:**
-- Purpose: `synthetic_signals.json` fixtures for demo/test-fixture modes.
-- Generated: No.
-- Committed: Yes.
+**`contracts/`:**
+- Purpose: generated OpenAPI artifact
+- Generated: Yes — by `scripts/export_openapi.py`
+- Committed: Yes (CI diffs it indirectly via `frontend/types/api.ts`)
 
-**`logs/`:**
-- Purpose: Runtime output from `start.py` (`backend.log`, `frontend.log`).
-- Generated: Yes.
-- Committed: No (gitignored runtime logs).
+**`.planning/`:**
+- Purpose: GSD project memory — PROJECT, ROADMAP, REQUIREMENTS, STATE, `phases/`, `codebase/`, `debug/`, `milestones/`
+- Generated: Partly (`codebase/` is written by this mapper workflow)
+- Committed: Yes
 
-**`frontend/node_modules/`, `__pycache__/`, `.pytest_cache/`:**
-- Purpose: Build/test caches.
-- Generated: Yes.
-- Committed: No.
+**`.agents/rules/`:**
+- Purpose: agent-facing copy of the engineering standards
+- Generated: No — duplicated from `docs/rules/`
+- Committed: Yes (the only tracked path under `.agents/`)
+
+**`logs/`, `scratch/`, `.pytest_cache/`, `__pycache__/`:**
+- Purpose: runtime scratch
+- Committed: No — `scratch/` and caches are gitignored
+
+**`pitch/`, `poster/`:**
+- Purpose: hackathon/REACH submissions (deck, diagrams, poster generator)
+- Generated: Partly (`poster/generate_poster.py`)
+- Committed: Yes — `.gitignore` explicitly re-includes `pitch/`
 
 ---
 
-*Structure analysis: 2026-10-01*
+*Structure analysis: 2026-10-02*
