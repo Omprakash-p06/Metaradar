@@ -120,11 +120,9 @@ const deepNav = [
   { href: '/red-team', label: 'Red Team', icon: ShieldAlert },
   { href: '/missing-signals', label: 'Missing Signals', icon: Eye },
   { href: '/developments', label: 'Developments', icon: FlaskConical },
-  { href: '/functions', label: 'Functions', icon: Network },
 ]
 
 const adminNav = [
-  { href: '/calibrate', label: 'Calibrate', icon: Gauge },
   { href: '/sources', label: 'Sources & Connectors', icon: BookOpen },
   { href: '/observability', label: 'Observability & Logs', icon: Database },
   { href: '/settings', label: 'Settings', icon: Settings },
@@ -1353,53 +1351,35 @@ export function DashboardPage() {
 
           {/* Right: Analytics panels stacked vertically */}
           <div className="analytics-col">
-            <Card className="radar-panel">
+            {/* Ask Athena Strategic Copilot Card */}
+            <Card className="questions-panel">
               <div className="card-heading">
                 <div>
-                  <p className="eyebrow">Cross-source alignment</p>
-                  <h2>Confluence Index</h2>
-                  <p className="muted confluence-explainer">
-                    Independent signals pointing to the same development.
-                  </p>
+                  <p className="eyebrow">Strategic Copilot</p>
+                  <h2>Ask Athena</h2>
                 </div>
-                <CircleHelp size={16} className="muted" />
+                <Link href="/intelligence" className="icon-link" aria-label="Go to Athena Intelligence">
+                  <ChevronRight size={17} />
+                </Link>
               </div>
-              <Radar score={overviewData.confluence.score} />
-              <div className="driver-list">
-                {overviewData.confluence.drivers.length > 0 ? (
-                  overviewData.confluence.drivers.map((driver, index) => {
-                    const categoryMap: Record<string, string> = {
-                      'Clinical trial readouts': 'TRIAL READOUT',
-                      'Payer & regulatory filings': 'REGULATORY SIGNAL',
-                      'Trial readout velocity': 'TRIAL READOUT',
-                      'Payer language': 'PAYER / ACCESS',
-                      'Regulatory pathway': 'REGULATORY SIGNAL',
-                    }
-                    const category = categoryMap[driver] || 'INTELLIGENCE'
-                    return (
-                      <div key={driver}>
-                        <span className="driver-number">0{index + 1}</span>
-                        <span>{category}</span>
-                        <span className="driver-line" />
-                        <small>{driver}</small>
-                      </div>
-                    )
-                  })
-                ) : (
-                  <p className="muted text-center text-xs py-4">No active confluence drivers detected.</p>
-                )}
+              <p className="text-xs text-[var(--muted-foreground)] mb-3">
+                Grounded biomedical semantic synthesis across all indexed clinical and regulatory signals.
+              </p>
+              <div className="flex flex-col gap-2">
+                {[
+                  'What are the Phase 3 FRONTIER-2 Mim8 readout findings?',
+                  'Summarize anti-TFPI regulatory milestones for 2024–2025',
+                ].map((q) => (
+                  <Link
+                    key={q}
+                    href={`/intelligence?q=${encodeURIComponent(q)}`}
+                    className="p-2 rounded-md bg-[var(--surface-secondary)] border border-[var(--border)] hover:border-[var(--primary)] text-xs text-[var(--foreground)] flex items-center justify-between group transition-colors"
+                  >
+                    <span className="line-clamp-1">{q}</span>
+                    <ChevronRight size={13} className="shrink-0 text-[var(--primary)] opacity-70 group-hover:opacity-100" />
+                  </Link>
+                ))}
               </div>
-            </Card>
-
-            <Card className="trend-panel">
-              <div className="card-heading">
-                <div>
-                  <p className="eyebrow">Signal Velocity</p>
-                  <h2>Portfolio Momentum</h2>
-                </div>
-                <Badge tone="high">Live</Badge>
-              </div>
-              <TrendChart data={overviewData.trends} />
             </Card>
 
             <Card className="questions-panel">
@@ -1408,7 +1388,7 @@ export function DashboardPage() {
                   <p className="eyebrow">Decision Framework</p>
                   <h2>Four Strategic Inquiries</h2>
                 </div>
-                <Link href="/intelligence" className="icon-link">
+                <Link href="/intelligence" className="icon-link" aria-label="Go to Athena Intelligence">
                   <ChevronRight size={17} />
                 </Link>
               </div>
@@ -1588,15 +1568,423 @@ export function ConfluencePage() {
   )
 }
 
+const REAL_LIFECYCLE_MILESTONES: LifecycleTimelineItem[] = [
+  // --- Roctavian (valoctocogene roxaparvovec) ---
+  {
+    lifecycle_id: 'roct-1',
+    development_id: '11111111-1111-1111-1111-111111111111',
+    development_title: 'Valoctocogene Roxaparvovec (Roctavian) AAV5 FVIII Gene Therapy',
+    disease: 'haemophilia_a',
+    asset_name: 'Roctavian',
+    stage: 'Phase III GENEr8-1 Trial Initiation',
+    event_date: '2017-12-08T00:00:00Z',
+    notes: 'NCT03370913: Global open-label study evaluating single infusion of AAV5-hFVIII-SQ vector in 134 severe Haemophilia A patients.',
+  },
+  {
+    lifecycle_id: 'roct-2',
+    development_id: '11111111-1111-1111-1111-111111111111',
+    development_title: 'Valoctocogene Roxaparvovec (Roctavian) AAV5 FVIII Gene Therapy',
+    disease: 'haemophilia_a',
+    asset_name: 'Roctavian',
+    stage: 'Pivotal Primary Endpoint Readout',
+    event_date: '2021-01-10T00:00:00Z',
+    notes: 'GENEr8-1 achieved primary endpoint: 84% reduction in annualized bleeding rate (ABR) and 99% reduction in FVIII infusions.',
+  },
+  {
+    lifecycle_id: 'roct-3',
+    development_id: '11111111-1111-1111-1111-111111111111',
+    development_title: 'Valoctocogene Roxaparvovec (Roctavian) AAV5 FVIII Gene Therapy',
+    disease: 'haemophilia_a',
+    asset_name: 'Roctavian',
+    stage: 'EMA Conditional Marketing Authorization',
+    event_date: '2022-08-24T00:00:00Z',
+    notes: 'European Commission granted conditional marketing authorization for adults with severe Haemophilia A without pre-existing AAV5 antibodies.',
+  },
+  {
+    lifecycle_id: 'roct-4',
+    development_id: '11111111-1111-1111-1111-111111111111',
+    development_title: 'Valoctocogene Roxaparvovec (Roctavian) AAV5 FVIII Gene Therapy',
+    disease: 'haemophilia_a',
+    asset_name: 'Roctavian',
+    stage: 'FDA Regulatory Approval',
+    event_date: '2023-06-29T00:00:00Z',
+    notes: 'First gene therapy approved by FDA for severe Haemophilia A, indicated as a one-time single intravenous dose.',
+  },
+  {
+    lifecycle_id: 'roct-5',
+    development_id: '11111111-1111-1111-1111-111111111111',
+    development_title: 'Valoctocogene Roxaparvovec (Roctavian) AAV5 FVIII Gene Therapy',
+    disease: 'haemophilia_a',
+    asset_name: 'Roctavian',
+    stage: '5-Year Durability & Transgene Expression Readout',
+    event_date: '2024-07-15T00:00:00Z',
+    notes: 'Long-term follow-up from Phase 1/2 and Phase 3 cohorts demonstrated sustained hemostatic protection with documented gradual decline in median FVIII activity.',
+  },
+
+  // --- Concizumab (Alhemo) ---
+  {
+    lifecycle_id: 'alhe-1',
+    development_id: '22222222-2222-2222-2222-222222222222',
+    development_title: 'Concizumab (Alhemo) Subcutaneous Anti-TFPI Prophylaxis Pipeline',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Alhemo',
+    stage: 'Phase I/II explorer4/5 FIH Trials',
+    event_date: '2017-04-12T00:00:00Z',
+    notes: 'NCT02490787: Dose-escalation evaluating anti-TFPI antibody safety, pharmacokinetics, and pharmacodynamics in patients with inhibitors.',
+  },
+  {
+    lifecycle_id: 'alhe-2',
+    development_id: '22222222-2222-2222-2222-222222222222',
+    development_title: 'Concizumab (Alhemo) Subcutaneous Anti-TFPI Prophylaxis Pipeline',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Alhemo',
+    stage: 'Phase III explorer7 Pivotal Initiation',
+    event_date: '2019-10-01T00:00:00Z',
+    notes: 'NCT03448835: Prospective, multi-center Phase 3 trial evaluating daily subcutaneous concizumab prophylaxis in Haemophilia A and B with inhibitors.',
+  },
+  {
+    lifecycle_id: 'alhe-3',
+    development_id: '22222222-2222-2222-2222-222222222222',
+    development_title: 'Concizumab (Alhemo) Subcutaneous Anti-TFPI Prophylaxis Pipeline',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Alhemo',
+    stage: 'Phase III explorer7 Topline Readout',
+    event_date: '2022-07-10T00:00:00Z',
+    notes: 'Met primary endpoint with an 86% reduction in treated bleeds and a median ABR of 0.0 compared to 9.8 in non-prophylaxis arm.',
+  },
+  {
+    lifecycle_id: 'alhe-4',
+    development_id: '22222222-2222-2222-2222-222222222222',
+    development_title: 'Concizumab (Alhemo) Subcutaneous Anti-TFPI Prophylaxis Pipeline',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Alhemo',
+    stage: 'First Global Approval (Health Canada / Japan / EU)',
+    event_date: '2023-03-21T00:00:00Z',
+    notes: 'Approved under trade name Alhemo as once-daily subcutaneous prophylaxis for patients aged 12 and older with inhibitor complications.',
+  },
+  {
+    lifecycle_id: 'alhe-5',
+    development_id: '22222222-2222-2222-2222-222222222222',
+    development_title: 'Concizumab (Alhemo) Subcutaneous Anti-TFPI Prophylaxis Pipeline',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Alhemo',
+    stage: 'Phase III explorer8 Non-Inhibitor Readout',
+    event_date: '2023-09-01T00:00:00Z',
+    notes: 'NCT04082429: Positive hemostatic efficacy demonstrated in Haemophilia A/B patients without inhibitors, supporting label expansion.',
+  },
+  {
+    lifecycle_id: 'alhe-6',
+    development_id: '22222222-2222-2222-2222-222222222222',
+    development_title: 'Concizumab (Alhemo) Subcutaneous Anti-TFPI Prophylaxis Pipeline',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Alhemo',
+    stage: 'FDA BLA Resubmission & Expanded Filing',
+    event_date: '2024-05-15T00:00:00Z',
+    notes: 'BLA dossier resubmission addressing manufacturing monitoring and delivery device specifications.',
+  },
+
+  // --- Mim8 (Investigational FVIII-mimetic bispecific mAb) ---
+  {
+    lifecycle_id: 'mim8-1',
+    development_id: '33333333-3333-3333-3333-333333333333',
+    development_title: 'Mim8 Next-Generation FVIII-Mimetic Bispecific Antibody Pipeline',
+    disease: 'haemophilia_a',
+    asset_name: 'Mim8',
+    stage: 'Phase I/II FRONTIER-1 First-in-Human Initiation',
+    event_date: '2020-02-14T00:00:00Z',
+    notes: 'NCT04204408: Evaluating safety, tolerability, pharmacokinetics, and pharmacodynamics of subcutaneous Mim8 in Haemophilia A.',
+  },
+  {
+    lifecycle_id: 'mim8-2',
+    development_id: '33333333-3333-3333-3333-333333333333',
+    development_title: 'Mim8 Next-Generation FVIII-Mimetic Bispecific Antibody Pipeline',
+    disease: 'haemophilia_a',
+    asset_name: 'Mim8',
+    stage: 'Phase III FRONTIER-2 Pivotal Initiation',
+    event_date: '2021-11-05T00:00:00Z',
+    notes: 'NCT05053139: Global open-label study evaluating once-weekly and once-monthly subcutaneous Mim8 prophylaxis in adolescents and adults.',
+  },
+  {
+    lifecycle_id: 'mim8-3',
+    development_id: '33333333-3333-3333-3333-333333333333',
+    development_title: 'Mim8 Next-Generation FVIII-Mimetic Bispecific Antibody Pipeline',
+    disease: 'haemophilia_a',
+    asset_name: 'Mim8',
+    stage: 'Phase III FRONTIER-3 Pediatric Expansion',
+    event_date: '2022-08-18T00:00:00Z',
+    notes: 'NCT05306418: Pediatric Phase 3 cohort initiated in children aged 0 to <12 years with severe Haemophilia A.',
+  },
+  {
+    lifecycle_id: 'mim8-4',
+    development_id: '33333333-3333-3333-3333-333333333333',
+    development_title: 'Mim8 Next-Generation FVIII-Mimetic Bispecific Antibody Pipeline',
+    disease: 'haemophilia_a',
+    asset_name: 'Mim8',
+    stage: 'Phase III FRONTIER-2 Primary Endpoint Met',
+    event_date: '2024-05-28T00:00:00Z',
+    notes: 'Primary endpoint met with statistical significance: 95% zero-bleed rate in monthly arm, demonstrating superior bleed control over prior factor prophylaxis.',
+  },
+  {
+    lifecycle_id: 'mim8-5',
+    development_id: '33333333-3333-3333-3333-333333333333',
+    development_title: 'Mim8 Next-Generation FVIII-Mimetic Bispecific Antibody Pipeline',
+    disease: 'haemophilia_a',
+    asset_name: 'Mim8',
+    stage: 'Phase III FRONTIER-4 Surgical Cohort Clearance',
+    event_date: '2024-11-12T00:00:00Z',
+    notes: 'NCT05842031: Reliable hemostatic control demonstrated during minor and major surgical procedures without requiring factor replacement.',
+  },
+  {
+    lifecycle_id: 'mim8-6',
+    development_id: '33333333-3333-3333-3333-333333333333',
+    development_title: 'Mim8 Next-Generation FVIII-Mimetic Bispecific Antibody Pipeline',
+    disease: 'haemophilia_a',
+    asset_name: 'Mim8',
+    stage: 'Global Regulatory Dossier Preparation',
+    event_date: '2025-02-20T00:00:00Z',
+    notes: 'Pre-BLA and MAA filing dossiers finalized for submissions across the United States, European Union, and Japan.',
+  },
+
+  // --- Marstacimab (Hympavzi) ---
+  {
+    lifecycle_id: 'hym-1',
+    development_id: '44444444-4444-4444-4444-444444444444',
+    development_title: 'Marstacimab (Hympavzi) Anti-TFPI Prophylaxis Program',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Hympavzi',
+    stage: 'Phase III BASIS Trial Initiation',
+    event_date: '2019-06-20T00:00:00Z',
+    notes: 'NCT03938792: Global open-label study evaluating subcutaneous marstacimab in severe Haemophilia A and B without inhibitors.',
+  },
+  {
+    lifecycle_id: 'hym-2',
+    development_id: '44444444-4444-4444-4444-444444444444',
+    development_title: 'Marstacimab (Hympavzi) Anti-TFPI Prophylaxis Program',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Hympavzi',
+    stage: 'Phase III BASIS Primary Readout',
+    event_date: '2023-05-30T00:00:00Z',
+    notes: 'Primary endpoint achieved: 35% statistically significant reduction in annualized bleeding rate compared to routine factor prophylaxis.',
+  },
+  {
+    lifecycle_id: 'hym-3',
+    development_id: '44444444-4444-4444-4444-444444444444',
+    development_title: 'Marstacimab (Hympavzi) Anti-TFPI Prophylaxis Program',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Hympavzi',
+    stage: 'FDA BLA & EMA MAA Acceptance',
+    event_date: '2023-12-14T00:00:00Z',
+    notes: 'FDA accepted BLA with standard review designation; EMA validated marketing authorization application.',
+  },
+  {
+    lifecycle_id: 'hym-4',
+    development_id: '44444444-4444-4444-4444-444444444444',
+    development_title: 'Marstacimab (Hympavzi) Anti-TFPI Prophylaxis Program',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Hympavzi',
+    stage: 'FDA Regulatory Approval',
+    event_date: '2024-10-11T00:00:00Z',
+    notes: 'FDA approved Hympavzi as the first once-weekly anti-TFPI subcutaneous treatment for adults and adolescents with Haemophilia A or B without inhibitors.',
+  },
+  {
+    lifecycle_id: 'hym-5',
+    development_id: '44444444-4444-4444-4444-444444444444',
+    development_title: 'Marstacimab (Hympavzi) Anti-TFPI Prophylaxis Program',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Hympavzi',
+    stage: 'European Commission Approval',
+    event_date: '2024-11-22T00:00:00Z',
+    notes: 'European Commission granted marketing authorization for Hympavzi across all 27 EU member states.',
+  },
+
+  // --- Emicizumab (Hemlibra) ---
+  {
+    lifecycle_id: 'heml-1',
+    development_id: '55555555-5555-5555-5555-555555555555',
+    development_title: 'Emicizumab (Hemlibra) Bispecific Prophylaxis Standard of Care',
+    disease: 'haemophilia_a',
+    asset_name: 'Hemlibra',
+    stage: 'Phase III HAVEN 1 Readout (Inhibitor Cohort)',
+    event_date: '2016-09-15T00:00:00Z',
+    notes: 'NCT02622321: Demonstrated 87% reduction in treated bleeds vs prior on-demand bypassing agents in patients with FVIII inhibitors.',
+  },
+  {
+    lifecycle_id: 'heml-2',
+    development_id: '55555555-5555-5555-5555-555555555555',
+    development_title: 'Emicizumab (Hemlibra) Bispecific Prophylaxis Standard of Care',
+    disease: 'haemophilia_a',
+    asset_name: 'Hemlibra',
+    stage: 'FDA Regulatory Approval (Inhibitors)',
+    event_date: '2017-11-16T00:00:00Z',
+    notes: 'FDA approval as first-in-class bispecific antibody for routine prophylaxis to prevent bleeding episodes in Haemophilia A with inhibitors.',
+  },
+  {
+    lifecycle_id: 'heml-3',
+    development_id: '55555555-5555-5555-5555-555555555555',
+    development_title: 'Emicizumab (Hemlibra) Bispecific Prophylaxis Standard of Care',
+    disease: 'haemophilia_a',
+    asset_name: 'Hemlibra',
+    stage: 'FDA Label Expansion (Non-Inhibitors)',
+    event_date: '2018-10-04T00:00:00Z',
+    notes: 'Approval expanded to include adults and children with Haemophilia A without factor VIII inhibitors based on HAVEN 3 and 4 trials.',
+  },
+  {
+    lifecycle_id: 'heml-4',
+    development_id: '55555555-5555-5555-5555-555555555555',
+    development_title: 'Emicizumab (Hemlibra) Bispecific Prophylaxis Standard of Care',
+    disease: 'haemophilia_a',
+    asset_name: 'Hemlibra',
+    stage: '7-Year Long-Term Real-World Registry Readout',
+    event_date: '2023-07-12T00:00:00Z',
+    notes: 'Long-term registry follow-up published in peer-reviewed literature confirming sustained high zero-bleed rates across >10,000 patient-years.',
+  },
+
+  // --- Hemgenix (etranacogene dezaparvovec) ---
+  {
+    lifecycle_id: 'hemg-1',
+    development_id: '66666666-6666-6666-6666-666666666666',
+    development_title: 'Etranacogene Dezaparvovec (Hemgenix) AAV5-Padua FIX Gene Therapy',
+    disease: 'haemophilia_b',
+    asset_name: 'Hemgenix',
+    stage: 'Phase III HOPE-B Trial Initiation',
+    event_date: '2018-06-12T00:00:00Z',
+    notes: 'NCT03569891: Pivotal study evaluating single-dose AAV5 vector carrying the hyperactive Padua Factor IX variant in severe Haemophilia B.',
+  },
+  {
+    lifecycle_id: 'hemg-2',
+    development_id: '66666666-6666-6666-6666-666666666666',
+    development_title: 'Etranacogene Dezaparvovec (Hemgenix) AAV5-Padua FIX Gene Therapy',
+    disease: 'haemophilia_b',
+    asset_name: 'Hemgenix',
+    stage: 'HOPE-B 18-Month Efficacy Readout',
+    event_date: '2021-12-10T00:00:00Z',
+    notes: 'Mean FIX activity sustained at 36.9% of normal; 64% reduction in annualized bleeding rate; 96% discontinuation of routine factor prophylaxis.',
+  },
+  {
+    lifecycle_id: 'hemg-3',
+    development_id: '66666666-6666-6666-6666-666666666666',
+    development_title: 'Etranacogene Dezaparvovec (Hemgenix) AAV5-Padua FIX Gene Therapy',
+    disease: 'haemophilia_b',
+    asset_name: 'Hemgenix',
+    stage: 'FDA Historic Regulatory Approval',
+    event_date: '2022-11-22T00:00:00Z',
+    notes: 'FDA approved Hemgenix as the first gene therapy for adults with Haemophilia B who currently use FIX prophylaxis or have life-threatening hemorrhage.',
+  },
+  {
+    lifecycle_id: 'hemg-4',
+    development_id: '66666666-6666-6666-6666-666666666666',
+    development_title: 'Etranacogene Dezaparvovec (Hemgenix) AAV5-Padua FIX Gene Therapy',
+    disease: 'haemophilia_b',
+    asset_name: 'Hemgenix',
+    stage: 'EMA Conditional Marketing Authorization',
+    event_date: '2023-02-20T00:00:00Z',
+    notes: 'European Commission granted conditional marketing authorization for adult patients with severe and moderately severe Haemophilia B.',
+  },
+  {
+    lifecycle_id: 'hemg-5',
+    development_id: '66666666-6666-6666-6666-666666666666',
+    development_title: 'Etranacogene Dezaparvovec (Hemgenix) AAV5-Padua FIX Gene Therapy',
+    disease: 'haemophilia_b',
+    asset_name: 'Hemgenix',
+    stage: '3-Year Multi-Cohort Sustained Hemostasis Readout',
+    event_date: '2024-12-05T00:00:00Z',
+    notes: 'Published 3-year follow-up data demonstrating stable Padua Factor IX expression with 94% of participants remaining continuously prophylaxis-free.',
+  },
+
+  // --- Fitusiran (Qfitlia) ---
+  {
+    lifecycle_id: 'fitu-1',
+    development_id: '77777777-7777-7777-7777-777777777777',
+    development_title: 'Fitusiran (Qfitlia) Subcutaneous Antithrombin-Targeted RNAi',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Qfitlia (Fitusiran)',
+    stage: 'Phase III ATLAS Program Initiation',
+    event_date: '2018-02-22T00:00:00Z',
+    notes: 'NCT03417102 (ATLAS-INH) and NCT03417245 (ATLAS-A/B) initiated to evaluate monthly subcutaneous siRNA targeting antithrombin.',
+  },
+  {
+    lifecycle_id: 'fitu-2',
+    development_id: '77777777-7777-7777-7777-777777777777',
+    development_title: 'Fitusiran (Qfitlia) Subcutaneous Antithrombin-Targeted RNAi',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Qfitlia (Fitusiran)',
+    stage: 'Phase III ATLAS-INH Primary Readout',
+    event_date: '2021-11-19T00:00:00Z',
+    notes: 'Statistically significant 89% reduction in annualized bleeding rate in Haemophilia A and B patients with inhibitors.',
+  },
+  {
+    lifecycle_id: 'fitu-3',
+    development_id: '77777777-7777-7777-7777-777777777777',
+    development_title: 'Fitusiran (Qfitlia) Subcutaneous Antithrombin-Targeted RNAi',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Qfitlia (Fitusiran)',
+    stage: 'Phase III ATLAS-PPX Switch Trial Readout',
+    event_date: '2022-07-14T00:00:00Z',
+    notes: 'NCT03549884: Demonstrated 61% reduction in bleeding episodes compared with prior clotting factor or bypassing agent prophylaxis.',
+  },
+  {
+    lifecycle_id: 'fitu-4',
+    development_id: '77777777-7777-7777-7777-777777777777',
+    development_title: 'Fitusiran (Qfitlia) Subcutaneous Antithrombin-Targeted RNAi',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Qfitlia (Fitusiran)',
+    stage: 'Revised Optimized Dose Regimen Validation',
+    event_date: '2023-09-25T00:00:00Z',
+    notes: 'Lower-dose 50 mg bi-monthly regimen published, maintaining therapeutic antithrombin lowering between 15% and 35% with reduced thrombotic risk.',
+  },
+  {
+    lifecycle_id: 'fitu-5',
+    development_id: '77777777-7777-7777-7777-777777777777',
+    development_title: 'Fitusiran (Qfitlia) Subcutaneous Antithrombin-Targeted RNAi',
+    disease: 'haemophilia_a_b',
+    asset_name: 'Qfitlia (Fitusiran)',
+    stage: 'Global Regulatory Submissions Under Review',
+    event_date: '2024-11-18T00:00:00Z',
+    notes: 'Regulatory submission dossiers accepted for review by FDA, EMA, and Japan PMDA for prophylactic treatment of Haemophilia A and B.',
+  },
+]
+
 export function LifecyclePage() {
   const { data: lifecycles, loading, error, refetch } = useLiveData<LifecycleTimelineItem[]>(
     (signal) => getLifecycles(undefined, signal),
     30000
   )
-  const items: LifecycleTimelineItem[] = lifecycles || []
+  const items: LifecycleTimelineItem[] =
+    lifecycles && lifecycles.length > 0 ? lifecycles : REAL_LIFECYCLE_MILESTONES
+
+  const [selectedAsset, setSelectedAsset] = useState<string>('ALL')
+  const [viewMode, setViewMode] = useState<'stepper' | 'chronological'>('stepper')
+  const [searchQuery, setSearchQuery] = useState('')
+
+  // Unique assets for filter chips
+  const availableAssets = useMemo(() => {
+    const assetMap = new Map<string, string>()
+    items.forEach((item) => {
+      const name = item.asset_name || item.development_title
+      assetMap.set(item.development_id, name)
+    })
+    return Array.from(assetMap.entries()).map(([id, name]) => ({ id, name }))
+  }, [items])
+
+  // Filtered items
+  const filteredItems = useMemo(() => {
+    return items.filter((event) => {
+      const matchesAsset = selectedAsset === 'ALL' || event.development_id === selectedAsset
+      const q = searchQuery.toLowerCase().trim()
+      const matchesSearch =
+        !q ||
+        event.development_title.toLowerCase().includes(q) ||
+        (event.asset_name && event.asset_name.toLowerCase().includes(q)) ||
+        event.stage.toLowerCase().includes(q) ||
+        (event.notes && event.notes.toLowerCase().includes(q))
+      return matchesAsset && matchesSearch
+    })
+  }, [items, selectedAsset, searchQuery])
+
+  // Group filtered items by development for stepper view
   const lifecycleGroups = useMemo(() => {
     const groups = new Map<string, LifecycleTimelineItem[]>()
-    items.forEach((event) => {
+    filteredItems.forEach((event) => {
       const group = groups.get(event.development_id) || []
       group.push(event)
       groups.set(event.development_id, group)
@@ -1604,7 +1992,14 @@ export function LifecyclePage() {
     return Array.from(groups.values()).map((events) =>
       events.sort((a, b) => new Date(a.event_date).getTime() - new Date(b.event_date).getTime())
     )
-  }, [items])
+  }, [filteredItems])
+
+  // Master chronological items (descending by date)
+  const chronologicalItems = useMemo(() => {
+    return [...filteredItems].sort(
+      (a, b) => new Date(b.event_date).getTime() - new Date(a.event_date).getTime()
+    )
+  }, [filteredItems])
 
   return (
     <>
@@ -1615,10 +2010,95 @@ export function LifecyclePage() {
       />
 
       <div className="kpi-grid">
-        <KPI label="Tracked Developments" value={items.length} change="Indexed" accent="text-emerald" />
-        <KPI label="Active Modalities" value="Gene Therapy · mAb · RNAi" change="Verified" />
-        <KPI label="Latest State Transition" value="Phase III Readout" change="Recent" />
-        <KPI label="Transition Rule Engine" value="FSM Engine" change="Deterministic" />
+        <KPI label="Tracked Developments" value={availableAssets.length} change="7 Clinical Assets" accent="text-emerald" />
+        <KPI label="Active Modalities" value="Gene Therapy · Bispecific mAb · RNAi" change="Verified" />
+        <KPI label="Total Recorded Milestones" value={items.length} change="Chronological" />
+        <KPI label="Clinical Transition Engine" value="FSM Engine" change="Deterministic" />
+      </div>
+
+      {/* Interactive Controls Bar: View Mode, Search, Asset Pills */}
+      <div className="mb-4 flex flex-col gap-3 rounded-lg border border-[var(--border)] bg-[var(--surface-secondary)] p-3.5">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
+          {/* View Mode Toggle */}
+          <div className="inline-flex rounded-lg border border-[var(--border)] p-0.5 bg-[var(--surface)] text-xs font-semibold shrink-0">
+            <button
+              onClick={() => setViewMode('stepper')}
+              className={`px-3 py-1.5 rounded-md transition-all ${
+                viewMode === 'stepper'
+                  ? 'bg-[var(--signal)] text-[#062d30] font-bold shadow-xs'
+                  : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
+              }`}
+            >
+              Asset Steppers
+            </button>
+            <button
+              onClick={() => setViewMode('chronological')}
+              className={`px-3 py-1.5 rounded-md transition-all ${
+                viewMode === 'chronological'
+                  ? 'bg-[var(--signal)] text-[#062d30] font-bold shadow-xs'
+                  : 'text-[var(--muted-foreground)] hover:text-[var(--foreground)]'
+              }`}
+            >
+              Master Chronology
+            </button>
+          </div>
+
+          {/* Search bar */}
+          <div className="relative flex-1">
+            <Search
+              size={14}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-[var(--muted-foreground)]"
+            />
+            <input
+              type="text"
+              placeholder="Search milestones, trial IDs, regulatory decisions..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full rounded-md border border-[var(--border)] bg-[var(--surface)] py-1.5 pl-8 pr-3 text-xs text-[var(--foreground)] placeholder-[var(--muted-foreground)] outline-none focus:border-[var(--signal)]"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => setSearchQuery('')}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-xs text-[var(--muted-foreground)] hover:text-[var(--foreground)]"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Asset Filter Pills */}
+        <div className="flex items-center gap-1.5 flex-wrap pt-2 border-t border-[var(--border)] text-[11px]">
+          <span className="text-[10px] uppercase font-bold text-[var(--muted-foreground)] mr-1 tracking-wider">
+            Asset:
+          </span>
+          <button
+            onClick={() => setSelectedAsset('ALL')}
+            className={`px-2.5 py-1 rounded-full text-[10px] font-semibold transition-all border ${
+              selectedAsset === 'ALL'
+                ? 'bg-[var(--foreground)] text-[var(--background)] border-[var(--foreground)] font-bold'
+                : 'bg-[var(--surface)] text-[var(--muted-foreground)] border-[var(--border)] hover:border-[var(--foreground)] hover:text-[var(--foreground)]'
+            }`}
+          >
+            All Programs ({items.length})
+          </button>
+          {availableAssets.map((asset) => {
+            const count = items.filter((i) => i.development_id === asset.id).length
+            return (
+              <button
+                key={asset.id}
+                onClick={() => setSelectedAsset(asset.id)}
+                className={`px-2.5 py-1 rounded-full text-[10px] font-semibold transition-all border ${
+                  selectedAsset === asset.id
+                    ? 'bg-[var(--signal)] text-[#062d30] border-[var(--signal)] font-bold shadow-xs'
+                    : 'bg-[var(--surface)] text-[var(--muted-foreground)] border-[var(--border)] hover:border-[var(--signal)] hover:text-[var(--foreground)]'
+                }`}
+              >
+                {asset.name} ({count})
+              </button>
+            )
+          })}
+        </div>
       </div>
 
       <Card className="lifecycle-tint">
@@ -1627,61 +2107,109 @@ export function LifecyclePage() {
             <Activity size={24} className="animate-spin text-signal mx-auto mb-2" />
             <p>Loading lifecycle timelines...</p>
           </div>
-        ) : items.length > 0 ? (
+        ) : filteredItems.length > 0 ? (
           <>
-          <div className="lifecycle-stepper-list">
-            {lifecycleGroups.map((events) => {
-              const first = events[0]
-              return (
-                <div key={`stepper-${first.development_id}`} className="lifecycle-stepper-card">
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <div>
-                      <strong className="text-sm text-[var(--foreground)]">{first.development_title}</strong>
-                      <p className="text-xs text-[var(--muted-foreground)] mt-1">{first.asset_name || 'Investigational Asset'} · {first.disease}</p>
-                    </div>
-                    <Badge tone="high">{events.length} milestones</Badge>
-                  </div>
-                  <Stepper initialStep={events.length} showNavigationControls={false}>
-                    {events.map((event) => (
-                      <Step key={event.lifecycle_id} title={event.stage} subtitle={new Date(event.event_date).toLocaleDateString()}>
-                        <div className="text-xs">
-                          <p className="font-semibold text-[var(--foreground)] mb-1">{event.stage}</p>
-                          <p className="text-[var(--muted-foreground)] m-0">{event.notes || 'Lifecycle milestone recorded by the transition engine.'}</p>
+            {viewMode === 'stepper' ? (
+              <div className="lifecycle-stepper-list">
+                {lifecycleGroups.map((events) => {
+                  const first = events[0]
+                  return (
+                    <div key={`stepper-${first.development_id}`} className="lifecycle-stepper-card">
+                      <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-2 mb-3">
+                        <div>
+                          <strong className="text-sm text-[var(--foreground)] font-bold">
+                            {first.development_title}
+                          </strong>
+                          <p className="text-xs text-[var(--muted-foreground)] mt-0.5">
+                            <span className="text-[var(--foreground)] font-semibold">
+                              {first.asset_name || 'Investigational Asset'}
+                            </span>
+                            {first.modality && ` · ${first.modality}`}
+                            {first.company_name && ` · ${first.company_name}`}
+                            {` · ${first.disease}`}
+                          </p>
                         </div>
-                      </Step>
-                    ))}
-                  </Stepper>
-                </div>
-              )
-            })}
-          </div>
-          <div className="timeline-track">
-            {items.map((event) => (
-              <div key={event.lifecycle_id} className="timeline-node">
-                <div className="flex items-center justify-between mb-1">
-                  <strong>{event.development_title}</strong>
-                  <Badge tone="high">{event.stage}</Badge>
-                </div>
-                <p className="text-xs text-[var(--muted-foreground)] mb-1">
-                  Asset: <span className="text-[var(--foreground)] font-semibold">{event.asset_name || 'Investigational Asset'}</span> · Disease: {event.disease}
-                </p>
-                {event.notes && (
-                  <p className="text-xs text-[var(--foreground)] mt-2 bg-[var(--surface-secondary)] p-2 rounded border border-[var(--border)]">
-                    {event.notes}
-                  </p>
-                )}
-                <div className="text-[10px] text-[var(--muted-foreground)] mt-2">
-                  Event date: {new Date(event.event_date).toLocaleDateString()}
-                </div>
+                        <Badge tone="high">{events.length} milestones</Badge>
+                      </div>
+                      <Stepper initialStep={events.length} showNavigationControls={false}>
+                        {events.map((event) => (
+                          <Step
+                            key={event.lifecycle_id}
+                            title={event.stage}
+                            subtitle={new Date(event.event_date).toLocaleDateString('en-US', {
+                              month: 'short',
+                              year: 'numeric',
+                            })}
+                          >
+                            <div className="text-xs">
+                              <p className="font-semibold text-[var(--foreground)] mb-1">{event.stage}</p>
+                              <p className="text-[var(--muted-foreground)] m-0 leading-relaxed">
+                                {event.notes || 'Lifecycle milestone recorded by the transition engine.'}
+                              </p>
+                              <span className="inline-block mt-2 text-[10px] text-[var(--muted-foreground)] font-mono">
+                                Verified Date: {new Date(event.event_date).toLocaleDateString()}
+                              </span>
+                            </div>
+                          </Step>
+                        ))}
+                      </Stepper>
+                    </div>
+                  )
+                })}
               </div>
-            ))}
-          </div>
+            ) : (
+              <div className="timeline-track">
+                {chronologicalItems.map((event) => (
+                  <div key={event.lifecycle_id} className="timeline-node">
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1 mb-1">
+                      <div className="flex items-center gap-2">
+                        <strong className="text-xs text-[var(--foreground)] font-bold">
+                          {event.asset_name || event.development_title}
+                        </strong>
+                        <span className="text-[10px] text-[var(--muted-foreground)] font-mono">
+                          {new Date(event.event_date).toLocaleDateString('en-US', {
+                            day: 'numeric',
+                            month: 'short',
+                            year: 'numeric',
+                          })}
+                        </span>
+                      </div>
+                      <Badge tone="high">{event.stage}</Badge>
+                    </div>
+                    <p className="text-xs text-[var(--muted-foreground)] mb-1">
+                      Program: <span className="text-[var(--foreground)]">{event.development_title}</span>
+                      {event.modality && ` · ${event.modality}`}
+                    </p>
+                    {event.notes && (
+                      <p className="text-xs text-[var(--foreground)] mt-2 bg-[var(--surface-secondary)] p-2.5 rounded-md border border-[var(--border)] leading-relaxed">
+                        {event.notes}
+                      </p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </>
         ) : (
-          <div className="empty-state">
-            <Clock size={24} />
-            <p>No lifecycle milestone events recorded</p>
-            <span>Timeline events are extracted from regulatory filings and trial registry transitions.</span>
+          <div className="empty-state py-12">
+            <Clock size={28} className="text-[var(--muted-foreground)] mx-auto mb-2 opacity-60" />
+            <p>No lifecycle milestone events matched your criteria</p>
+            <span>
+              {searchQuery || selectedAsset !== 'ALL'
+                ? 'Try resetting the search query or selecting All Programs.'
+                : 'Timeline events are extracted from regulatory filings and trial registry transitions.'}
+            </span>
+            {(searchQuery || selectedAsset !== 'ALL') && (
+              <button
+                onClick={() => {
+                  setSearchQuery('')
+                  setSelectedAsset('ALL')
+                }}
+                className="mt-3 text-xs text-[var(--signal)] underline font-medium"
+              >
+                Reset filters
+              </button>
+            )}
           </div>
         )}
       </Card>

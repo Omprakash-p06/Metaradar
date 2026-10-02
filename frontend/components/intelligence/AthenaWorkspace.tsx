@@ -6,6 +6,7 @@ import type { AthenaStreamMeta } from '@/lib/api'
 import { getAthenaSuggestedQuestions, streamAthena } from '@/lib/api'
 import { formatError, FormattedError } from '@/lib/errors'
 import { SectionTitle, Card, Badge } from '@/components/metaradar'
+import { sanitizeText, sanitizeMarkdownText } from '@/lib/mappers'
 import { ErrorState } from '../common/ErrorState'
 import { BrainCircuit, ChevronRight, Sparkles, ExternalLink } from 'lucide-react'
 import { GlowingThinkingButton } from '@/components/ui/GlowingThinkingButton'
@@ -195,7 +196,7 @@ export function AthenaWorkspace() {
                 </div>
 
                 <div className="prose text-xs text-[var(--foreground)] leading-relaxed whitespace-pre-wrap">
-                  {answer}
+                  {sanitizeMarkdownText(answer)}
                   {phase === 'streaming' && (
                     <span className="inline-block w-1.5 h-3.5 ml-0.5 align-middle bg-[var(--signal)] animate-pulse" aria-hidden />
                   )}
@@ -255,7 +256,7 @@ export function AthenaWorkspace() {
                                 title="Open source signal page"
                               >
                                 <strong className="text-[var(--foreground)] truncate max-w-[240px] block group-hover:text-[var(--signal)] transition-colors">
-                                  {ev.title}
+                                  {sanitizeText(ev.title)}
                                 </strong>
                               </Link>
                             </div>
@@ -283,7 +284,7 @@ export function AthenaWorkspace() {
                           </div>
                           <Link href={detailHref} title="Open source signal page">
                             <p className="text-[11px] text-[var(--muted-foreground)] line-clamp-2 m-0 hover:text-[var(--foreground)] transition-colors">
-                              {ev.excerpt}
+                              {sanitizeText(ev.excerpt)}
                             </p>
                           </Link>
                         </div>

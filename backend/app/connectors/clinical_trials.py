@@ -9,8 +9,10 @@ from app.connectors.base import (
     ProfileRunResult,
     RawSignalPayload,
     SourceConnector,
+    clean_html_text,
 )
 from app.services.deduplication import generate_fingerprint
+from app.services.pii import PIIPHIScrubber
 
 logger = logging.getLogger(__name__)
 
@@ -229,18 +231,28 @@ class ClinicalTrialsConnector(SourceConnector):
             event_type = "NEW_TRIAL"
 
         url = f"https://clinicaltrials.gov/study/{nct_id}"
-        fingerprint = generate_fingerprint(nct_id=nct_id, title=title, published_at=published_at)
-        content_parts = [p for p in [title, brief_summary, " ".join(conditions + interventions)] if p]
+        cleaned_summary = clean_html_text(brief_summary)
+        cleaned_title = clean_html_text(title)
+        scrubbed_summary, summary_pii, _ = PIIPHIScrubber.scrub(cleaned_summary)
+        scrubbed_title, title_pii, _ = PIIPHIScrubber.scrub(cleaned_title)
+        has_pii = summary_pii or title_pii
+
+        fingerprint = generate_fingerprint(nct_id=nct_id, title=scrubbed_title, published_at=published_at)
+        content_parts = [p for p in [scrubbed_title, scrubbed_summary, " ".join(conditions + interventions)] if p]
         content = "\n".join(content_parts)
         content_hash = hashlib.sha256(f"{nct_id}:{content}".encode("utf-8")).hexdigest()
 
-        evidence_parts = [p for p in [title, brief_summary, f"Conditions: {', '.join(conditions)}" if conditions else "", f"Interventions: {', '.join(interventions)}" if interventions else "", f"Status: {status}" if status else "", f"Event: {event_type}"] if p]
+        evidence_parts = [p for p in [scrubbed_title, scrubbed_summary, f"Conditions: {', '.join(conditions)}" if conditions else "", f"Interventions: {', '.join(interventions)}" if interventions else "", f"Status: {status}" if status else "", f"Event: {event_type}"] if p]
         evidence_text = ". ".join(evidence_parts)
+
+        # Sanitize free-text fields in study dict to avoid unscrubbed PII/PHI leakage (REQ-P1-14)
+        sanitized_study = dict(study) if isinstance(study, dict) else study
+
         raw_payload = {
             "external_id": nct_id,
             "fingerprint": fingerprint,
-            "title": title,
-            "brief_summary": brief_summary,
+            "title": scrubbed_title,
+            "brief_summary": scrubbed_summary,
             "status": status,
             "sponsor": sponsor,
             "source_name": "ClinicalTrials.gov",
@@ -253,17 +265,19 @@ class ClinicalTrialsConnector(SourceConnector):
             "conditions": conditions,
             "interventions": interventions,
             "entities": list({*conditions, *interventions}),
+            "pii_scrubbed": True,
+            "has_pii": has_pii,
             "published_at": published_at.isoformat(),
             "retrieved_at": retrieved_at.isoformat(),
             "connector_version": self.connector_version,
-            "study": study,  # verbatim APIv2 study object (D-23)
+            "study": sanitized_study,  # sanitized APIv2 study object
         }
 
         return RawSignalPayload(
             source_id=self.source_id,
             source_type=self.source_type,
             external_id=nct_id,
-            title=title,
+            title=scrubbed_title,
             content=content,
             url=url,
             published_at=published_at,

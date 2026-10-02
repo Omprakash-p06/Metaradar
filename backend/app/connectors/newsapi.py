@@ -10,6 +10,7 @@ from app.connectors.base import (
     ProfileRunResult,
     RawSignalPayload,
     SourceConnector,
+    clean_html_text,
 )
 from app.services.deduplication import generate_fingerprint
 from app.services.pii import PIIPHIScrubber
@@ -200,8 +201,12 @@ class NewsAPIConnector(SourceConnector):
             return None
 
         # Scrub both title and body fields (WR-04)
-        scrubbed_title, _, _ = PIIPHIScrubber.scrub(title)
-        scrubbed, _, _ = PIIPHIScrubber.scrub(f"{description} {content_raw}".strip())
+        cleaned_title = clean_html_text(title)
+        cleaned_body = clean_html_text(f"{description} {content_raw}".strip())
+        scrubbed_title, title_pii, _ = PIIPHIScrubber.scrub(cleaned_title)
+        scrubbed, body_pii, _ = PIIPHIScrubber.scrub(cleaned_body)
+        has_pii = title_pii or body_pii
+
         content = scrubbed or scrubbed_title
         published_at = self._parse_date(pub_date_raw, retrieved_at)
 
@@ -218,7 +223,7 @@ class NewsAPIConnector(SourceConnector):
         sanitized_article = dict(article)
         for key in ("title", "description", "content"):
             if isinstance(sanitized_article.get(key), str):
-                scrubbed_val, _, _ = PIIPHIScrubber.scrub(sanitized_article[key])
+                scrubbed_val, _, _ = PIIPHIScrubber.scrub(clean_html_text(sanitized_article[key]))
                 sanitized_article[key] = scrubbed_val
 
         raw_payload = {
@@ -235,6 +240,7 @@ class NewsAPIConnector(SourceConnector):
             "provenance_status": "available" if url else "missing_url",
             "entity_terms": entities,
             "pii_scrubbed": True,
+            "has_pii": has_pii,
             "published_at": published_at.isoformat(),
             "retrieved_at": retrieved_at.isoformat(),
             "connector_version": self.connector_version,

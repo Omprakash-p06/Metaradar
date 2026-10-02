@@ -3,6 +3,7 @@ import uuid
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 
+from app.connectors.base import clean_html_text
 from app.core.domain_config import get_domain_config
 from app.providers.base import DataClassification, ProviderCapability
 from app.providers.factory import provider_factory
@@ -24,8 +25,8 @@ ALL_FUNCTIONS = [
 
 def _build_factual_only_brief(sig: Dict[str, Any], reason: str = "Insufficient evidence") -> Dict[str, Any]:
     """Constructs a strictly factual brief when evidence sufficiency gate fails (D-17)."""
-    title = sig.get("title", "")
-    content_excerpt = sig.get("content", "")[:200]
+    title = clean_html_text(sig.get("title", ""))
+    content_excerpt = clean_html_text(sig.get("content", ""))[:200]
     return {
         "brief_id": str(uuid.uuid4()),
         "signal_id": str(sig.get("id") or sig.get("fingerprint")),
@@ -137,10 +138,13 @@ async def node_synthesize(state: MetaRadarState) -> Dict[str, Any]:
                 meta = intelligence.get("model_metadata", {})
                 model_metadata_list.append(meta)
 
-                q1_text = intelligence.get("q1_what_changed") or f"[FACT] {title}. {content[:180]}..."
-                q2_text = intelligence.get("q2_why_matters") or f"[INTERPRETATION] Demonstrates clinical development progression for {asset_id} ({company}), affecting competitive positioning."
+                raw_q1 = intelligence.get("q1_what_changed") or f"[FACT] {clean_html_text(title)}. {clean_html_text(content)[:180]}..."
+                q1_text = clean_html_text(raw_q1)
+                raw_q2 = intelligence.get("q2_why_matters") or f"[INTERPRETATION] Demonstrates clinical development progression for {asset_id} ({company}), affecting competitive positioning."
+                q2_text = clean_html_text(raw_q2)
                 q3_functions = intelligence.get("q3_impacted_functions") or [primary_fn] + secondary_fns
-                q4_action = intelligence.get("q4_action") or f"[INTERPRETATION] {primary_fn.replace('_', ' ').title()} should review clinical trial outcomes and cross-reference with internal pipeline milestones."
+                raw_q4 = intelligence.get("q4_action") or f"[INTERPRETATION] {primary_fn.replace('_', ' ').title()} should review clinical trial outcomes and cross-reference with internal pipeline milestones."
+                q4_action = clean_html_text(raw_q4)
 
                 # Ensure epistemic tags are present
                 if not any(tag in q1_text for tag in ["[FACT]", "[INTERPRETATION]", "[SPECULATION]"]):

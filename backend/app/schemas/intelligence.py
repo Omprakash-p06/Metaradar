@@ -74,6 +74,8 @@ class LifecycleTimelineItem(BaseModel):
     stage: str
     event_date: datetime
     notes: Optional[str] = None
+    modality: Optional[str] = None
+    company_name: Optional[str] = None
 
 
 class ContradictionItem(BaseModel):

@@ -332,9 +332,12 @@ async def get_lifecycle_timelines(
             Development.title.label("development_title"),
             Development.disease.label("disease"),
             Asset.brand_name.label("asset_name"),
+            Asset.modality.label("modality"),
+            Company.name.label("company_name"),
         )
         .join(Development, LifecycleEvent.development_id == Development.development_id)
         .outerjoin(Asset, Development.asset_id == Asset.asset_id)
+        .outerjoin(Company, Development.company_id == Company.company_id)
     )
     if disease:
         query = query.where(Development.disease.ilike(f"%{disease}%"))
@@ -344,17 +347,20 @@ async def get_lifecycle_timelines(
     rows = result.all()
 
     timelines = []
-    for event, dev_title, dev_disease, asset_name in rows:
+    for row in rows:
+        event = row[0]
         timelines.append(
             LifecycleTimelineItem(
                 lifecycle_id=event.lifecycle_id,
                 development_id=event.development_id,
-                development_title=dev_title,
-                disease=dev_disease,
-                asset_name=asset_name,
+                development_title=row[1],
+                disease=row[2],
+                asset_name=row[3],
                 stage=event.stage,
                 event_date=event.event_date,
                 notes=event.notes,
+                modality=row[4],
+                company_name=row[5],
             )
         )
     return timelines

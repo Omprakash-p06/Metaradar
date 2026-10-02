@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation'
 import type { Signal, ApprovalRequest } from '@/types/api'
 import { useAuth } from '@/context/AuthContext'
 import { Badge } from '@/components/metaradar'
+import { sanitizeText } from '@/lib/mappers'
 import { DataModeBadge } from '../common/DataModeBadge'
 import { ApprovalRequestModal } from './ApprovalRequestModal'
 import Counter from '@/components/ui/Counter'
@@ -178,17 +179,23 @@ export function SignalCard({
 
   const authority = getSourceAuthority(signal.source_id, sourceName)
   const { functionName, escalateToLeadership } = getSignalFunction(signal)
-  const suggestedAction = getSuggestedAction(signal)
+  const suggestedAction = sanitizeText(getSuggestedAction(signal))
 
-  const whatChanged =
-    signal.facts && signal.facts.length > 0
+  const rawWhatChanged =
+    signal.what_changed ||
+    (signal.facts && signal.facts.length > 0
       ? signal.facts.join(' ')
-      : signal.evidence_text || signal.summary || signal.content || signal.title
+      : signal.evidence_text || signal.summary || signal.content || signal.title)
+  const whatChanged = sanitizeText(rawWhatChanged)
 
-  const whyItMatters =
+  const rawWhyItMatters =
+    signal.why_it_matters ||
     signal.interpretation ||
     (signal.speculation ? `Strategic perspective: ${signal.speculation}` : null) ||
     'Decision significance pending automated cross-source synthesis.'
+  const whyItMatters = sanitizeText(rawWhyItMatters)
+
+  const cleanTitle = sanitizeText(signal.title)
 
   const rawStatus = (signal.review_status || signal.status || 'UNREVIEWED').toUpperCase()
   const reviewStatusLabel = rawStatus.replace(/_/g, ' ')
@@ -278,7 +285,7 @@ export function SignalCard({
             href={signalUrl}
             className="hover:underline text-inherit inline-flex items-baseline gap-1"
           >
-            {signal.title}
+            {cleanTitle}
           </Link>
         </h3>
 

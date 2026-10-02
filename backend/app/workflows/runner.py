@@ -7,6 +7,7 @@ from sqlalchemy import select, update
 from sqlalchemy.dialects.postgresql import insert as pg_insert
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.connectors.base import clean_html_text
 from app.models import (
     Asset,
     Company,
@@ -32,7 +33,7 @@ _pipeline_concurrency_lock = asyncio.Lock()
 
 class PipelineRunner:
     """
-    Async Execution Orchestrator for the 10-node MetaRadar LangGraph Intelligence Pipeline (D-01).
+    Async Execution Orchestrator for the 11-node MetaRadar LangGraph Intelligence Pipeline (backend/app/workflows/graph.py).
     Manages PipelineRun DB lifecycle, database persistence, error tracking, and state execution.
     """
 
@@ -313,8 +314,11 @@ class PipelineRunner:
                 data_mode = sig.get("data_mode") or ("test_fixture" if is_synth else "live")
                 provenance_status = sig.get("provenance_status") or ("fixture" if is_synth else "available" if url else "missing_url")
                 source_name = sig.get("source_name") or (source.upper().replace("_", " ") if source else None)
-                evidence_text = sig.get("evidence_text") or sig.get("content") or sig.get("title")
+                cleaned_title = clean_html_text(sig.get("title", ""))
+                cleaned_content = clean_html_text(sig.get("content", ""))
+                evidence_text = clean_html_text(sig.get("evidence_text") or cleaned_content or cleaned_title)
                 raw_ref = sig.get("raw_record_reference")
+                cleaned_facts = [clean_html_text(f) for f in (sig.get("facts") or [])]
 
                 stmt = pg_insert(Signal).values(
                     signal_id=sig_uuid,
@@ -325,8 +329,8 @@ class PipelineRunner:
                     pmid=pmid,
                     nct_id=nct_id,
                     regulatory_id=reg_id,
-                    title=sig.get("title", ""),
-                    content=sig.get("content", ""),
+                    title=cleaned_title,
+                    content=cleaned_content,
                     canonical_url=url,
                     evidence_text=evidence_text,
                     raw_record_reference=raw_ref,
@@ -336,7 +340,7 @@ class PipelineRunner:
                     ingested_at=now,
                     signal_type=sig.get("signal_type", "CLINICAL_TRIAL"),
                     disease=sig.get("disease", "haemophilia_a"),
-                    facts=sig.get("facts") or [],
+                    facts=cleaned_facts,
                     interpretation=sig.get("interpretation") or "",
                     speculation=sig.get("speculation") or "",
                     priority=priority_str,
@@ -358,8 +362,8 @@ class PipelineRunner:
                     set_={
                         "source_name": source_name,
                         "external_id": ext_id,
-                        "title": sig.get("title", ""),
-                        "content": sig.get("content", ""),
+                        "title": cleaned_title,
+                        "content": cleaned_content,
                         "retrieved_at": ret_at,
                         "canonical_url": url,
                         "evidence_text": evidence_text,
@@ -367,7 +371,7 @@ class PipelineRunner:
                         "provenance_status": provenance_status,
                         "data_mode": data_mode,
                         "is_synthetic": is_synth,
-                        "facts": sig.get("facts") or [],
+                        "facts": cleaned_facts,
                         "interpretation": sig.get("interpretation") or "",
                         "speculation": sig.get("speculation") or "",
                         "priority": priority_str,

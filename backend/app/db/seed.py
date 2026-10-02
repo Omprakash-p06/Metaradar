@@ -82,6 +82,7 @@ async def seed_data():
             {"company_id": "biomarin", "name": "BioMarin", "is_internal_asset": False},
             {"company_id": "pfizer", "name": "Pfizer", "is_internal_asset": False},
             {"company_id": "roche", "name": "Roche / Genentech", "is_internal_asset": False},
+            {"company_id": "sanofi", "name": "Sanofi / Alnylam", "is_internal_asset": False},
         ]
         for c in companies_data:
             existing = await session.get(Company, c["company_id"])
@@ -125,7 +126,7 @@ async def seed_data():
                 "indication": "Haemophilia A and B without inhibitors",
                 "approval_status": "Approved",
                 "approval_date": "2024-10-11",
-                "jurisdiction": "FDA",
+                "jurisdiction": "FDA / EMA",
             },
             {
                 "asset_id": "alhemo",
@@ -137,7 +138,7 @@ async def seed_data():
                 "indication": "Haemophilia A and B with inhibitors",
                 "approval_status": "Approved",
                 "approval_date": "2023-03-21",
-                "jurisdiction": "Health Canada / Japan / EU",
+                "jurisdiction": "Health Canada / Japan / EU / FDA",
             },
             {
                 "asset_id": "mim8",
@@ -151,6 +152,30 @@ async def seed_data():
                 "approval_date": None,
                 "jurisdiction": "Global Trials",
             },
+            {
+                "asset_id": "hemlibra",
+                "brand_name": "Hemlibra",
+                "generic_name": "emicizumab-kxwh",
+                "company_id": "roche",
+                "mechanism": "Bispecific Factor IXa- and Factor X-directed antibody",
+                "modality": "Bispecific Antibody",
+                "indication": "Haemophilia A with and without inhibitors",
+                "approval_status": "Approved",
+                "approval_date": "2017-11-16",
+                "jurisdiction": "FDA / EMA / Global",
+            },
+            {
+                "asset_id": "fitusiran",
+                "brand_name": "Qfitlia (Fitusiran)",
+                "generic_name": "fitusiran",
+                "company_id": "sanofi",
+                "mechanism": "Subcutaneous RNAi therapeutic targeting antithrombin (AT)",
+                "modality": "siRNA",
+                "indication": "Haemophilia A and B with and without inhibitors",
+                "approval_status": "Phase III Regulatory Review",
+                "approval_date": None,
+                "jurisdiction": "Global Filings",
+            },
         ]
         for a in assets_data:
             existing = await session.get(Asset, a["asset_id"])
@@ -159,69 +184,354 @@ async def seed_data():
 
         await session.flush()
 
-        # 5. Canonical Developments
+        # 5. Canonical Developments (7 key competitive & portfolio programs)
         dev1_id = uuid.UUID("11111111-1111-1111-1111-111111111111")
         dev2_id = uuid.UUID("22222222-2222-2222-2222-222222222222")
         dev3_id = uuid.UUID("33333333-3333-3333-3333-333333333333")
+        dev4_id = uuid.UUID("44444444-4444-4444-4444-444444444444")
+        dev5_id = uuid.UUID("55555555-5555-5555-5555-555555555555")
+        dev6_id = uuid.UUID("66666666-6666-6666-6666-666666666666")
+        dev7_id = uuid.UUID("77777777-7777-7777-7777-777777777777")
 
-        dev1 = await session.get(Development, dev1_id)
-        if not dev1:
-            dev1 = Development(
-                development_id=dev1_id,
-                title="Haemophilia A Long-Term Factor VIII Expression & Durability",
-                disease="haemophilia_a",
-                asset_id="roctavian",
-                company_id="biomarin",
-                current_stage="Phase III Long-term Follow-up",
-            )
-            session.add(dev1)
+        developments_seed = [
+            {
+                "development_id": dev1_id,
+                "title": "Valoctocogene Roxaparvovec (Roctavian) AAV5 FVIII Gene Therapy",
+                "disease": "haemophilia_a",
+                "asset_id": "roctavian",
+                "company_id": "biomarin",
+                "current_stage": "Approved / 5-Year Durability Follow-Up",
+            },
+            {
+                "development_id": dev2_id,
+                "title": "Concizumab (Alhemo) Subcutaneous Anti-TFPI Prophylaxis Pipeline",
+                "disease": "haemophilia_a_b",
+                "asset_id": "alhemo",
+                "company_id": "enterprise-pharma",
+                "current_stage": "Approved (Inhibitors) / Phase III Expansion",
+            },
+            {
+                "development_id": dev3_id,
+                "title": "Mim8 Next-Generation FVIII-Mimetic Bispecific Antibody Pipeline",
+                "disease": "haemophilia_a",
+                "asset_id": "mim8",
+                "company_id": "enterprise-pharma",
+                "current_stage": "Phase III FRONTIER Readouts & Filing Prep",
+            },
+            {
+                "development_id": dev4_id,
+                "title": "Marstacimab (Hympavzi) Anti-TFPI Prophylaxis Program",
+                "disease": "haemophilia_a_b",
+                "asset_id": "hympavzi",
+                "company_id": "pfizer",
+                "current_stage": "FDA & European Commission Approved",
+            },
+            {
+                "development_id": dev5_id,
+                "title": "Emicizumab (Hemlibra) Bispecific Prophylaxis Standard of Care",
+                "disease": "haemophilia_a",
+                "asset_id": "hemlibra",
+                "company_id": "roche",
+                "current_stage": "Approved & Real-World Market Standard",
+            },
+            {
+                "development_id": dev6_id,
+                "title": "Etranacogene Dezaparvovec (Hemgenix) AAV5-Padua FIX Gene Therapy",
+                "disease": "haemophilia_b",
+                "asset_id": "hemgenix",
+                "company_id": "csl-behring",
+                "current_stage": "FDA & EMA Approved / Commercial",
+            },
+            {
+                "development_id": dev7_id,
+                "title": "Fitusiran (Qfitlia) Subcutaneous Antithrombin-Targeted RNAi",
+                "disease": "haemophilia_a_b",
+                "asset_id": "fitusiran",
+                "company_id": "sanofi",
+                "current_stage": "Phase III Regulatory Review Underway",
+            },
+        ]
 
-        dev2 = await session.get(Development, dev2_id)
-        if not dev2:
-            dev2 = Development(
-                development_id=dev2_id,
-                title="Subcutaneous Anti-TFPI Prophylaxis Landscape in Haemophilia B",
-                disease="haemophilia_b",
-                asset_id="alhemo",
-                company_id="enterprise-pharma",
-                current_stage="Approved (Inhibitors) / Phase III Expansion",
-            )
-            session.add(dev2)
-
-        dev3 = await session.get(Development, dev3_id)
-        if not dev3:
-            dev3 = Development(
-                development_id=dev3_id,
-                title="Next-Generation FVIII-Mimetic Subcutaneous Hemostasis",
-                disease="haemophilia_a",
-                asset_id="mim8",
-                company_id="enterprise-pharma",
-                current_stage="Phase III FRONTIER Readouts",
-            )
-            session.add(dev3)
+        for d_info in developments_seed:
+            existing_dev = await session.get(Development, d_info["development_id"])
+            if not existing_dev:
+                session.add(Development(**d_info))
+            else:
+                existing_dev.title = d_info["title"]
+                existing_dev.disease = d_info["disease"]
+                existing_dev.asset_id = d_info["asset_id"]
+                existing_dev.company_id = d_info["company_id"]
+                existing_dev.current_stage = d_info["current_stage"]
 
         await session.flush()
 
-        # 6. Lifecycle Events
+        # 6. Real Drug Lifecycle Milestone Events (Comprehensive multi-step chronologies)
         await session.execute(delete(LifecycleEvent))
         session.add_all([
+            # --- Roctavian (valoctocogene roxaparvovec) ---
             LifecycleEvent(
                 development_id=dev1_id,
                 source_id="clinical_trials",
-                stage="Phase III 5-Year Data Readout",
-                notes="5-year post-infusion data presented at congress showing steady baseline factor expression.",
+                stage="Phase III GENEr8-1 Trial Initiation",
+                event_date=datetime(2017, 12, 8, tzinfo=timezone.utc),
+                notes="NCT03370913: Global open-label study evaluating single infusion of AAV5-hFVIII-SQ vector in 134 severe Haemophilia A patients.",
+            ),
+            LifecycleEvent(
+                development_id=dev1_id,
+                source_id="clinical_trials",
+                stage="Pivotal Primary Endpoint Readout",
+                event_date=datetime(2021, 1, 10, tzinfo=timezone.utc),
+                notes="GENEr8-1 achieved primary endpoint: 84% reduction in annualized bleeding rate (ABR) and 99% reduction in FVIII infusions.",
+            ),
+            LifecycleEvent(
+                development_id=dev1_id,
+                source_id="ema",
+                stage="EMA Conditional Marketing Authorization",
+                event_date=datetime(2022, 8, 24, tzinfo=timezone.utc),
+                notes="European Commission granted conditional marketing authorization for adults with severe Haemophilia A without pre-existing AAV5 capsid antibodies.",
+            ),
+            LifecycleEvent(
+                development_id=dev1_id,
+                source_id="fda",
+                stage="FDA Regulatory Approval",
+                event_date=datetime(2023, 6, 29, tzinfo=timezone.utc),
+                notes="First gene therapy approved by FDA for severe Haemophilia A, indicated as a one-time single intravenous dose.",
+            ),
+            LifecycleEvent(
+                development_id=dev1_id,
+                source_id="pubmed",
+                stage="5-Year Durability & Transgene Expression Readout",
+                event_date=datetime(2024, 7, 15, tzinfo=timezone.utc),
+                notes="Long-term follow-up from Phase 1/2 and Phase 3 cohorts demonstrated sustained hemostatic protection with documented gradual decline in median FVIII activity.",
+            ),
+
+            # --- Concizumab (Alhemo) ---
+            LifecycleEvent(
+                development_id=dev2_id,
+                source_id="clinical_trials",
+                stage="Phase I/II explorer4/5 FIH Trials",
+                event_date=datetime(2017, 4, 12, tzinfo=timezone.utc),
+                notes="NCT02490787: Dose-escalation evaluating anti-TFPI antibody safety, pharmacokinetics, and pharmacodynamics in patients with inhibitors.",
+            ),
+            LifecycleEvent(
+                development_id=dev2_id,
+                source_id="clinical_trials",
+                stage="Phase III explorer7 Pivotal Initiation",
+                event_date=datetime(2019, 10, 1, tzinfo=timezone.utc),
+                notes="NCT03448835: Prospective, multi-center Phase 3 trial evaluating daily subcutaneous concizumab prophylaxis in Haemophilia A and B with inhibitors.",
+            ),
+            LifecycleEvent(
+                development_id=dev2_id,
+                source_id="clinical_trials",
+                stage="Phase III explorer7 Topline Readout",
+                event_date=datetime(2022, 7, 10, tzinfo=timezone.utc),
+                notes="Met primary endpoint with an 86% reduction in treated bleeds and a median ABR of 0.0 compared to 9.8 in non-prophylaxis arm.",
+            ),
+            LifecycleEvent(
+                development_id=dev2_id,
+                source_id="ema",
+                stage="First Global Approval (Health Canada / Japan / EU)",
+                event_date=datetime(2023, 3, 21, tzinfo=timezone.utc),
+                notes="Approved under trade name Alhemo as once-daily subcutaneous prophylaxis for patients aged 12 and older with inhibitor complications.",
+            ),
+            LifecycleEvent(
+                development_id=dev2_id,
+                source_id="clinical_trials",
+                stage="Phase III explorer8 Non-Inhibitor Readout",
+                event_date=datetime(2023, 9, 1, tzinfo=timezone.utc),
+                notes="NCT04082429: Positive hemostatic efficacy demonstrated in Haemophilia A/B patients without inhibitors, supporting label expansion.",
             ),
             LifecycleEvent(
                 development_id=dev2_id,
                 source_id="fda",
-                stage="Label Expansion Filing",
-                notes="Regulatory submission under review for non-inhibitor patient population.",
+                stage="FDA BLA Resubmission & Expanded Filing",
+                event_date=datetime(2024, 5, 15, tzinfo=timezone.utc),
+                notes="BLA dossier resubmission addressing manufacturing monitoring and delivery device specifications.",
+            ),
+
+            # --- Mim8 (Investigational FVIII-mimetic bispecific mAb) ---
+            LifecycleEvent(
+                development_id=dev3_id,
+                source_id="clinical_trials",
+                stage="Phase I/II FRONTIER-1 First-in-Human Initiation",
+                event_date=datetime(2020, 2, 14, tzinfo=timezone.utc),
+                notes="NCT04204408: Evaluating safety, tolerability, pharmacokinetics, and pharmacodynamics of subcutaneous Mim8 in Haemophilia A.",
             ),
             LifecycleEvent(
                 development_id=dev3_id,
                 source_id="clinical_trials",
-                stage="Phase III FRONTIER Topline Primary Endpoint Met",
-                notes="Statistically significant annualized bleeding rate reduction in severe Haemophilia A.",
+                stage="Phase III FRONTIER-2 Pivotal Initiation",
+                event_date=datetime(2021, 11, 5, tzinfo=timezone.utc),
+                notes="NCT05053139: Global open-label study evaluating once-weekly and once-monthly subcutaneous Mim8 prophylaxis in adolescents and adults.",
+            ),
+            LifecycleEvent(
+                development_id=dev3_id,
+                source_id="clinical_trials",
+                stage="Phase III FRONTIER-3 Pediatric Expansion",
+                event_date=datetime(2022, 8, 18, tzinfo=timezone.utc),
+                notes="NCT05306418: Pediatric Phase 3 cohort initiated in children aged 0 to <12 years with severe Haemophilia A.",
+            ),
+            LifecycleEvent(
+                development_id=dev3_id,
+                source_id="clinical_trials",
+                stage="Phase III FRONTIER-2 Primary Endpoint Met",
+                event_date=datetime(2024, 5, 28, tzinfo=timezone.utc),
+                notes="Primary endpoint met with statistical significance: 95% zero-bleed rate in monthly arm, demonstrating superior bleed control over prior factor prophylaxis.",
+            ),
+            LifecycleEvent(
+                development_id=dev3_id,
+                source_id="clinical_trials",
+                stage="Phase III FRONTIER-4 Surgical Cohort Clearance",
+                event_date=datetime(2024, 11, 12, tzinfo=timezone.utc),
+                notes="NCT05842031: Reliable hemostatic control demonstrated during minor and major surgical procedures without requiring factor replacement.",
+            ),
+            LifecycleEvent(
+                development_id=dev3_id,
+                source_id="fda",
+                stage="Global Regulatory Dossier Preparation",
+                event_date=datetime(2025, 2, 20, tzinfo=timezone.utc),
+                notes="Pre-BLA and MAA filing dossiers finalized for submissions across the United States, European Union, and Japan.",
+            ),
+
+            # --- Marstacimab (Hympavzi) ---
+            LifecycleEvent(
+                development_id=dev4_id,
+                source_id="clinical_trials",
+                stage="Phase III BASIS Trial Initiation",
+                event_date=datetime(2019, 6, 20, tzinfo=timezone.utc),
+                notes="NCT03938792: Global open-label study evaluating subcutaneous marstacimab in severe Haemophilia A and B without inhibitors.",
+            ),
+            LifecycleEvent(
+                development_id=dev4_id,
+                source_id="clinical_trials",
+                stage="Phase III BASIS Primary Readout",
+                event_date=datetime(2023, 5, 30, tzinfo=timezone.utc),
+                notes="Primary endpoint achieved: 35% statistically significant reduction in annualized bleeding rate compared to routine factor prophylaxis.",
+            ),
+            LifecycleEvent(
+                development_id=dev4_id,
+                source_id="fda",
+                stage="FDA BLA & EMA MAA Acceptance",
+                event_date=datetime(2023, 12, 14, tzinfo=timezone.utc),
+                notes="FDA accepted BLA with standard review designation; EMA validated marketing authorization application.",
+            ),
+            LifecycleEvent(
+                development_id=dev4_id,
+                source_id="fda",
+                stage="FDA Regulatory Approval",
+                event_date=datetime(2024, 10, 11, tzinfo=timezone.utc),
+                notes="FDA approved Hympavzi as the first once-weekly anti-TFPI subcutaneous treatment for adults and adolescents with Haemophilia A or B without inhibitors.",
+            ),
+            LifecycleEvent(
+                development_id=dev4_id,
+                source_id="ema",
+                stage="European Commission Approval",
+                event_date=datetime(2024, 11, 22, tzinfo=timezone.utc),
+                notes="European Commission granted marketing authorization for Hympavzi across all 27 EU member states.",
+            ),
+
+            # --- Emicizumab (Hemlibra) ---
+            LifecycleEvent(
+                development_id=dev5_id,
+                source_id="clinical_trials",
+                stage="Phase III HAVEN 1 Readout (Inhibitor Cohort)",
+                event_date=datetime(2016, 9, 15, tzinfo=timezone.utc),
+                notes="NCT02622321: Demonstrated 87% reduction in treated bleeds vs prior on-demand bypassing agents in patients with FVIII inhibitors.",
+            ),
+            LifecycleEvent(
+                development_id=dev5_id,
+                source_id="fda",
+                stage="FDA Regulatory Approval (Inhibitors)",
+                event_date=datetime(2017, 11, 16, tzinfo=timezone.utc),
+                notes="FDA approval as first-in-class bispecific antibody for routine prophylaxis to prevent bleeding episodes in Haemophilia A with inhibitors.",
+            ),
+            LifecycleEvent(
+                development_id=dev5_id,
+                source_id="fda",
+                stage="FDA Label Expansion (Non-Inhibitors)",
+                event_date=datetime(2018, 10, 4, tzinfo=timezone.utc),
+                notes="Approval expanded to include adults and children with Haemophilia A without factor VIII inhibitors based on HAVEN 3 and 4 trials.",
+            ),
+            LifecycleEvent(
+                development_id=dev5_id,
+                source_id="pubmed",
+                stage="7-Year Long-Term Real-World Registry Readout",
+                event_date=datetime(2023, 7, 12, tzinfo=timezone.utc),
+                notes="Long-term registry follow-up published in peer-reviewed literature confirming sustained high zero-bleed rates across >10,000 patient-years.",
+            ),
+
+            # --- Hemgenix (etranacogene dezaparvovec) ---
+            LifecycleEvent(
+                development_id=dev6_id,
+                source_id="clinical_trials",
+                stage="Phase III HOPE-B Trial Initiation",
+                event_date=datetime(2018, 6, 12, tzinfo=timezone.utc),
+                notes="NCT03569891: Pivotal study evaluating single-dose AAV5 vector carrying the hyperactive Padua Factor IX variant in severe Haemophilia B.",
+            ),
+            LifecycleEvent(
+                development_id=dev6_id,
+                source_id="clinical_trials",
+                stage="HOPE-B 18-Month Efficacy Readout",
+                event_date=datetime(2021, 12, 10, tzinfo=timezone.utc),
+                notes="Mean FIX activity sustained at 36.9% of normal; 64% reduction in annualized bleeding rate; 96% discontinuation of routine factor prophylaxis.",
+            ),
+            LifecycleEvent(
+                development_id=dev6_id,
+                source_id="fda",
+                stage="FDA Historic Regulatory Approval",
+                event_date=datetime(2022, 11, 22, tzinfo=timezone.utc),
+                notes="FDA approved Hemgenix as the first gene therapy for adults with Haemophilia B who currently use FIX prophylaxis or have life-threatening hemorrhage.",
+            ),
+            LifecycleEvent(
+                development_id=dev6_id,
+                source_id="ema",
+                stage="EMA Conditional Marketing Authorization",
+                event_date=datetime(2023, 2, 20, tzinfo=timezone.utc),
+                notes="European Commission granted conditional marketing authorization for adult patients with severe and moderately severe Haemophilia B.",
+            ),
+            LifecycleEvent(
+                development_id=dev6_id,
+                source_id="pubmed",
+                stage="3-Year Multi-Cohort Sustained Hemostasis Readout",
+                event_date=datetime(2024, 12, 5, tzinfo=timezone.utc),
+                notes="Published 3-year follow-up data demonstrating stable Padua Factor IX expression with 94% of participants remaining continuously prophylaxis-free.",
+            ),
+
+            # --- Fitusiran (Qfitlia) ---
+            LifecycleEvent(
+                development_id=dev7_id,
+                source_id="clinical_trials",
+                stage="Phase III ATLAS Program Initiation",
+                event_date=datetime(2018, 2, 22, tzinfo=timezone.utc),
+                notes="NCT03417102 (ATLAS-INH) and NCT03417245 (ATLAS-A/B) initiated to evaluate monthly subcutaneous siRNA targeting antithrombin.",
+            ),
+            LifecycleEvent(
+                development_id=dev7_id,
+                source_id="clinical_trials",
+                stage="Phase III ATLAS-INH Primary Readout",
+                event_date=datetime(2021, 11, 19, tzinfo=timezone.utc),
+                notes="Statistically significant 89% reduction in annualized bleeding rate in Haemophilia A and B patients with inhibitors.",
+            ),
+            LifecycleEvent(
+                development_id=dev7_id,
+                source_id="clinical_trials",
+                stage="Phase III ATLAS-PPX Switch Trial Readout",
+                event_date=datetime(2022, 7, 14, tzinfo=timezone.utc),
+                notes="NCT03549884: Demonstrated 61% reduction in bleeding episodes compared with prior clotting factor or bypassing agent prophylaxis.",
+            ),
+            LifecycleEvent(
+                development_id=dev7_id,
+                source_id="pubmed",
+                stage="Revised Optimized Dose Regimen Validation",
+                event_date=datetime(2023, 9, 25, tzinfo=timezone.utc),
+                notes="Lower-dose 50 mg bi-monthly regimen published, maintaining therapeutic antithrombin lowering between 15% and 35% with reduced thrombotic risk.",
+            ),
+            LifecycleEvent(
+                development_id=dev7_id,
+                source_id="fda",
+                stage="Global Regulatory Submissions Under Review",
+                event_date=datetime(2024, 11, 18, tzinfo=timezone.utc),
+                notes="Regulatory submission dossiers accepted for review by FDA, EMA, and Japan PMDA for prophylactic treatment of Haemophilia A and B.",
             ),
         ])
 
@@ -353,7 +663,7 @@ async def seed_data():
                 "title": "Five-Year Durability Outcomes in AAV5 Gene Therapy for Severe Haemophilia A",
                 "content": "Sustained median Factor VIII expression was maintained at 5 years with a 92% reduction in annualized bleeding rates compared to baseline prophylactic therapy.",
                 "canonical_url": "https://pubmed.ncbi.nlm.nih.gov/38291023/",
-                "published_at": now - timedelta(days=1),
+                "published_at": now - timedelta(hours=2),
                 "retrieved_at": now,
                 "ingested_at": now,
                 "data_mode": "test_fixture",
@@ -404,7 +714,7 @@ async def seed_data():
                 "title": "Phase 3 FRONTIER-2 Trial Evaluates Subcutaneous Mim8 in Haemophilia A Patients",
                 "content": "Primary outcome measures achieved zero-bleed status in a majority of treated cohorts without unexpected thromboembolic adverse events.",
                 "canonical_url": "https://clinicaltrials.gov/study/NCT04869267",
-                "published_at": now - timedelta(days=3),
+                "published_at": now - timedelta(hours=14),
                 "retrieved_at": now,
                 "ingested_at": now,
                 "data_mode": "test_fixture",
@@ -459,8 +769,8 @@ async def seed_data():
                 "disease": "haemophilia_a",
                 "title": "FDA Priority Review Granted for Subcutaneous Anti-TFPI Prophylaxis Expansion",
                 "content": "Supplemental Biologics License Application (sBLA) accepted under Priority Review with a PDUFA action date scheduled for late 2026.",
-                "canonical_url": "https://www.accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761083",
-                "published_at": now - timedelta(days=5),
+                "canonical_url": "https://accessdata.fda.gov/scripts/cder/daf/index.cfm?event=overview.process&ApplNo=761083",
+                "published_at": now - timedelta(days=1, hours=3),
                 "retrieved_at": now,
                 "ingested_at": now,
                 "data_mode": "test_fixture",
@@ -557,7 +867,10 @@ async def seed_data():
             if not sig_obj:
                 session.add(Signal(**s_data))
             else:
-                # Update with verified score breakdown, decision fields, and provenance URLs
+                # Update with verified score breakdown, decision fields, provenance URLs, and fresh dates
+                sig_obj.published_at = s_data["published_at"]
+                sig_obj.retrieved_at = s_data["retrieved_at"]
+                sig_obj.ingested_at = s_data["ingested_at"]
                 sig_obj.score_breakdown = s_data["score_breakdown"]
                 sig_obj.canonical_url = s_data["canonical_url"]
                 sig_obj.external_id = s_data["external_id"]
@@ -594,7 +907,7 @@ async def seed_data():
             from app.services.authority import get_source_authority_tier, resolve_validation_status
             from app.services.routing import resolve_signal_routing, StakeholderFunction
 
-            for item in syn_data[:60]:
+            for idx, item in enumerate(syn_data[:60]):
                 fp = f"syn:{item['id']}"
                 sig_stmt = select(Signal).where(Signal.fingerprint == fp)
                 sig_res = await session.execute(sig_stmt)
@@ -603,7 +916,8 @@ async def seed_data():
                 title = item.get("title", "")
                 content = item.get("content", "")
                 source_id = item.get("source_id", "newsapi")
-                pub_at = datetime.fromisoformat(item["published_at"]) if "published_at" in item else now
+                # Dynamically space synthetic signals from current day backwards over recent days
+                pub_at = now - timedelta(hours=6 + (idx * 5))
                 
                 score_obj = priority_scorer.score_text(f"{title} {content}", pub_at, novelty_distance=0.65)
                 routing = resolve_signal_routing(

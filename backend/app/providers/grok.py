@@ -17,6 +17,7 @@ from app.core.config import settings
 from app.core.logging import get_logger
 from app.providers.base import LLMProvider, ProviderCapability, DataClassification
 from app.schemas import ModelMetadataSchema
+from app.services.pii import PIIPHIScrubber
 
 logger = get_logger("grok_provider")
 
@@ -152,9 +153,17 @@ class GrokProvider(LLMProvider):
         if not self.validate_privacy_gate(classification):
             raise PermissionError(f"Privacy gate rejected external API transmission for classification '{classification}'")
 
+        # Scrub all evidence items and ensure no PII (asymmetric privacy enforcement mitigation)
+        scrubbed_evidence = []
+        for item in evidence:
+            scrubbed, has_pii, _ = PIIPHIScrubber.scrub(item)
+            if has_pii:
+                raise PermissionError("Privacy gate rejected payload: PII/PHI detected in evidence")
+            scrubbed_evidence.append(scrubbed)
+
         start_time = time.time()
 
-        evidence_block = "\n".join(f"- {e}" for e in evidence)
+        evidence_block = "\n".join(f"- {e}" for e in scrubbed_evidence)
         messages = [
             {
                 "role": "system",

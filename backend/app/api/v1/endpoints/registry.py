@@ -23,12 +23,28 @@ async def get_developments_registry(
             Development,
             Asset.brand_name.label("asset_name"),
             Company.name.label("company_name"),
+            Asset.generic_name.label("generic_name"),
+            Asset.modality.label("modality"),
+            Asset.mechanism.label("mechanism"),
+            Asset.indication.label("indication"),
+            Asset.approval_status.label("approval_status"),
+            Asset.jurisdiction.label("jurisdiction"),
             func.count(Signal.signal_id).label("signal_count"),
         )
         .outerjoin(Asset, Development.asset_id == Asset.asset_id)
         .outerjoin(Company, Development.company_id == Company.company_id)
         .outerjoin(Signal, Development.development_id == Signal.development_id)
-        .group_by(Development.development_id, Asset.brand_name, Company.name)
+        .group_by(
+            Development.development_id,
+            Asset.brand_name,
+            Company.name,
+            Asset.generic_name,
+            Asset.modality,
+            Asset.mechanism,
+            Asset.indication,
+            Asset.approval_status,
+            Asset.jurisdiction,
+        )
     )
 
     if disease:
@@ -46,16 +62,23 @@ async def get_developments_registry(
     rows = result.all()
 
     items = []
-    for dev, asset_name, company_name, sig_count in rows:
+    for row in rows:
+        dev = row[0]
         items.append(
             DevelopmentSummary(
                 development_id=dev.development_id,
                 title=dev.title,
                 disease=dev.disease,
                 current_stage=dev.current_stage,
-                asset_name=asset_name,
-                company_name=company_name,
-                signal_count=sig_count or 0,
+                asset_name=row[1],
+                company_name=row[2],
+                generic_name=row[3],
+                modality=row[4],
+                mechanism=row[5],
+                indication=row[6],
+                approval_status=row[7],
+                jurisdiction=row[8],
+                signal_count=row[9] or 0,
                 created_at=dev.created_at,
                 updated_at=dev.updated_at,
             )

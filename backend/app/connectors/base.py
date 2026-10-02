@@ -1,7 +1,9 @@
 import asyncio
+import html
 import json
 import logging
 import random
+import re
 from dataclasses import dataclass, field
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Literal, Optional, Tuple
@@ -17,6 +19,21 @@ from app.models import ConnectorState
 from app.services.deduplication import check_and_persist_bronze
 
 logger = logging.getLogger(__name__)
+
+
+def clean_html_text(text: Optional[str]) -> str:
+    """Strips HTML tags, comments, script/style, unescapes entities, and collapses whitespace."""
+    if not text:
+        return ""
+    # Remove script and style elements
+    s = re.sub(r"<(script|style)[^>]*>.*?</\1>", " ", text, flags=re.DOTALL | re.IGNORECASE)
+    # Remove HTML tags
+    s = re.sub(r"<[^>]+>", " ", s)
+    # Unescape HTML entities (e.g. &amp;, &quot;, &#39;, &nbsp;)
+    s = html.unescape(s)
+    # Collapse multiple whitespace/newlines
+    s = re.sub(r"\s+", " ", s).strip()
+    return s
 
 
 class ConnectorFetchError(Exception):

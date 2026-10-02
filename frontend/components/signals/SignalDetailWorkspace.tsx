@@ -11,6 +11,7 @@ import Counter from '@/components/ui/Counter'
 import Stepper, { Step } from '@/components/ui/Stepper'
 import { GlowingThinkingButton } from '@/components/ui/GlowingThinkingButton'
 import { useTheme } from '@/components/theme/ThemeProvider'
+import { sanitizeText } from '@/lib/mappers'
 import { getSourceAuthority, getSignalFunction, getSuggestedAction } from './SignalCard'
 import { EvidenceConvergenceWidget } from './EvidenceConvergenceWidget'
 import { PriorityScoreExplainer } from './PriorityScoreExplainer'
@@ -138,19 +139,23 @@ export function SignalDetailWorkspace({
 
   const authority = getSourceAuthority(signal.source_id, sourceName)
   const { functionName, escalateToLeadership } = getSignalFunction(signal)
-  const suggestedAction = getSuggestedAction(signal)
+  const suggestedAction = sanitizeText(signal.suggested_action || getSuggestedAction(signal))
 
-  const whatChanged =
+  const rawWhatChanged =
     signal.what_changed ||
     (signal.facts && signal.facts.length > 0
       ? signal.facts.join(' ')
       : signal.evidence_text || signal.summary || signal.content || signal.title)
+  const whatChanged = sanitizeText(rawWhatChanged)
 
-  const whyItMatters =
+  const rawWhyItMatters =
     signal.why_it_matters ||
     signal.interpretation ||
     (signal.speculation ? `Strategic perspective: ${signal.speculation}` : null) ||
     'Decision significance pending live clinical reasoning synthesis.'
+  const whyItMatters = sanitizeText(rawWhyItMatters)
+
+  const cleanTitle = sanitizeText(signal.title)
 
   const rawPayload = (signal as any).raw_payload || {}
 
@@ -326,7 +331,7 @@ export function SignalDetailWorkspace({
             </div>
 
             <h1 className="text-xl md:text-2xl font-bold text-[var(--foreground)] leading-tight m-0">
-              {signal.title}
+              {cleanTitle}
             </h1>
           </div>
 

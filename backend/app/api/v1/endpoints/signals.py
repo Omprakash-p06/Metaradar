@@ -55,6 +55,7 @@ from app.services.vector_query import vector_query_service
 from app.providers.factory import provider_factory
 from app.providers.base import ProviderCapability, DataClassification
 from app.providers.gemma import GemmaProvider, OllamaUnavailableError
+from app.connectors.base import clean_html_text
 
 router = APIRouter()
 
@@ -137,16 +138,18 @@ def _serialize_signal(s: Signal, approval_request: Optional[ApprovalRequest] = N
         content=s.content,
     )
 
-    what_changed = (
+    raw_wc = (
         getattr(s, "what_changed", None)
         or (s.facts[0] if (s.facts and len(s.facts) > 0) else s.title)
     )
-    why_it_matters = (
+    what_changed = clean_html_text(raw_wc)
+    raw_wim = (
         getattr(s, "why_it_matters", None)
         or s.interpretation
         or s.speculation
         or "Clinical decision significance under active landscape review."
     )
+    why_it_matters = clean_html_text(raw_wim)
     relevant_function = getattr(s, "relevant_function", None) or routing_data["relevant_function"]
     route_destination = getattr(s, "route_destination", None) or routing_data["route_destination"]
     route_role = getattr(s, "route_role", None) or routing_data["route_role"]
@@ -273,8 +276,8 @@ def _serialize_signal(s: Signal, approval_request: Optional[ApprovalRequest] = N
         canonical_url=canonical_url,
         signal_type=s.signal_type,
         disease=s.disease,
-        title=s.title,
-        content=s.content,
+        title=clean_html_text(s.title),
+        content=clean_html_text(s.content),
         published_at=s.published_at,
         retrieved_at=s.retrieved_at,
         ingested_at=ingested_at,
@@ -284,7 +287,7 @@ def _serialize_signal(s: Signal, approval_request: Optional[ApprovalRequest] = N
         confidence_type=confidence_type,
         confidence_rationale=confidence_rationale,
         provenance_status=prov_status,
-        evidence_text=evidence_text,
+        evidence_text=clean_html_text(evidence_text),
         raw_record_reference=raw_record_ref,
         scoring_status=scoring_status,
         what_changed=what_changed,
@@ -1238,7 +1241,7 @@ async def get_signal_decision_object(signal_id: str, db: AsyncSession = Depends(
 
     return SignalDecisionResponse(
         id=str(s.signal_id),
-        title=s.title,
+        title=clean_html_text(s.title),
         signal_type=s.signal_type,
         disease=s.disease,
         priority=PrioritySchema(
@@ -1246,8 +1249,8 @@ async def get_signal_decision_object(signal_id: str, db: AsyncSession = Depends(
             score=s.score_breakdown.total if s.score_breakdown else None,
             score_breakdown=s.score_breakdown,
         ),
-        what_changed=s.what_changed or s.title,
-        why_it_matters=s.why_it_matters or "Clinical significance under active evaluation.",
+        what_changed=clean_html_text(s.what_changed or s.title),
+        why_it_matters=clean_html_text(s.why_it_matters or "Clinical significance under active evaluation."),
         function=FunctionSchema(
             name=s.relevant_function or "MEDICAL_AFFAIRS",
             label=fn_label,
@@ -1441,7 +1444,9 @@ async def _retrieve_athena_evidence(
                 s = signals_by_id.get(r.signal_id)
                 if not s:
                     continue
-                excerpt = s.content[:500] if s.content else s.title
+                clean_title = clean_html_text(s.title)
+                clean_body = clean_html_text(s.content or s.title)
+                excerpt = clean_body[:350]
                 can_url = s.canonical_url
                 if can_url and ("metaradar.internal" in can_url or can_url.endswith(".internal")):
                     can_url = None
@@ -1449,7 +1454,7 @@ async def _retrieve_athena_evidence(
                 citations.append(
                     AthenaEvidenceCitation(
                         signal_id=r.signal_id,
-                        title=s.title,
+                        title=clean_title,
                         source_id=s.source_id,
                         canonical_url=can_url,
                         published_at=s.published_at.isoformat() if s.published_at else None,
@@ -1459,7 +1464,7 @@ async def _retrieve_athena_evidence(
                     )
                 )
                 type_tag = "[TEST FIXTURE]" if is_synth else "[LIVE SIGNAL]"
-                evidence_texts.append(f"[{s.source_id.upper()}] ({type_tag}) {s.title}: {excerpt}")
+                evidence_texts.append(f"[{s.source_id.upper()}] ({type_tag}) {clean_title}: {excerpt}")
     except Exception as e:
         logger.warning(f"[ATHENA] Vector search error during retrieval: {e}")
 
@@ -1476,7 +1481,9 @@ async def _retrieve_athena_evidence(
         ).limit(4)
         lex_res = await db.execute(lex_stmt)
         for s in lex_res.scalars().all():
-            excerpt = s.content[:500] if s.content else s.title
+            clean_title = clean_html_text(s.title)
+            clean_body = clean_html_text(s.content or s.title)
+            excerpt = clean_body[:350]
             can_url = s.canonical_url
             if can_url and ("metaradar.internal" in can_url or can_url.endswith(".internal")):
                 can_url = None
@@ -1484,7 +1491,7 @@ async def _retrieve_athena_evidence(
             citations.append(
                 AthenaEvidenceCitation(
                     signal_id=str(s.signal_id),
-                    title=s.title,
+                    title=clean_title,
                     source_id=s.source_id,
                     canonical_url=can_url,
                     published_at=s.published_at.isoformat() if s.published_at else None,
@@ -1494,7 +1501,7 @@ async def _retrieve_athena_evidence(
                 )
             )
             type_tag = "[TEST FIXTURE]" if is_synth else "[LIVE SIGNAL]"
-            evidence_texts.append(f"[{s.source_id.upper()}] ({type_tag}) {s.title}: {excerpt}")
+            evidence_texts.append(f"[{s.source_id.upper()}] ({type_tag}) {clean_title}: {excerpt}")
 
     # Broad landscape / weekly summary fallback
     if not citations:
@@ -1504,7 +1511,9 @@ async def _retrieve_athena_evidence(
             broad_stmt = select(Signal).order_by(Signal.published_at.desc().nullslast(), Signal.ingested_at.desc()).limit(5)
             broad_res = await db.execute(broad_stmt)
             for s in broad_res.scalars().all():
-                excerpt = s.content[:500] if s.content else s.title
+                clean_title = clean_html_text(s.title)
+                clean_body = clean_html_text(s.content or s.title)
+                excerpt = clean_body[:350]
                 can_url = s.canonical_url
                 if can_url and ("metaradar.internal" in can_url or can_url.endswith(".internal")):
                     can_url = None
@@ -1512,7 +1521,7 @@ async def _retrieve_athena_evidence(
                 citations.append(
                     AthenaEvidenceCitation(
                         signal_id=str(s.signal_id),
-                        title=s.title,
+                        title=clean_title,
                         source_id=s.source_id,
                         canonical_url=can_url,
                         published_at=s.published_at.isoformat() if s.published_at else None,
@@ -1522,7 +1531,7 @@ async def _retrieve_athena_evidence(
                     )
                 )
                 type_tag = "[TEST FIXTURE]" if is_synth else "[LIVE SIGNAL]"
-                evidence_texts.append(f"[{s.source_id.upper()}] ({type_tag}) {s.title}: {excerpt}")
+                evidence_texts.append(f"[{s.source_id.upper()}] ({type_tag}) {clean_title}: {excerpt}")
 
     return citations, evidence_texts
 
@@ -1596,12 +1605,13 @@ async def query_athena(payload: AthenaQueryRequest, db: AsyncSession = Depends(g
     model_metadata = ModelMetadataSchema(**meta_dict) if meta_dict and isinstance(meta_dict, dict) else None
 
     if mode == "degraded_factual" or (model_metadata and not model_metadata.reasoning_available):
-        answer = provider_res.get("factual_summary") or provider_res.get("what_changed") or "Reasoning unavailable in degraded factual mode."
+        raw_ans = provider_res.get("factual_summary") or provider_res.get("what_changed") or "Reasoning unavailable in degraded factual mode."
+        answer = clean_html_text(raw_ans)
         confidence = 45.0
     else:
-        what_changed = provider_res.get("what_changed") or ""
-        why_it_matters = provider_res.get("why_it_matters") or ""
-        suggested_action = provider_res.get("suggested_action") or ""
+        what_changed = clean_html_text(provider_res.get("what_changed") or "")
+        why_it_matters = clean_html_text(provider_res.get("why_it_matters") or "")
+        suggested_action = clean_html_text(provider_res.get("suggested_action") or "")
         if why_it_matters or suggested_action:
             answer_blocks = [what_changed]
             if why_it_matters:
@@ -1610,7 +1620,8 @@ async def query_athena(payload: AthenaQueryRequest, db: AsyncSession = Depends(g
                 answer_blocks.append(f"\n\n**Recommended Next Action:**\n{suggested_action}")
             answer = "".join(answer_blocks)
         else:
-            answer = what_changed or provider_res.get("factual_summary") or "Synthesized response ready."
+            raw_ans = what_changed or provider_res.get("factual_summary") or "Synthesized response ready."
+            answer = clean_html_text(raw_ans)
         confidence = float(provider_res.get("confidence", 88.0))
 
     logger.info(f"[ATHENA] Synthesis complete: confidence={confidence}%, mode={mode}, length={len(answer)} chars")
@@ -1651,7 +1662,7 @@ async def query_athena_stream(payload: AthenaQueryRequest, db: AsyncSession = De
 
     # 1. PII / PHI scrubbing & content classification (CR-03)
     scrubbed_prompt, has_pii, _ = PIIPHIScrubber.scrub(trimmed)
-    classification = DataClassification.PATIENT_IDENTIFIABLE if has_pii else DataClassification.PUBLIC
+    classification = DataClassification.CONFIDENTIAL if has_pii else DataClassification.PUBLIC
 
     clean_lower = scrubbed_prompt.lower().strip("?!., ")
     is_greeting = clean_lower in ATHENA_GREETINGS or len(clean_lower) < 4
@@ -1738,11 +1749,12 @@ async def query_athena_stream(payload: AthenaQueryRequest, db: AsyncSession = De
                 task=f"Analyze the following biomedical query against available evidence: {scrubbed_prompt}",
                 classification=classification,
             )
-            answer = (
+            raw_ans = (
                 provider_res.get("what_changed")
                 or provider_res.get("factual_summary")
                 or "Reasoning unavailable in degraded factual mode."
             )
+            answer = clean_html_text(raw_ans)
             yield _sse_event("degraded", {"mode": "degraded_factual"})
             # Emit composed answer in small chunks so the UI still renders progressively.
             for i in range(0, len(answer), 24):

@@ -57,8 +57,55 @@ export interface RawSignalPayload {
   tags?: string[]
   sources?: SignalSource[]
   stakeholders?: Record<string, number>
+  what_changed?: string
+  why_it_matters?: string
+  relevant_function?: string
+  route_destination?: string
+  route_role?: string
+  is_escalated?: boolean
+  suggested_action?: string
+  action_rationale?: string
+  review_status?: string
   approval_status?: "PENDING" | "APPROVED" | "REJECTED" | null
   latest_approval_request?: any
+}
+
+export function sanitizeText(str?: string | null): string {
+  if (!str) return ''
+  // Strip script and style blocks
+  let s = str.replace(/<(script|style)[^>]*>[\s\S]*?<\/\1>/gi, ' ')
+  // Strip HTML tags
+  s = s.replace(/<[^>]+>/g, ' ')
+  // Remove markdown image syntax ![alt](url)
+  s = s.replace(/!\[[^\]]*\]\([^)]*\)/g, ' ')
+  // Unescape common HTML entities
+  s = s
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+  // Collapse whitespace
+  return s.replace(/\s+/g, ' ').trim()
+}
+
+export function sanitizeMarkdownText(text?: string | null): string {
+  if (!text) return ''
+  // Strip script and style blocks
+  let s = text.replace(/<(script|style)[^>]*>[\s\S]*?<\/\1>/gi, ' ')
+  // Strip HTML tags
+  s = s.replace(/<[^>]+>/g, ' ')
+  // Unescape common HTML entities
+  s = s
+    .replace(/&amp;/g, '&')
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&#39;/g, "'")
+    .replace(/&nbsp;/g, ' ')
+  // Collapse excessive inline spaces while preserving newlines
+  return s.replace(/[ \t]+/g, ' ').trim()
 }
 
 export function formatTimeAgo(isoString?: string): string {
@@ -136,16 +183,21 @@ export function mapSignal(raw: RawSignalPayload): Signal {
   // via magic multipliers applied to unrelated score components.
   const stakeholders: Record<string, number> = raw.stakeholders || {}
 
-  const summary = raw.summary || raw.content || (raw.facts && raw.facts.length > 0 ? raw.facts.join(' ') : raw.title)
+  const rawSummary = raw.summary || raw.content || (raw.facts && raw.facts.length > 0 ? raw.facts.join(' ') : raw.title)
+  const summary = sanitizeText(rawSummary)
   const is_synth = Boolean(raw.is_synthetic)
   const data_mode = raw.data_mode || (is_synth ? 'test_fixture' : 'live')
   const prov_status = raw.provenance_status || (is_synth ? 'fixture' : raw.canonical_url ? 'available' : 'missing_url')
+  const cleanedTitle = sanitizeText(raw.title) || 'Untitled Signal'
+  const cleanedEvidence = sanitizeText(raw.evidence_text || raw.content || raw.title)
+  const cleanedWhatChanged = sanitizeText(raw.what_changed || (raw.facts && raw.facts.length > 0 ? raw.facts[0] : null) || cleanedTitle)
+  const cleanedWhyItMatters = sanitizeText(raw.why_it_matters || raw.interpretation || 'Decision significance under active evaluation.')
 
   return {
     ...raw,
     id: sid,
     signal_id: sid,
-    title: raw.title || 'Untitled Signal',
+    title: cleanedTitle,
     summary,
     severity,
     status: raw.status || 'new',
@@ -165,7 +217,9 @@ export function mapSignal(raw: RawSignalPayload): Signal {
     external_id: raw.external_id || raw.pmid || raw.nct_id || raw.regulatory_id || sid,
     canonical_url: raw.canonical_url,
     provenance_status: prov_status,
-    evidence_text: raw.evidence_text || raw.content || raw.title,
+    evidence_text: cleanedEvidence,
+    what_changed: cleanedWhatChanged,
+    why_it_matters: cleanedWhyItMatters,
     raw_record_reference: raw.raw_record_reference,
     ingested_at: raw.ingested_at || raw.retrieved_at || raw.created_at,
   }

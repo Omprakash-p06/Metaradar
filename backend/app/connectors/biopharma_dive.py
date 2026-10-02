@@ -10,6 +10,7 @@ from app.connectors.base import (
     ProfileRunResult,
     RawSignalPayload,
     SourceConnector,
+    clean_html_text,
 )
 from app.services.deduplication import generate_fingerprint
 from app.services.pii import PIIPHIScrubber
@@ -137,24 +138,29 @@ class BioPharmaDiveRSSConnector(SourceConnector):
         pub_date_raw = self._element_text(item, "pubDate")
         published_at = self._parse_rfc2822(pub_date_raw, retrieved_at)
 
-        scrubbed, _, _ = PIIPHIScrubber.scrub(description)
-        content = scrubbed or title
-        fingerprint = generate_fingerprint(title=title, published_at=published_at, publisher="BioPharma Dive")
+        cleaned_desc = clean_html_text(description)
+        cleaned_title = clean_html_text(title)
+        scrubbed_desc, has_desc_pii, _ = PIIPHIScrubber.scrub(cleaned_desc)
+        scrubbed_title, has_title_pii, _ = PIIPHIScrubber.scrub(cleaned_title)
+        has_pii = has_desc_pii or has_title_pii
+
+        content = scrubbed_desc or scrubbed_title
+        fingerprint = generate_fingerprint(title=scrubbed_title, published_at=published_at, publisher="BioPharma Dive")
         external_id = link or guid or hashlib.sha256(fingerprint.encode("utf-8")).hexdigest()
         content_hash = hashlib.sha256(f"{external_id}:{content}".encode("utf-8")).hexdigest()
-        entities = self._detect_entities(f"{title} {description}")
+        entities = self._detect_entities(f"{scrubbed_title} {scrubbed_desc}")
 
         raw_payload = {
             "external_id": external_id,
             "fingerprint": fingerprint,
-            "title": title,
-            "description": scrubbed,
+            "title": scrubbed_title,
+            "description": scrubbed_desc,
             "source_name": "BioPharma Dive",
             "source_tier": 3,
             "signal_type": "NEWS",
             "event_type": "INDUSTRY_NEWS",
             "url": link or None,
-            "evidence_text": scrubbed or description or title,
+            "evidence_text": scrubbed_desc or scrubbed_title,
             "provenance_status": "available" if link else "missing_url",
             "link": link,
             "guid": guid,
@@ -162,6 +168,7 @@ class BioPharmaDiveRSSConnector(SourceConnector):
             "published_at": published_at.isoformat(),
             "entity_terms": entities,
             "pii_scrubbed": True,
+            "has_pii": has_pii,
             "retrieved_at": retrieved_at.isoformat(),
             "connector_version": self.connector_version,
             "item_xml": ET.tostring(item, encoding="unicode"),
@@ -171,7 +178,7 @@ class BioPharmaDiveRSSConnector(SourceConnector):
             source_id=self.source_id,
             source_type=self.source_type,
             external_id=external_id,
-            title=title,
+            title=scrubbed_title,
             content=content,
             url=link or None,
             published_at=published_at,

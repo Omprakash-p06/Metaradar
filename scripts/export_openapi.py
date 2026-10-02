@@ -565,6 +565,8 @@ export interface LifecycleTimelineItem {
   stage: string;
   event_date: string;
   notes?: string;
+  modality?: string;
+  company_name?: string;
 }
 
 export interface ContradictionItem {
@@ -609,6 +611,12 @@ export interface DevelopmentSummary {
   current_stage: string;
   asset_name?: string;
   company_name?: string;
+  generic_name?: string;
+  modality?: string;
+  mechanism?: string;
+  indication?: string;
+  approval_status?: string;
+  jurisdiction?: string;
   signal_count: number;
   created_at: string;
   updated_at: string;

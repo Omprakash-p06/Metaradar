@@ -11,6 +11,12 @@ class DevelopmentSummary(BaseModel):
     current_stage: str
     asset_name: Optional[str] = None
     company_name: Optional[str] = None
+    generic_name: Optional[str] = None
+    modality: Optional[str] = None
+    mechanism: Optional[str] = None
+    indication: Optional[str] = None
+    approval_status: Optional[str] = None
+    jurisdiction: Optional[str] = None
     signal_count: int = 0
     created_at: datetime
     updated_at: datetime

@@ -9,6 +9,7 @@ from app.connectors.base import (
     ProfileRunResult,
     RawSignalPayload,
     SourceConnector,
+    clean_html_text,
 )
 from app.core.config import settings
 from app.services.deduplication import generate_fingerprint
@@ -210,20 +211,24 @@ class OpenFDAConnector(SourceConnector):
             action_date = products[0].get("marketing_start_date") or ""
 
         title = brand_names[0] if brand_names else application_number
-        content = (
+        raw_content = (
             f"{' '.join(brand_names)} — {' '.join(substances)} — "
             f"{' '.join(sponsors)}"
         ).strip(" —")
-        scrubbed, _, _ = PIIPHIScrubber.scrub(content)
+        cleaned_content = clean_html_text(raw_content)
+        cleaned_title = clean_html_text(title)
+        scrubbed_content, content_pii, _ = PIIPHIScrubber.scrub(cleaned_content)
+        scrubbed_title, title_pii, _ = PIIPHIScrubber.scrub(cleaned_title)
+        has_pii = content_pii or title_pii
 
         published_at = self._parse_date(action_date, retrieved_at)
-        fingerprint = generate_fingerprint(regulatory_id=application_number, title=title, published_at=published_at)
-        content_hash = hashlib.sha256(f"{application_number}:{scrubbed}".encode("utf-8")).hexdigest()
+        fingerprint = generate_fingerprint(regulatory_id=application_number, title=scrubbed_title, published_at=published_at)
+        content_hash = hashlib.sha256(f"{application_number}:{scrubbed_content}".encode("utf-8")).hexdigest()
 
         raw_payload = {
             "external_id": application_number,
             "fingerprint": fingerprint,
-            "title": title,
+            "title": scrubbed_title,
             "brand_name": brand_names,
             "substance_name": substances,
             "sponsor_name": sponsors,
@@ -232,12 +237,13 @@ class OpenFDAConnector(SourceConnector):
             "signal_type": "REGULATORY",
             "event_type": "REGULATORY_APPROVAL",
             "url": None,
-            "evidence_text": scrubbed or content or title,
+            "evidence_text": scrubbed_content or scrubbed_title,
             "provenance_status": "missing_url",
             "action_date": action_date,
             "published_at": published_at.isoformat(),
             "entities": list({*substances, *brand_names}),
             "pii_scrubbed": True,
+            "has_pii": has_pii,
             "retrieved_at": retrieved_at.isoformat(),
             "connector_version": self.connector_version,
             "result": result_item,  # verbatim drugsfda result object (D-23)
@@ -247,8 +253,8 @@ class OpenFDAConnector(SourceConnector):
             source_id=self.source_id,
             source_type=self.source_type,
             external_id=application_number,
-            title=title,
-            content=scrubbed or title,
+            title=scrubbed_title,
+            content=scrubbed_content or scrubbed_title,
             url=None,
             published_at=published_at,
             publisher=sponsors[0] if sponsors else "FDA",

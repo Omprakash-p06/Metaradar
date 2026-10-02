@@ -1,5 +1,6 @@
 import time
 from typing import Any, Dict, List
+from app.connectors.base import clean_html_text
 from app.providers.base import LLMProvider, ProviderCapability, DataClassification
 from app.schemas import ModelMetadataSchema
 
@@ -8,12 +9,12 @@ class DegradedProvider(LLMProvider):
     name = "bart_degraded"
     capabilities = [ProviderCapability.SUMMARIZE]
 
-    def __init__(self, model_name: str = "facebook/bart-large-cnn"):
+    def __init__(self, model_name: str = "truncation_v1"):
         self.model_name = model_name
 
     async def generate_summary(self, text: str) -> str:
         # Factual text summarization fallback
-        cleaned = text.strip()
+        cleaned = clean_html_text(text).strip()
         if len(cleaned) > 300:
             return cleaned[:297] + "..."
         return cleaned
@@ -30,7 +31,7 @@ class DegradedProvider(LLMProvider):
         # Structure evidence items into clean factual bullet points
         points = []
         for idx, item in enumerate(evidence, 1):
-            cleaned = item.strip()
+            cleaned = clean_html_text(item).strip()
             if len(cleaned) > 280:
                 cleaned = cleaned[:277] + "..."
             points.append(f"• {cleaned}")

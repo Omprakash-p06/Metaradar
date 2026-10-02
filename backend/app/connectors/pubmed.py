@@ -10,6 +10,7 @@ from app.connectors.base import (
     ProfileRunResult,
     RawSignalPayload,
     SourceConnector,
+    clean_html_text,
 )
 from app.core.config import settings
 from app.services.deduplication import generate_fingerprint
@@ -191,19 +192,24 @@ class PubMedConnector(SourceConnector):
                 mesh_terms.append(mesh.text.strip())
 
         # PII scrub before bronze persistence (REQ-P1-14)
-        scrubbed, _, _ = PIIPHIScrubber.scrub(abstract)
-        content = scrubbed or title
+        cleaned_abstract = clean_html_text(abstract)
+        cleaned_title = clean_html_text(title)
+        scrubbed_abstract, has_abstract_pii, _ = PIIPHIScrubber.scrub(cleaned_abstract)
+        scrubbed_title, has_title_pii, _ = PIIPHIScrubber.scrub(cleaned_title)
+        has_pii = has_abstract_pii or has_title_pii
+
+        content = scrubbed_abstract or scrubbed_title
         published_at = self._parse_pub_date(pub_year, retrieved_at)
         url = f"https://pubmed.ncbi.nlm.nih.gov/{pmid}/"
 
-        fingerprint = generate_fingerprint(pmid=pmid, title=title, published_at=published_at)
-        content_hash = hashlib.sha256(f"{pmid}:{scrubbed}".encode("utf-8")).hexdigest()
+        fingerprint = generate_fingerprint(pmid=pmid, title=scrubbed_title, published_at=published_at)
+        content_hash = hashlib.sha256(f"{pmid}:{scrubbed_abstract}".encode("utf-8")).hexdigest()
 
         raw_payload = {
             "external_id": pmid,
             "fingerprint": fingerprint,
-            "title": title,
-            "abstract": scrubbed,
+            "title": scrubbed_title,
+            "abstract": scrubbed_abstract,
             "abstract_raw": abstract,
             "journal": journal,
             "source_name": journal or "PubMed",
@@ -211,12 +217,13 @@ class PubMedConnector(SourceConnector):
             "signal_type": "PUBLICATIONS",
             "event_type": "PUBLICATION",
             "url": url,
-            "evidence_text": scrubbed,
+            "evidence_text": scrubbed_abstract,
             "pub_date": pub_year,
             "published_at": published_at.isoformat(),
             "mesh_terms": mesh_terms,
             "entities": mesh_terms,
             "pii_scrubbed": True,
+            "has_pii": has_pii,
             "retrieved_at": retrieved_at.isoformat(),
             "connector_version": self.connector_version,
             "xml_fragment": ET.tostring(article, encoding="unicode"),
@@ -226,7 +233,7 @@ class PubMedConnector(SourceConnector):
             source_id=self.source_id,
             source_type=self.source_type,
             external_id=pmid,
-            title=title,
+            title=scrubbed_title,
             content=content,
             url=url,
             published_at=published_at,
