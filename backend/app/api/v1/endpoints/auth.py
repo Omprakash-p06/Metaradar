@@ -37,7 +37,9 @@ from app.services.auth_service import (
     invalidate_session,
 )
 
-logger = logging.getLogger(__name__)
+from app.core.logging import get_logger
+
+logger = get_logger("metaradar.auth")
 
 router = APIRouter()
 

@@ -181,3 +181,32 @@ async def test_csrf_bootstrap_endpoint():
         assert "csrf_token" in data
         assert len(data["csrf_token"]) > 20
         assert CSRF_COOKIE_NAME in ac.cookies
+
+
+@pytest.mark.asyncio
+async def test_login_db_outage_returns_503():
+    from unittest.mock import patch
+    with patch("app.api.v1.endpoints.auth.authenticate_user", side_effect=Exception("Database connection timeout")):
+        async with AsyncClient(
+            transport=ASGITransport(app=app),
+            base_url="http://localhost:8000",
+            headers={"Origin": "http://localhost:3000"},
+        ) as ac:
+            res = await ac.post("/api/v1/auth/login", json={"email": "leadership@metaradar.demo", "password": "any"})
+            assert res.status_code == 503
+            assert "Database service is unavailable or paused" in res.json()["detail"]
+
+
+@pytest.mark.asyncio
+async def test_demo_login_db_outage_returns_503():
+    from unittest.mock import patch
+    with patch("app.api.v1.endpoints.auth.get_or_create_demo_user", side_effect=Exception("Database connection timeout")):
+        async with AsyncClient(
+            transport=ASGITransport(app=app),
+            base_url="http://localhost:8000",
+            headers={"Origin": "http://localhost:3000"},
+        ) as ac:
+            res = await ac.post("/api/v1/auth/demo-login", json={"role": "MEDICAL_AFFAIRS"})
+            assert res.status_code == 503
+            assert "Database service is unavailable or paused" in res.json()["detail"]
+
