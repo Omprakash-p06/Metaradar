@@ -1,6 +1,7 @@
 import logging
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 import structlog
 
@@ -85,6 +86,43 @@ if settings.cors_origins_list:
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
+    )
+
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    """
+    Catch unhandled exceptions and return structured JSON while strictly preserving
+    Access-Control-Allow-* CORS headers. Prevents client browsers from masking server/database
+    errors behind opaque 'TypeError: Failed to fetch'.
+    """
+    logger.error("unhandled_server_exception", error=str(exc), path=request.url.path)
+
+    origin = request.headers.get("origin")
+    headers: dict[str, str] = {}
+    if origin and settings.cors_origins_list:
+        if origin in settings.cors_origins_list or "*" in settings.cors_origins_list:
+            headers["Access-Control-Allow-Origin"] = origin
+            headers["Access-Control-Allow-Credentials"] = "true"
+            headers["Vary"] = "Origin"
+
+    exc_msg = str(exc).lower()
+    exc_type = type(exc).__name__.lower()
+    is_db_err = any(
+        k in exc_msg or k in exc_type
+        for k in ["database", "asyncpg", "connection", "operationalerror", "timeout", "interfaceerror"]
+    )
+    status_code = 503 if is_db_err else 500
+    detail = (
+        "Database service is unavailable or paused. If using free-tier cloud hosting (Supabase/Render), verify database status."
+        if is_db_err
+        else "Internal Server Error"
+    )
+
+    return JSONResponse(
+        status_code=status_code,
+        content={"detail": detail, "error_type": type(exc).__name__},
+        headers=headers,
     )
 
 # Router Registrations

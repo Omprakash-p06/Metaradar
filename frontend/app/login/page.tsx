@@ -163,9 +163,24 @@ export default function LoginPage() {
       await login({ email, password })
       router.push('/dashboard')
     } catch (err: any) {
-      setErrorMessage(
-        err?.message || 'Invalid credentials. Please verify your email and password.'
-      )
+      const msg = err?.message || ''
+      if (
+        msg.includes('Unable to connect') ||
+        msg.includes('Failed to fetch') ||
+        msg.includes('NetworkError') ||
+        msg.includes('database') ||
+        msg.includes('Database') ||
+        msg.includes('503') ||
+        msg.includes('500')
+      ) {
+        setErrorMessage(
+          'Backend service or database is currently unavailable. If using free-tier cloud hosting (Render/Supabase), the backend service may be waking up or the database may be paused.'
+        )
+      } else {
+        setErrorMessage(
+          msg || 'Invalid credentials. Please verify your email and password.'
+        )
+      }
     } finally {
       setIsSubmitting(false)
     }
@@ -181,7 +196,22 @@ export default function LoginPage() {
       await login({ email: 'leadership@metaradar.demo', password: 'Leader2026!' })
       router.push('/dashboard')
     } catch (err: any) {
-      setErrorMessage(err?.message || 'Invalid API Key.')
+      const msg = err?.message || ''
+      if (
+        msg.includes('Unable to connect') ||
+        msg.includes('Failed to fetch') ||
+        msg.includes('NetworkError') ||
+        msg.includes('database') ||
+        msg.includes('Database') ||
+        msg.includes('503') ||
+        msg.includes('500')
+      ) {
+        setErrorMessage(
+          'Backend service or database is currently unavailable. If using free-tier cloud hosting (Render/Supabase), the backend service may be waking up or the database may be paused.'
+        )
+      } else {
+        setErrorMessage(msg || 'Invalid API Key.')
+      }
     } finally {
       setIsSubmitting(false)
       setShowApiKeyModal(false)

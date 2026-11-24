@@ -19,8 +19,11 @@
   [![Contract](https://img.shields.io/badge/OpenAPI%203.1-Synchronized-blue)](#)
   [![Data](https://img.shields.io/badge/Data-8%20Monitored%20Sources-green)](#)
   [![Governance](https://img.shields.io/badge/Governance-Database--Enforced%20Audit-orange)](#)
+  [![Hosted App](https://img.shields.io/badge/Hosted%20App-mtradar--app.netlify.app-00C7B7?logo=netlify)](https://mtradar-app.netlify.app/)
 </div>
 
+> 🌐 **Live Cloud Deployment:** The application has been hosted on: **[https://mtradar-app.netlify.app/](https://mtradar-app.netlify.app/)**
+>
 > **"A conventional AI summarizes documents. MetaRadar builds an evidence story around a development."**
 
 MetaRadar organizes fragmented public information across the haemophilia treatment landscape into **evidence-linked developments, multi-source confluence alerts, zero-shot contradiction flags, missing milestone alerts, and role-scoped intelligence briefs**.
@@ -34,7 +37,7 @@ The platform is purpose-built as an **Autonomous Rare Disease Competitive Intell
 | Submission Deliverable | Location & Description |
 |---|---|
 | **1. Master Presentation Deck** | [`pitch/PITCH.md`](pitch/PITCH.md) — Master 7-Slide presentation deck and Q1–Q10 technical defense guide covering Project Overview, Problem & Innovation, Solution Summary, Technical Implementation, Verification Metrics, Roadmap, and Business Impact. |
-| **2. Interactive Prototype / Demo** | Full-stack application running at `http://localhost:3000` with 13 specialized workspace views, 3D holographic persona switcher, live 8-source ingestion, Athena AI Copilot with streaming citations, and Executive Sign-Off Queue. |
+| **2. Interactive Prototype / Demo** | **Live Hosted Application:** [https://mtradar-app.netlify.app/](https://mtradar-app.netlify.app/) (Netlify + Render + Supabase + Gemini 2.5 Flash). Full-stack local alternative running at `http://localhost:3000` with 13 specialized workspace views, 3D holographic persona switcher, live 8-source ingestion, Athena AI Copilot with streaming citations, and Executive Sign-Off Queue. |
 | **3. Visual Architecture Diagrams** | Ultra-HD 2800px Vector SVGs & PNGs in [`pitch/`](pitch/): [System Architecture](pitch/architecture.svg), [Data Flow](pitch/dataflow.svg), and [Decision Governance Flow](pitch/responsibility_flow.svg). |
 | **4. Domain Knowledge Layer** | Curated haemophilia ontology covering 12 modalities, canonical competitor assets, and 19 Red-Team evidence checks in [`config/haemophilia.yaml`](config/haemophilia.yaml). |
 | **5. Deep Technical Documentation** | Comprehensive architecture specifications, design documents, and engineering standards in [`docs/`](docs/). |
@@ -400,6 +403,15 @@ Detailed technical documentation is organized in [`docs/`](docs/):
 
 ---
 
+# Academic & Laboratory Context
+
+This project is developed and utilized for the **Generative AI Lab** at **MS Ramaiah Institute of Technology (MSRIT)** under the mentorship and guidance of:
+
+- **Faculty Name / Lab Lead:** **Mrs. Subia Salma**
+- **Institution:** Department of Computer Science and Engineering / Information Science and Engineering, MS Ramaiah Institute of Technology, Bangalore, Karnataka, India
+
+---
+
 # Team
 
 **MS Ramaiah Institute of Technology (MSRIT), Bangalore, Karnataka, India**  
@@ -411,4 +423,4 @@ Detailed technical documentation is organized in [`docs/`](docs/):
 - **Omprakash Panda** — ISE/CSE (System Architecture, Data Ingestion, LangGraph Orchestration, Full-Stack Engine)
 - **Veerendra Desai** — ISE/CSE (Vector Search, Database, Telemetry, Performance & Deployment)
 
-*Faculty Sponsor: Faculty Advisory Board, Dept. of Pharmacy Practice & Dept. of Computer Science and Engineering, MSRIT*
+*Faculty Mentorship & Lab Supervision: Mrs. Subia Salma (Generative AI Lab Lead) & Faculty Advisory Board, Dept. of Pharmacy Practice & Dept. of Computer Science and Engineering, MSRIT*
