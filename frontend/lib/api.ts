@@ -369,10 +369,15 @@ async function apiFetch<T>(
         notifyColdStart({ isRetrying: false, attempt: 0, maxAttempts: maxRetries, endpoint })
       }
 
+      let networkMessage = err instanceof Error ? err.message : 'Network request failed'
+      if (networkMessage === 'Failed to fetch' || networkMessage.includes('Failed to fetch')) {
+        networkMessage = 'Unable to connect to MetaRadar backend service. If using free-tier cloud hosting (Render/Supabase), the backend or database may be sleeping or paused.'
+      }
+
       throw new ApiError(
         0,
         'NetworkError',
-        err instanceof Error ? err.message : 'Network request failed',
+        networkMessage,
         true,
         undefined,
         endpoint

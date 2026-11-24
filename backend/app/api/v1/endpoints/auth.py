@@ -90,7 +90,14 @@ async def login(
     db: AsyncSession = Depends(get_db),
 ):
     """Standard email/password credential authentication endpoint."""
-    user = await authenticate_user(db, payload.email, payload.password)
+    try:
+        user = await authenticate_user(db, payload.email, payload.password)
+    except Exception as e:
+        logger.error("login_db_error", error=str(e), email=payload.email)
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database service is unavailable or paused. If using free-tier cloud hosting (Supabase/Render), verify database status.",
+        )
     now_utc = datetime.now(timezone.utc)
     correlation_id = getattr(request.state, "correlation_id", None) or request.headers.get("X-Correlation-ID")
 
@@ -115,12 +122,19 @@ async def login(
         )
 
     # Create session
-    sess, token = await create_session(
-        db=db,
-        user_id=user.user_id,
-        secret=settings.SECRET_KEY,
-        lifetime_s=settings.SESSION_LIFETIME_SECONDS,
-    )
+    try:
+        sess, token = await create_session(
+            db=db,
+            user_id=user.user_id,
+            secret=settings.SECRET_KEY,
+            lifetime_s=settings.SESSION_LIFETIME_SECONDS,
+        )
+    except Exception as e:
+        logger.error("session_creation_db_error", error=str(e), user_id=str(user.user_id))
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database service is unavailable or paused. Unable to establish user session.",
+        )
     csrf_token = generate_session_bound_csrf(str(sess.session_id), settings.SECRET_KEY)
     _set_auth_cookies(response, token, csrf_token)
 
@@ -165,19 +179,33 @@ async def demo_login(
             detail="Forbidden: Demo persona switching is disabled in production.",
         )
 
-    user = await get_or_create_demo_user(db, payload.role)
+    try:
+        user = await get_or_create_demo_user(db, payload.role)
+    except Exception as e:
+        logger.error("demo_login_db_error", error=str(e), role=payload.role)
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database service is unavailable or paused. If using free-tier cloud hosting (Supabase/Render), verify database status.",
+        )
     if not user:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail=f"Invalid demo persona role '{payload.role}'",
         )
 
-    sess, token = await create_session(
-        db=db,
-        user_id=user.user_id,
-        secret=settings.SECRET_KEY,
-        lifetime_s=settings.SESSION_LIFETIME_SECONDS,
-    )
+    try:
+        sess, token = await create_session(
+            db=db,
+            user_id=user.user_id,
+            secret=settings.SECRET_KEY,
+            lifetime_s=settings.SESSION_LIFETIME_SECONDS,
+        )
+    except Exception as e:
+        logger.error("session_creation_db_error", error=str(e), user_id=str(user.user_id))
+        raise HTTPException(
+            status_code=status.HTTP_503_SERVICE_UNAVAILABLE,
+            detail="Database service is unavailable or paused. Unable to establish user session.",
+        )
     csrf_token = generate_session_bound_csrf(str(sess.session_id), settings.SECRET_KEY)
     _set_auth_cookies(response, token, csrf_token)
 
